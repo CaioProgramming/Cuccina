@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "481541057548",
+    "firebase_url": "https://recipes-br.firebaseio.com",
+    "project_id": "recipes-br",
+    "storage_bucket": "recipes-br.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:481541057548:android:d68384fe9916b2cc",
+        "android_client_info": {
+          "package_name": "com.inlustris.cuccina"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "481541057548-1km8qn578n9dc28uuvgemq8931h623r8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.inlustris.cuccina",
+            "certificate_hash": "e52ea948ad8eb3370c325822e60b1550052192ac"
+          }
+        },
+        {
+          "client_id": "481541057548-rqjsrkh7cn8cogeot32uogkd0l1rgnrr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4rV0UpihaZoQYvqVQp_sclQDLbFP8PJo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "481541057548-rqjsrkh7cn8cogeot32uogkd0l1rgnrr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

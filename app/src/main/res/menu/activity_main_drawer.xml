@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+    <group android:checkableBehavior="single" android:id="@+id/useroptions">
+            <item
+                android:id="@+id/nav_home"
+                android:icon="@drawable/ic_home_black_24dp"
+                android:title="Home" />
+            <item
+                android:id="@+id/nav_favorite"
+                android:icon="@drawable/ic_favorite_black_24dp"
+                android:title="Receitas favoritas" />
+    </group>
+
+    <group android:id="@+id/categories" android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_drinks"
+            android:icon="@drawable/ic_cocktail"
+            android:title="Bebidas" />
+        <item
+            android:id="@+id/nav_bakery"
+            android:icon="@drawable/ic_donut"
+            android:title="Confeitaria" />
+        <item
+            android:id="@+id/nav_soup"
+            android:icon="@drawable/ic_hot_soup_bowl"
+            android:title="Cremes e sopas" />
+        <item
+            android:id="@+id/nav_candy"
+            android:icon="@drawable/ic_lollipop"
+            android:title="Doces" />
+        <item
+            android:id="@+id/nav_sea"
+            android:icon="@drawable/ic_crab"
+            android:title="Frutos do mar" />
+        <item
+            android:id="@+id/nav_lettuce"
+            android:icon="@drawable/ic_healthy"
+            android:title="Legumes, vegetais e cia." />
+        <item
+            android:id="@+id/nav_massas"
+            android:icon="@drawable/ic_spaghetti"
+            android:title="Massas" />
+        <item
+            android:id="@+id/nav_sauce"
+            android:icon="@drawable/ic_sauce"
+            android:title="Molhos" />
+        <item
+            android:id="@+id/nav_protein"
+            android:icon="@drawable/ic_beef_steak"
+            android:title="Proteínas" />
+        <item
+            android:id="@+id/nav_saladas"
+            android:icon="@drawable/ic_bowl_with_vegetables"
+            android:title="Saladas" />
+
+    </group>
+
+
+</menu>

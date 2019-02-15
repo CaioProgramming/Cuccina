@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    tools:context=".Startrecipe">
+    <android.support.v4.view.ViewPager
+        android:id="@+id/slides"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    <LinearLayout
+        android:layout_alignParentBottom="true"
+        android:background="@color/md_white_1000"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/goback"
+            android:drawableStart="@drawable/ic_arrow_back_black_24dp"
+            android:textColor="@color/colorPrimaryDark"
+            android:background="@drawable/ripple"
+            android:text="Voltar"
+            android:layout_width="wrap_content"
+            android:padding="5dp"
+            android:layout_height="wrap_content" />
+        <android.support.design.widget.TabLayout
+            app:tabIndicatorHeight="0dp"
+            app:tabIndicatorColor="@color/transparent"
+            android:id="@+id/tabs"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"/>
+        <Button
+            android:layout_gravity="end"
+            android:id="@+id/begin"
+            android:drawableEnd="@drawable/ic_done_black_24dp"
+            android:padding="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ripple"
+            android:text="Tudo pronto"
+            android:textColor="@color/colorPrimary" />
+    </LinearLayout>
+
+
+
+
+</RelativeLayout>
