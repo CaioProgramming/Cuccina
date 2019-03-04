@@ -302,6 +302,7 @@
     <color name="colorAccent">#ff6e40</color>
     <color name="lwhite">#64ffffff</color>
     <color name="lblack">#64050000</color>
+    <color name="lblack_2">#40050000</color>
     <color name="transparent">#00ffffff</color>
     <color name="colorPrimaryLight">#ffb952</color>
 </resources>

@@ -3,6 +3,7 @@ package com.inlustris.cuccina;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -12,6 +13,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,37 +39,48 @@ import java.util.Objects;
 
 import de.mateware.snacky.Snacky;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener{
     FirebaseUser user;
+    RecyclerAdapter myadapter;
     private DrawerLayout drawerlayout;
     private android.support.v7.widget.RecyclerView recipes;
-    private android.widget.ImageView nomorerecipes;
     private android.support.v7.widget.Toolbar toolbar;
     private static final int RC_SIGN_IN = 123;
     private Query recipesdb;
     private Activity activity = this;
     TextView usertxt;
     private ArrayList<Recipe> recipeArrayList;
+    private NavigationView navview;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        SearchView search = findViewById(R.id.search);
         this.toolbar = findViewById(R.id.toolbar);
-        this.nomorerecipes = findViewById(R.id.nomorerecipes);
+        android.widget.ImageView nomorerecipes = findViewById(R.id.nomorerecipes);
         this.recipes = findViewById(R.id.recipes);
         Glide.with(this).load(getResources().getString(R.string.nomorerecipesimage)).into(nomorerecipes);
         setSupportActionBar(toolbar);
+
         recipesdb = FirebaseDatabase.getInstance().getReference();
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        search.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                Carregar();
+                return false;
+            }
+        });
         NavigationView navigationView = findViewById(R.id.nav_view);
         View header = navigationView.getHeaderView(0);
-         usertxt = (TextView) header.findViewById(R.id.usuarios);
-
+         usertxt = header.findViewById(R.id.usuarios);
+        Typeface font = Typeface.createFromAsset(this.getAssets(),"fonts/GrandHotel-Regular.ttf");
+        usertxt.setTypeface(font);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -77,8 +90,8 @@ public class MainActivity extends AppCompatActivity{
                     getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
                     Carregar();
                     // Handle the camera action
-                } else if (id == R.id.nav_favorite) {
-                    getSupportActionBar().setTitle("Favoritos");
+//                } else if (id == R.id.nav_favorite) {
+//                    getSupportActionBar().setTitle("Favoritos");
                 } else if (id == R.id.nav_bakery) {
                     getSupportActionBar().setTitle("Confeitaria");
                     CarregarCategoria("Confeitaria");
@@ -115,7 +128,9 @@ public class MainActivity extends AppCompatActivity{
                 return true;
             }
         });
-        User();
+        ChecKUser();
+        search.setOnQueryTextListener(this);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
     @Override
@@ -144,6 +159,9 @@ public class MainActivity extends AppCompatActivity{
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            FirebaseAuth.getInstance().signOut();
+            Snacky.builder().setActivity(this).info().setText("Você saiu de sua conta").show();
+            Carregar();
             return true;
         }
 
@@ -152,7 +170,8 @@ public class MainActivity extends AppCompatActivity{
 
 
 
-    public void Carregar(){
+
+    private void Carregar(){
         recipesdb = FirebaseDatabase.getInstance().getReference().child("recipes");
          user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null){recipesdb.addValueEventListener(new ValueEventListener() {
@@ -181,7 +200,7 @@ public class MainActivity extends AppCompatActivity{
                 Collections.shuffle(recipeArrayList);
                 GridLayoutManager llm = new GridLayoutManager(activity, 1, GridLayoutManager.VERTICAL, false);
                 recipes.setHasFixedSize(true);
-                RecyclerAdapter myadapter = new RecyclerAdapter(activity, recipeArrayList, activity,recipes);
+                myadapter = new RecyclerAdapter(activity, recipeArrayList, activity,recipes);
                 myadapter.notifyDataSetChanged();
                 recipes.setAdapter(myadapter);
                 recipes.setLayoutManager(llm);
@@ -196,11 +215,11 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
-    public void User() {
+    private void ChecKUser() {
         user = FirebaseAuth.getInstance().getCurrentUser();
 
         if (user == null) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this).setMessage("Faça login para ter acesso");
+            AlertDialog.Builder builder = new AlertDialog.Builder(this).setMessage("Faça login para ver o que tem para você comer hoje, mas se não quiser também não faz, quem ta perdendo é você.");
             builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
@@ -221,7 +240,7 @@ public class MainActivity extends AppCompatActivity{
     }
 
 
-    public void CarregarCategoria(final String categoria){
+    private void CarregarCategoria(final String categoria){
         recipesdb = FirebaseDatabase.getInstance().getReference().child("recipes");
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null){recipesdb.addValueEventListener(new ValueEventListener() {
@@ -263,11 +282,59 @@ public class MainActivity extends AppCompatActivity{
                 Snacky.builder().setActivity(activity).error().setText(databaseError.getMessage() + ": " + databaseError.getDetails() + " " + databaseError.getCode()).show();
             }
         });
+        }else{
+            ChecKUser();
         }
 
 
 
 
+    }
+
+    private void Pesquisar(String pesquisa){
+        recipesdb =  FirebaseDatabase.getInstance().getReference().child("recipes").orderByChild("prato").startAt(pesquisa).endAt(pesquisa +  "\uf8ff");
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null){recipesdb.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (recipeArrayList != null){
+                    recipeArrayList.clear();
+                    recipes.removeAllViews();
+                }else{
+                    recipeArrayList = new ArrayList<>();}
+                for (DataSnapshot d: dataSnapshot.getChildren()){
+                    Recipe recipe = new Recipe();
+                    Recipe r = d.getValue(Recipe.class);
+                    if (r != null){
+                        System.out.println(r.getPrato());
+                        recipe.setPrato(r.getPrato());
+                        recipe.setImageurl(r.getImageurl());
+                        recipe.setCalorias(r.getCalorias());
+                        recipe.setTempo(r.getTempo());
+                        recipe.setId(d.getKey());
+                        recipe.setTipo(r.getTipo());
+                        recipeArrayList.add(recipe);
+                        System.out.println("Search result " + recipeArrayList.size());
+                    }
+                }
+                Collections.shuffle(recipeArrayList);
+                GridLayoutManager llm = new GridLayoutManager(activity, 1, GridLayoutManager.VERTICAL, false);
+                recipes.setHasFixedSize(true);
+                myadapter = new RecyclerAdapter(activity, recipeArrayList, activity,recipes);
+                myadapter.notifyDataSetChanged();
+                recipes.setAdapter(myadapter);
+                recipes.setLayoutManager(llm);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        }else{
+            ChecKUser();
+        }
     }
 
     @Override
@@ -286,5 +353,19 @@ public class MainActivity extends AppCompatActivity{
             }
 
         }
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+            Pesquisar(newText);
+            if (newText.isEmpty()){Carregar();}
+            return true;
+
     }
 }

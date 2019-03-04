@@ -23,8 +23,32 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="scalingPercent" value="75" />
+                                                <entry key="scalingPercent" value="95" />
                                                 <entry key="trimmed" value="true" />
+                                              </map>
+                                            </option>
+                                          </PersistentState>
+                                        </value>
+                                      </entry>
+                                      <entry key="foregroundText">
+                                        <value>
+                                          <PersistentState>
+                                            <option name="values">
+                                              <map>
+                                                <entry key="color" value="ffffff" />
+                                                <entry key="trimmed" value="true" />
+                                              </map>
+                                            </option>
+                                          </PersistentState>
+                                        </value>
+                                      </entry>
+                                      <entry key="foregroundTextAsset">
+                                        <value>
+                                          <PersistentState>
+                                            <option name="values">
+                                              <map>
+                                                <entry key="fontFamily" value="Grand Hotel" />
+                                                <entry key="text" value="Cuccina" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -35,10 +59,39 @@
                                   <option name="values">
                                     <map>
                                       <entry key="backgroundAssetType" value="COLOR" />
-                                      <entry key="backgroundColor" value="ffffff" />
-                                      <entry key="foregroundImage" value="C:\Users\cacai\Documents\programas\cuccina\logo.png" />
+                                      <entry key="backgroundColor" value="ef8b05" />
+                                      <entry key="foregroundAssetType" value="TEXT" />
+                                      <entry key="foregroundImage" value="C:\Users\cacai\Documents\programas\cuccina\text.png" />
                                       <entry key="legacyIconShape" value="CIRCLE" />
                                       <entry key="webIconShape" value="CIRCLE" />
+                                    </map>
+                                  </option>
+                                </PersistentState>
+                              </value>
+                            </entry>
+                            <entry key="notification">
+                              <value>
+                                <PersistentState>
+                                  <option name="children">
+                                    <map>
+                                      <entry key="textAsset">
+                                        <value>
+                                          <PersistentState>
+                                            <option name="values">
+                                              <map>
+                                                <entry key="fontFamily" value="Grand Hotel" />
+                                                <entry key="text" value="C" />
+                                              </map>
+                                            </option>
+                                          </PersistentState>
+                                        </value>
+                                      </entry>
+                                    </map>
+                                  </option>
+                                  <option name="values">
+                                    <map>
+                                      <entry key="assetType" value="TEXT" />
+                                      <entry key="outputName" value="ic_notification" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -69,7 +122,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/navigation/ic_check_black_24dp.xml" />
+                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/social/ic_whatshot_black_24dp.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -80,8 +133,8 @@
                         <option name="values">
                           <map>
                             <entry key="color" value="ffffff" />
-                            <entry key="outputName" value="ic_check_black_24dp" />
-                            <entry key="sourceFile" value="C:\Users\cacai\Downloads\dish-of-spaghetti.psd" />
+                            <entry key="outputName" value="ic_whatshot_black_24dp" />
+                            <entry key="sourceFile" value="C:\Users\cacai\Downloads\hourglass.svg" />
                           </map>
                         </option>
                       </PersistentState>

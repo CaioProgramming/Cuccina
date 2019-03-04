@@ -4,20 +4,18 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.inlustris.cuccina.Beans.Recipe;
 import com.inlustris.cuccina.R;
 import com.inlustris.cuccina.Startrecipe;
@@ -51,34 +49,41 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
         final Recipe recipe = mData.get(position);
         Glide.with(mContext).load(recipe.getImageurl()).into(holder.pic);
+        Animation animation = AnimationUtils.loadAnimation(mContext,R.anim.slide_in_bottom);
+        holder.card.startAnimation(animation);
         holder.recipe.setText(recipe.getPrato());
-        holder.time.setText(recipe.getTempo());
-        holder.calories.setText("Aproximadamente " +  recipe.getCalorias() + "/kcal");
-        DatabaseReference firebase = FirebaseDatabase.getInstance().getReference();
-        firebase.child("recipes").child(recipe.getId()).child("ingredientes").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                holder.ingredients.setText(dataSnapshot.getChildrenCount() + " ingredientes");
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+        holder.tempo.setText(recipe.getTempo());
+        holder.calorias.setText(recipe.getCalorias()+ "/kcal por 100/g");
         holder.startrecipe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(mActivity,Startrecipe.class);
-                intent.putExtra("id",recipe.getId());
-                intent.putExtra("prato",recipe.getPrato());
-                intent.putExtra("picurl",recipe.getImageurl());
-                intent.putExtra("tipo",recipe.getTipo());
-                intent.putExtra("tempo",recipe.getTempo());
-                mActivity.startActivity(intent);
+                StartRecipe(recipe);
+            }
+        });
+        holder.pic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                StartRecipe(recipe);
+            }
+        });
+        holder.card.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                StartRecipe(recipe);
             }
         });
     }
+
+    private void StartRecipe(Recipe recipe) {
+        Intent intent = new Intent(mActivity,Startrecipe.class);
+        intent.putExtra("id",recipe.getId());
+        intent.putExtra("prato",recipe.getPrato());
+        intent.putExtra("picurl",recipe.getImageurl());
+        intent.putExtra("tipo",recipe.getTipo());
+        intent.putExtra("tempo",recipe.getTempo());
+        mActivity.startActivity(intent);
+    }
+
 
     @Override
     public int getItemCount() {
@@ -86,16 +91,17 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
+        private CardView card;
         private ImageView pic;
-        private TextView recipe,ingredients,calories,time;
+        private TextView recipe,calorias,tempo;
         private Button startrecipe;
         public MyViewHolder(View itemView) {
             super(itemView);
+            card = itemView.findViewById(R.id.card);
+            tempo = itemView.findViewById(R.id.tempo);
+            calorias = itemView.findViewById(R.id.calorias);
             pic = itemView.findViewById(R.id.pic);
             recipe = itemView.findViewById(R.id.receita);
-            time = itemView.findViewById(R.id.tempo);
-            calories = itemView.findViewById(R.id.calories);
-            ingredients = itemView.findViewById(R.id.ingredientscount);
             startrecipe = itemView.findViewById(R.id.startrecipe);
         }
     }

@@ -6,45 +6,45 @@
     android:orientation="vertical"
     android:layout_height="match_parent"
     tools:context=".Startrecipe">
-    <android.support.v4.view.ViewPager
-        android:id="@+id/slides"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-    <LinearLayout
-        android:layout_alignParentBottom="true"
-        android:background="@color/md_white_1000"
-        android:orientation="horizontal"
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <Button
-            android:id="@+id/goback"
-            android:drawableStart="@drawable/ic_arrow_back_black_24dp"
-            android:textColor="@color/colorPrimaryDark"
-            android:background="@drawable/ripple"
-            android:text="Voltar"
-            android:layout_width="wrap_content"
-            android:padding="5dp"
-            android:layout_height="wrap_content" />
-        <android.support.design.widget.TabLayout
-            app:tabIndicatorHeight="0dp"
-            app:tabIndicatorColor="@color/transparent"
-            android:id="@+id/tabs"
-            android:layout_width="130dp"
-            android:layout_height="wrap_content"
-            android:background="@color/transparent"/>
-        <Button
-            android:layout_gravity="end"
-            android:id="@+id/begin"
-            android:drawableEnd="@drawable/ic_done_black_24dp"
-            android:padding="5dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/ripple"
-            android:text="Tudo pronto"
-            android:textColor="@color/colorPrimary" />
-    </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <android.support.v7.widget.Toolbar
+                android:layout_margin="10dp"
+                android:background="@drawable/roundstroke"
+                app:title="@string/app_name"
+                android:id="@+id/toolbar"
+                android:layout_alignParentTop="true"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize">
 
-
+            </android.support.v7.widget.Toolbar>
+            <LinearLayout
+                android:layout_marginBottom="2dp"
+                android:padding="5dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/roundstroke"
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            <android.support.design.widget.BottomNavigationView
+                android:id="@+id/navigation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:menu="@menu/make_recipe" />
+            <android.support.v7.widget.RecyclerView
+                android:nestedScrollingEnabled="false"
+                android:id="@+id/items"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp" />
+            </LinearLayout>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
 
 
 </RelativeLayout>
