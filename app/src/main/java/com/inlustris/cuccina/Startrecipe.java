@@ -69,17 +69,14 @@ public class Startrecipe extends AppCompatActivity {
         });
         CarregarIngredientes();
         MobileAds.initialize(this, getString(R.string.addmob_id));
-
         mInterstitialAd = new InterstitialAd(this);
-        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        mInterstitialAd.setAdUnitId("ca-app-pub-4979584089010597/8627584192");
         mInterstitialAd.loadAd(new AdRequest.Builder().build());
-
         if (mInterstitialAd.isLoaded()) {
             mInterstitialAd.show();
         } else {
             System.out.println("Ad didnt loaded");
         }
-
         //recycleringredientes(ingredientArrayList);
 
     }

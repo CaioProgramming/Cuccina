@@ -66,10 +66,10 @@ public class Splash extends AppCompatActivity {
 
         };
 
-        CountDownTimer timer = new CountDownTimer(15000, 600) {
+        CountDownTimer timer = new CountDownTimer(15000, 1500) {
             @Override
             public void onTick(long l) {
-                CountDownTimer timer1 = new CountDownTimer(4000,200) {
+                CountDownTimer timer1 = new CountDownTimer(4000,100) {
                     @Override
                     public void onTick(long l) {
 
@@ -80,7 +80,6 @@ public class Splash extends AppCompatActivity {
                         if (animating) {
                             Rect bounds = new Rect();
                             background.getDrawingRect(bounds);
-
                             Random random = new Random();
                             int color = random.nextInt(colors.length);
                             background.setBackgroundColor(colors[color]);
@@ -89,10 +88,21 @@ public class Splash extends AppCompatActivity {
                             int radius = Math.max(background.getWidth(), background.getHeight());
                             Animator anim = ViewAnimationUtils.createCircularReveal(background, cx, cy,
                                     100, radius);
-                            anim.setDuration(1000);
+                            anim.setDuration(1200);
                             background.setVisibility(View.VISIBLE);
                             anim.start();
                             System.out.println(color);
+                            CountDownTimer timer2 = new CountDownTimer(3000,100) {
+                                @Override
+                                public void onTick(long l) {
+
+                                }
+
+                                @Override
+                                public void onFinish() {
+
+                                }
+                            }.start();
                         }
                     }
                 }.start();

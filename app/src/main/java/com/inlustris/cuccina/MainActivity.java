@@ -161,6 +161,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         if (id == R.id.action_settings) {
             FirebaseAuth.getInstance().signOut();
             Snacky.builder().setActivity(this).info().setText("Você saiu de sua conta").show();
+            recipes.removeAllViews();
             Carregar();
             return true;
         }

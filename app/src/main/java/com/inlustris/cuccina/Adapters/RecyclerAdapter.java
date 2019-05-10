@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +11,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -21,6 +20,8 @@ import com.inlustris.cuccina.R;
 import com.inlustris.cuccina.Startrecipe;
 
 import java.util.ArrayList;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyViewHolder> {
     private Context mContext;
@@ -49,8 +50,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
         final Recipe recipe = mData.get(position);
         Glide.with(mContext).load(recipe.getImageurl()).into(holder.pic);
-        Animation animation = AnimationUtils.loadAnimation(mContext,R.anim.slide_in_bottom);
-        holder.card.startAnimation(animation);
+        Animation animation = AnimationUtils.loadAnimation(mContext,R.anim.pop_in);
+        holder.pic.startAnimation(animation);
         holder.recipe.setText(recipe.getPrato());
         holder.tempo.setText(recipe.getTempo());
         holder.calorias.setText(recipe.getCalorias()+ "/kcal por 100/g");
@@ -90,12 +91,12 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
         return mData.size() ;
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
-        private CardView card;
-        private ImageView pic;
+    static class MyViewHolder extends RecyclerView.ViewHolder {
+        private RelativeLayout card;
+        private CircleImageView pic;
         private TextView recipe,calorias,tempo;
         private Button startrecipe;
-        public MyViewHolder(View itemView) {
+        MyViewHolder(View itemView) {
             super(itemView);
             card = itemView.findViewById(R.id.card);
             tempo = itemView.findViewById(R.id.tempo);

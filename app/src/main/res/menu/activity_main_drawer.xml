@@ -2,14 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
-    <group android:checkableBehavior="single" android:id="@+id/useroptions">
+    <group android:checkableBehavior="single">
             <item
                 android:id="@+id/nav_home"
                 android:icon="@drawable/ic_home_black_24dp"
                 android:title="Home" />
     </group>
 
-    <group android:id="@+id/categories" android:checkableBehavior="single">
+    <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_drinks"
             android:icon="@drawable/ic_cocktail"
@@ -35,11 +35,9 @@
             android:icon="@drawable/ic_healthy"
             android:title="Legumes, vegetais e cia." />
         <item
-            android:id="@+id/nav_massas"
             android:icon="@drawable/ic_spaghetti"
             android:title="Massas" />
         <item
-            android:id="@+id/nav_sauce"
             android:icon="@drawable/ic_sauce"
             android:title="Molhos" />
         <item

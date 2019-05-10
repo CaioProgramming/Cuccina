@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "481541057548-mli40fdfppu6tc0obicm56m01enp9ucu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.inlustris.cuccina",
+            "certificate_hash": "de7b5b429ceba25618c823f243aa01a9bc44156c"
+          }
+        },
+        {
           "client_id": "481541057548-rqjsrkh7cn8cogeot32uogkd0l1rgnrr.apps.googleusercontent.com",
           "client_type": 3
         }
