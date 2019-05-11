@@ -23,7 +23,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="scalingPercent" value="95" />
+                                                <entry key="scalingPercent" value="54" />
                                                 <entry key="trimmed" value="true" />
                                               </map>
                                             </option>
@@ -58,12 +58,27 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="backgroundAssetType" value="COLOR" />
                                       <entry key="backgroundColor" value="ef8b05" />
-                                      <entry key="foregroundAssetType" value="TEXT" />
-                                      <entry key="foregroundImage" value="C:\Users\cacai\Documents\programas\cuccina\text.png" />
+                                      <entry key="backgroundImage" value="C:\Users\cacai\Documents\programas\cuccina\back.png" />
+                                      <entry key="backgroundLayerName" value="ic_launcher_background" />
+                                      <entry key="foregroundImage" value="C:\Users\cacai\Documents\programas\cuccina\C.png" />
+                                      <entry key="foregroundLayerName" value="ic_launcher_foreground" />
                                       <entry key="legacyIconShape" value="CIRCLE" />
+                                      <entry key="outputName" value="ic_launcher_round" />
                                       <entry key="webIconShape" value="CIRCLE" />
+                                    </map>
+                                  </option>
+                                </PersistentState>
+                              </value>
+                            </entry>
+                            <entry key="launcherLegacy">
+                              <value>
+                                <PersistentState>
+                                  <option name="values">
+                                    <map>
+                                      <entry key="assetType" value="IMAGE" />
+                                      <entry key="iconShape" value="NONE" />
+                                      <entry key="imageAsset" value="C:\Users\cacai\Documents\programas\cuccina\cuccinalogo2.png" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -97,6 +112,11 @@
                                 </PersistentState>
                               </value>
                             </entry>
+                          </map>
+                        </option>
+                        <option name="values">
+                          <map>
+                            <entry key="outputIconType" value="LAUNCHER_LEGACY" />
                           </map>
                         </option>
                       </PersistentState>
