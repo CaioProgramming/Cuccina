@@ -199,7 +199,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                     }
                 }
                 Collections.shuffle(recipeArrayList);
-                GridLayoutManager llm = new GridLayoutManager(activity, 1, GridLayoutManager.VERTICAL, false);
+                GridLayoutManager llm = new GridLayoutManager(activity, 1, GridLayoutManager.HORIZONTAL, false);
                 recipes.setHasFixedSize(true);
                 myadapter = new RecyclerAdapter(activity, recipeArrayList, activity,recipes);
                 myadapter.notifyDataSetChanged();
@@ -269,7 +269,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                     }
                 }
                 Collections.shuffle(recipeArrayList);
-                GridLayoutManager llm = new GridLayoutManager(activity, 1, GridLayoutManager.VERTICAL, false);
+                GridLayoutManager llm = new GridLayoutManager(activity, 1, GridLayoutManager.HORIZONTAL, false);
                 recipes.setHasFixedSize(true);
                 RecyclerAdapter myadapter = new RecyclerAdapter(activity, recipeArrayList, activity,recipes);
                 myadapter.notifyDataSetChanged();

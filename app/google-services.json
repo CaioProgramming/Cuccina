@@ -15,11 +15,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "481541057548-1km8qn578n9dc28uuvgemq8931h623r8.apps.googleusercontent.com",
+          "client_id": "481541057548-2a76goh3rq7gmq98m2nt3m1nt9ej3ure.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.inlustris.cuccina",
-            "certificate_hash": "e52ea948ad8eb3370c325822e60b1550052192ac"
+            "certificate_hash": "27f9c3e4d6329afb5ec5c475f97e4c1a6fe0f664"
           }
         },
         {
@@ -28,6 +28,14 @@
           "android_info": {
             "package_name": "com.inlustris.cuccina",
             "certificate_hash": "de7b5b429ceba25618c823f243aa01a9bc44156c"
+          }
+        },
+        {
+          "client_id": "481541057548-1km8qn578n9dc28uuvgemq8931h623r8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.inlustris.cuccina",
+            "certificate_hash": "e52ea948ad8eb3370c325822e60b1550052192ac"
           }
         },
         {
@@ -41,22 +49,16 @@
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 2,
           "other_platform_oauth_client": [
             {
               "client_id": "481541057548-rqjsrkh7cn8cogeot32uogkd0l1rgnrr.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
-        },
-        "ads_service": {
-          "status": 2
         }
-      }
+      },
+      "admob_app_id": "ca-app-pub-4979584089010597~3758400895"
     }
   ],
   "configuration_version": "1"

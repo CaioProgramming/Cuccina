@@ -7,7 +7,7 @@
     android:background="@color/md_white_1000"
     android:layout_height="match_parent"
     tools:openDrawer="start"
-    >
+     >
 
 
     <android.support.v4.widget.NestedScrollView
@@ -23,15 +23,15 @@
             android:layout_height="wrap_content">
             <android.support.v7.widget.Toolbar
                 app:navigationIcon="@drawable/ic_menu_black_24dp"
-                android:background="@drawable/roundstroke"
+                android:background="@color/colorPrimaryDark"
                 app:title="@string/app_name"
-                app:titleTextColor="@color/colorPrimaryDark"
-                android:layout_margin="15dp"
-                android:id="@+id/toolbar"
+
+                app:titleTextColor="@color/md_white_1000"
+                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize">
                 <android.support.v7.widget.SearchView
-                    app:showDividers="none"
+                     app:showDividers="none"
                     android:gravity="end"
                     app:defaultQueryHint="Pesquisar receita"
                     android:id="@+id/search"
@@ -43,7 +43,7 @@
                 android:nestedScrollingEnabled="false"
                 android:id="@+id/recipes"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
             </android.support.v7.widget.RecyclerView>
             <TextView
                 android:layout_marginTop="5dp"

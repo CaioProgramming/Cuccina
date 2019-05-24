@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -92,8 +94,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     }
 
     static class MyViewHolder extends RecyclerView.ViewHolder {
-        private RelativeLayout card;
-        private CircleImageView pic;
+        private LinearLayout card;
+        private ImageView pic;
         private TextView recipe,calorias,tempo;
         private Button startrecipe;
         MyViewHolder(View itemView) {

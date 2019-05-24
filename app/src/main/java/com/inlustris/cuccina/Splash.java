@@ -18,8 +18,7 @@ import java.util.Random;
 
 public class Splash extends AppCompatActivity {
 
-    private android.widget.TextView appname;
-    private android.widget.LinearLayout background;
+     private android.widget.LinearLayout background;
     private Activity activity = this;
     boolean animating = true;
     @Override
@@ -31,11 +30,7 @@ public class Splash extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
         );
         this.background = findViewById(R.id.background);
-        this.appname = findViewById(R.id.appname);
-        Typeface font = Typeface.createFromAsset(this.getAssets(),"fonts/GrandHotel-Regular.ttf");
-        appname.setTypeface(font);
-        Animation animation = AnimationUtils.loadAnimation(this,R.anim.pop_in);
-        appname.startAnimation(animation);
+
         background();
 
     }
