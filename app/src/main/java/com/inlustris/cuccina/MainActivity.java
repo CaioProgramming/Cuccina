@@ -56,12 +56,10 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        SearchView search = findViewById(R.id.search);
         this.toolbar = findViewById(R.id.toolbar);
         android.widget.ImageView nomorerecipes = findViewById(R.id.nomorerecipes);
         this.recipes = findViewById(R.id.recipes);
-        Glide.with(this).load(getResources().getString(R.string.nomorerecipesimage)).into(nomorerecipes);
-        setSupportActionBar(toolbar);
+         setSupportActionBar(toolbar);
 
         recipesdb = FirebaseDatabase.getInstance().getReference();
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -69,13 +67,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-        search.setOnCloseListener(new SearchView.OnCloseListener() {
-            @Override
-            public boolean onClose() {
-                Carregar();
-                return false;
-            }
-        });
         NavigationView navigationView = findViewById(R.id.nav_view);
         View header = navigationView.getHeaderView(0);
          usertxt = header.findViewById(R.id.usuarios);
@@ -129,7 +120,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
             }
         });
         ChecKUser();
-        search.setOnQueryTextListener(this);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
@@ -138,9 +128,9 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
         }
+        super.onBackPressed();
+
     }
 
     @Override
@@ -199,8 +189,8 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                     }
                 }
                 Collections.shuffle(recipeArrayList);
-                GridLayoutManager llm = new GridLayoutManager(activity, 1, GridLayoutManager.HORIZONTAL, false);
-                recipes.setHasFixedSize(true);
+                GridLayoutManager llm = new GridLayoutManager(activity, 1, GridLayoutManager.VERTICAL, false);
+
                 myadapter = new RecyclerAdapter(activity, recipeArrayList, activity,recipes);
                 myadapter.notifyDataSetChanged();
                 recipes.setAdapter(myadapter);

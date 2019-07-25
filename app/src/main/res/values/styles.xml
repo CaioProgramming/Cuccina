@@ -1,12 +1,17 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="ThemeOverlay.AppCompat.Dark">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="toolbarNavigationButtonStyle">@drawable/ic_left_align</item>
+        <item name="homeAsUpIndicator">@drawable/ic_back</item>
+        <item name="android:fontFamily">@font/grotesque</item>
+        <item name="android:navigationBarColor">@color/md_white_1000</item>
+        <item name="android:statusBarColor">@color/md_white_1000</item>
+         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:colorControlHighlight">@color/colorAccent</item>
+         <item name="colorControlNormal">@color/colorPrimaryDark</item>
         <item name="android:scrollbarThumbVertical">@color/transparent</item>
 
 

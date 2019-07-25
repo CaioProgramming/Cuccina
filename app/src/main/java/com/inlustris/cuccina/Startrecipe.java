@@ -51,8 +51,8 @@ public class Startrecipe extends AppCompatActivity {
         setContentView(R.layout.activity_startrecipe);
 
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        ViewPager items = (ViewPager) findViewById(R.id.items);
+        toolbar = findViewById(R.id.toolbar);
+        ViewPager items = findViewById(R.id.items);
 
         toolbar.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -63,9 +63,10 @@ public class Startrecipe extends AppCompatActivity {
                     if (getContext() == null) {
                         return;
                     }
-                    Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/GrandHotel.ttf");
+                    Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/GrandHotel-Regular.ttf");
                     title.setTypeface(tf);
                     title.setTextSize(20);
+                    title.setText(activity.getIntent().getExtras().getString("prato"));
 
                 }
             }

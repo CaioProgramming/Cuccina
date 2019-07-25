@@ -83,11 +83,11 @@ public class Splash extends AppCompatActivity {
                             int radius = Math.max(background.getWidth(), background.getHeight());
                             Animator anim = ViewAnimationUtils.createCircularReveal(background, cx, cy,
                                     100, radius);
-                            anim.setDuration(1200);
+                            anim.setDuration(1000);
                             background.setVisibility(View.VISIBLE);
                             anim.start();
                             System.out.println(color);
-                            CountDownTimer timer2 = new CountDownTimer(3000,100) {
+                            CountDownTimer timer2 = new CountDownTimer(1400,100) {
                                 @Override
                                 public void onTick(long l) {
 

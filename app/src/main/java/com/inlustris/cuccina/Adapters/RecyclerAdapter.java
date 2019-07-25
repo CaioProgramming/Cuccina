@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -94,7 +95,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     }
 
     static class MyViewHolder extends RecyclerView.ViewHolder {
-        private LinearLayout card;
+        private CardView card;
         private ImageView pic;
         private TextView recipe,calorias,tempo;
         private Button startrecipe;
