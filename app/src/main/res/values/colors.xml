@@ -45,6 +45,8 @@
     <!--brown -->
 
     <!--grey-->
+    <color name="md_grey_50">#FAFAFA</color>
+
     <color name="md_grey_300">#E0E0E0</color>
     <color name="md_grey_500">#9E9E9E</color>
     <color name="md_black_1000">#000000</color>

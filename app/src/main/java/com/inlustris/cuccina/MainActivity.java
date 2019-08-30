@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     TextView usertxt;
     private ArrayList<Recipe> recipeArrayList;
     private NavigationView navview;
-
+    private TextView title;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         android.widget.ImageView nomorerecipes = findViewById(R.id.nomorerecipes);
         this.recipes = findViewById(R.id.recipes);
          setSupportActionBar(toolbar);
+         toolbar.setTitle(" ");
 
         recipesdb = FirebaseDatabase.getInstance().getReference();
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -72,45 +73,46 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
          usertxt = header.findViewById(R.id.usuarios);
         Typeface font = Typeface.createFromAsset(this.getAssets(),"fonts/GrandHotel-Regular.ttf");
         usertxt.setTypeface(font);
+        this.title = findViewById(R.id.title);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
 
                 if (id == R.id.nav_home) {
-                    getSupportActionBar().setTitle(getResources().getString(R.string.app_name));
+                    title.setText(getResources().getString(R.string.app_name));
                     Carregar();
                     // Handle the camera action
 //                } else if (id == R.id.nav_favorite) {
 //                    getSupportActionBar().setTitle("Favoritos");
                 } else if (id == R.id.nav_bakery) {
-                    getSupportActionBar().setTitle("Confeitaria");
+                    title.setText("Confeitaria");
                     CarregarCategoria("Confeitaria");
 
                 } else if (id == R.id.nav_soup) {
-                    getSupportActionBar().setTitle("Cremes e sopas");
+                    title.setText("Cremes e sopas");
                     CarregarCategoria("Cremes e sopas");
                 } else if (id == R.id.nav_candy) {
-                    getSupportActionBar().setTitle("Doces");
+                    title.setText("Doces");
                     CarregarCategoria("Doces");
 
                 } else if (id == R.id.nav_sea) {
-                    getSupportActionBar().setTitle("Frutos do mar");
+                    title.setText("Frutos do mar");
                     CarregarCategoria("Frutos do mar");
 
                 } else if(id == R.id.nav_protein){
-                    getSupportActionBar().setTitle("Proteínas");
+                    title.setText("Proteínas");
                     CarregarCategoria("Proteínas");
 
                 }else if(id == R.id.nav_saladas){
-                    getSupportActionBar().setTitle("Saladas");
+                    title.setText("Saladas");
                     CarregarCategoria("Saladas");
                 }else if(id == R.id.nav_lettuce){
-                    getSupportActionBar().setTitle("Legumes,vegetais e cia.");
+                    title.setText("Legumes,vegetais e cia.");
                     CarregarCategoria("Legumes,vegetais e cia.");
 
                 }else if(id == R.id.nav_drinks){
-                    getSupportActionBar().setTitle("Bebidas");
+                    title.setText("Bebidas");
                     CarregarCategoria("Bebidas");
                 }
 
@@ -121,6 +123,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         });
         ChecKUser();
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
 
     @Override

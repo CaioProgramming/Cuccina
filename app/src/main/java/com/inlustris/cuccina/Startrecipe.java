@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -53,27 +54,16 @@ public class Startrecipe extends AppCompatActivity {
 
         toolbar = findViewById(R.id.toolbar);
         ViewPager items = findViewById(R.id.items);
+        TabLayout tabs = findViewById(R.id.tabs);
 
-        toolbar.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                View view = toolbar.getChildAt(0);
-                if (view != null) {
-                    TextView title = (TextView) view;
-                    if (getContext() == null) {
-                        return;
-                    }
-                    Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/GrandHotel-Regular.ttf");
-                    title.setTypeface(tf);
-                    title.setTextSize(20);
-                    title.setText(activity.getIntent().getExtras().getString("prato"));
-
-                }
-            }
-        });
 
         StartRecipeAdapter adapter = new StartRecipeAdapter(activity);
         items.setAdapter(adapter);
+        tabs.setupWithViewPager(items);
+        tabs.getTabAt(0).setText("Ingredientes");
+        tabs.getTabAt(1).setText("Passo a passo");
+       toolbar.setTitle(activity.getIntent().getExtras().getString("prato"));
+
     }
 
 

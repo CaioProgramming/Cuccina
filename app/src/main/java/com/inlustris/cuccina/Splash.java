@@ -61,10 +61,10 @@ public class Splash extends AppCompatActivity {
 
         };
 
-        CountDownTimer timer = new CountDownTimer(15000, 1500) {
+        CountDownTimer timer = new CountDownTimer(2000, 1500) {
             @Override
             public void onTick(long l) {
-                CountDownTimer timer1 = new CountDownTimer(4000,100) {
+                CountDownTimer timer1 = new CountDownTimer(2100,100) {
                     @Override
                     public void onTick(long l) {
 
