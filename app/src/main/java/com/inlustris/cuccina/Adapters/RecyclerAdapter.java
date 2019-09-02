@@ -54,16 +54,15 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
         final Recipe recipe = mData.get(position);
         Glide.with(mContext).load(recipe.getImageurl()).into(holder.pic);
         Animation animation = AnimationUtils.loadAnimation(mContext,R.anim.pop_in);
-        holder.pic.startAnimation(animation);
-        holder.recipe.setText(recipe.getPrato());
+         holder.recipe.setText(recipe.getPrato());
         holder.tempo.setText(recipe.getTempo());
         holder.calorias.setText(recipe.getCalorias()+ "/kcal por 100/g");
-        holder.startrecipe.setOnClickListener(new View.OnClickListener() {
+       /* holder.startrecipe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 StartRecipe(recipe);
             }
-        });
+        });*/
         holder.pic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -76,6 +75,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
                 StartRecipe(recipe);
             }
         });
+        holder.card.startAnimation(animation);
     }
 
     private void StartRecipe(Recipe recipe) {
@@ -85,6 +85,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
         intent.putExtra("picurl",recipe.getImageurl());
         intent.putExtra("tipo",recipe.getTipo());
         intent.putExtra("tempo",recipe.getTempo());
+        intent.putExtra("calorias",recipe.getCalorias());
         mActivity.startActivity(intent);
     }
 
@@ -98,15 +99,13 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
         private CardView card;
         private ImageView pic;
         private TextView recipe,calorias,tempo;
-        private Button startrecipe;
-        MyViewHolder(View itemView) {
+         MyViewHolder(View itemView) {
             super(itemView);
             card = itemView.findViewById(R.id.card);
             tempo = itemView.findViewById(R.id.tempo);
             calorias = itemView.findViewById(R.id.calorias);
             pic = itemView.findViewById(R.id.pic);
             recipe = itemView.findViewById(R.id.receita);
-            startrecipe = itemView.findViewById(R.id.startrecipe);
-        }
+         }
     }
 }

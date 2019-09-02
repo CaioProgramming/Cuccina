@@ -28,6 +28,7 @@ import java.util.ArrayList;
 
 public class StartRecipeAdapter extends PagerAdapter {
     private Activity activity;
+    public static String titleingredients = "Title";
     private String id;
     public StartRecipeAdapter(Activity activity) {
         this.activity = activity;
@@ -81,6 +82,10 @@ public class StartRecipeAdapter extends PagerAdapter {
         firebase.child("recipes").child(id).child("ingredientes").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Ingredient i1 = new Ingredient();
+                i1.setIngrediente(titleingredients);
+                ingredientArrayList.add(i1);
+
                 for (DataSnapshot d : dataSnapshot.getChildren()) {
                     Ingredient ingredient = new Ingredient();
                     Ingredient i = d.getValue(Ingredient.class);

@@ -3,6 +3,7 @@ package com.inlustris.cuccina.Adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,23 +48,11 @@ public class RecyclerStepsAdapter extends RecyclerView.Adapter<RecyclerStepsAdap
 
         final Step step = mData.get(position);
         Animation animation = AnimationUtils.loadAnimation(mContext,R.anim.fui_slide_in_right);
-        holder.card.startAnimation(animation);
         holder.count.setText(String.valueOf(Integer.parseInt(step.getCount()) + 1));
         holder.steptxt.setText(step.getPasso());
-        holder.line.setVisibility(View.GONE);
-        if (position != mData.size()) {
-            holder.line.setVisibility(View.VISIBLE);
-            ViewTreeObserver vto = holder.steptxt.getViewTreeObserver();
-            vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                @Override
-                public void onGlobalLayout() {
-                    ViewGroup.LayoutParams params = holder.line.getLayoutParams();
-                    params.height = holder.steptxt.getHeight();
-                    holder.line.setLayoutParams(params);
-                    holder.steptxt.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                }
-            });
-        }
+        holder.card.startAnimation(animation);
+
+
 
     }
 
@@ -74,15 +63,13 @@ public class RecyclerStepsAdapter extends RecyclerView.Adapter<RecyclerStepsAdap
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         private TextView steptxt,count;
-        private LinearLayout line;
-        private RelativeLayout card;
+        CardView  card;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             card = itemView.findViewById(R.id.card);
             steptxt = itemView.findViewById(R.id.steptxt);
             count = itemView.findViewById(R.id.counter);
-            line = itemView.findViewById(R.id.line);
 
         }
     }

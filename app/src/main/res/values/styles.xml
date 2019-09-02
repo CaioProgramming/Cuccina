@@ -3,6 +3,8 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:statusBarColor">@color/md_white_1000</item>
         <item name="android:textColor">@color/md_black_1000</item>
         <item name="windowNoTitle">true</item>
          <item name="android:fontFamily">@font/roboto_normal</item>

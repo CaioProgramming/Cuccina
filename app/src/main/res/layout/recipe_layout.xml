@@ -1,29 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView
+    app:cardCornerRadius="10dp"
+    app:cardElevation="1dp"
+    android:foreground="?attr/selectableItemBackground"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card"
-    app:cardElevation="0dp"
-    android:layout_margin="10dp"
-    app:cardCornerRadius="10dp"
-    android:layout_height="wrap_content"
-    app:cardBackgroundColor="@color/md_grey_50"
-    android:layout_width="match_parent">
+     android:layout_margin="5dp"
+     android:layout_height="wrap_content"
+     android:layout_width="match_parent">
     <LinearLayout
-         android:orientation="horizontal"
+         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="150dp">
+        android:layout_height="wrap_content">
         <android.support.v7.widget.CardView
             android:foreground="?attr/selectableItemBackground"
             app:cardElevation="0dp"
             app:cardCornerRadius="20dp"
-            android:layout_width="150dp"
-            android:layout_height="150dp">
+            android:layout_width="match_parent"
+            android:layout_height="200dp">
             <ImageView
                 android:foreground="?attr/selectableItemBackground"
                 android:scaleType="centerCrop"
                 android:background="@drawable/whiteripple"
-                android:adjustViewBounds="true"
-                android:contentDescription="food picture"
+                 android:contentDescription="food picture"
                 android:foregroundTint="@color/colorAccent"
                 android:id="@+id/pic"
                 android:src="@drawable/ic_donut"
@@ -33,41 +34,44 @@
 
         </android.support.v7.widget.CardView>
         <LinearLayout
-            android:layout_margin="10dp"
+            android:background="@color/transparent"
+            android:layout_margin="1dp"
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="150dp">
+            android:layout_height="wrap_content">
             <TextView
+                android:textSize="20sp"
+                android:padding="5dp"
                 android:textStyle="bold"
                 android:id="@+id/receita"
-                android:padding="10dp"
-                android:text="Brigadeiro de panela com canela"
+                 android:text="Brigadeiro de panela com canela"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
-            <TextView
-                android:drawableStart="@drawable/ic_whatshot_black_24dp"
-                android:textSize="12sp"
-                android:id="@+id/calorias"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
-            <TextView
-                android:drawableStart="@drawable/ic_query_builder_black_24dp"
-                android:textSize="12sp"
-                android:id="@+id/tempo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
-            <Button
-                android:background="@drawable/ripple"
-                android:padding="10dp"
-                android:layout_gravity="center|bottom"
-                android:id="@+id/startrecipe"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Fazer receita"
-                android:textStyle="bold"
-                android:textColor="@color/md_white_1000" />
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="362/kcal"
+                    android:padding="10dp"
+                    android:id="@+id/calorias"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_whatshot_black_24dp"
+                    android:textColor="@color/md_grey_300"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:text="1 hora"
+                    android:padding="10dp"
+                    android:id="@+id/tempo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_query_builder_black_24dp"
+                    android:textColor="@color/md_grey_300"
+                    android:textSize="16sp" />
+            </LinearLayout>
 
 
         </LinearLayout>

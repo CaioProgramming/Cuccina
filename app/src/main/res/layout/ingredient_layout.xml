@@ -14,13 +14,6 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:padding="1dp"
-            app:civ_fill_color="#4DFF6F00"
-             android:layout_gravity="center"
-            android:src="@drawable/ic_ingredients"
-            android:layout_width="50dp"
-            android:layout_height="50dp" />
         <LinearLayout
             android:layout_gravity="center"
             android:orientation="vertical"
