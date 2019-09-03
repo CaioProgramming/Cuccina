@@ -4,13 +4,14 @@
         android:layout_width="match_parent"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical"
+        android:fitsSystemWindows="true"
         android:background="@color/md_white_1000"
         android:layout_height="match_parent"
         tools:context=".Startrecipe">
         <android.support.design.widget.AppBarLayout
             android:id="@+id/appbar"
-
-            android:theme="@style/ThemeOverlay.AppCompat"
+            android:fitsSystemWindows="true"
+            android:theme="@style/AppTheme.AppBarOverlay"
             android:background="@color/md_white_1000"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -21,17 +22,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <LinearLayout
+                    android:layout_marginBottom="40dp"
                     app:layout_collapseMode="parallax"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <ImageView
+                        android:fitsSystemWindows="true"
                         app:layout_collapseMode="parallax"
                         android:id="@+id/foodpick"
                         android:scaleType="centerCrop"
                         android:src="@drawable/ic_donut"
                         android:layout_width="match_parent"
-                        android:layout_height="300dp" />
+                        android:layout_height="300dp"
+                        android:contentDescription="Recipe picture" />
 
 
 
@@ -58,32 +62,35 @@
                             android:textSize="24sp"
                             android:background="@drawable/bottom_line"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content" /></LinearLayout>
+                            android:layout_height="wrap_content" />
+                </LinearLayout>
 
                     <android.support.v7.widget.Toolbar
                         app:popupTheme="@style/AppTheme"
                         android:theme="@style/Theme.AppCompat.Light"
-                        android:layout_gravity="top"
+                        android:layout_gravity="bottom"
                          android:id="@+id/toolbar"
                         android:layout_width="match_parent"
                         android:layout_height="?attr/actionBarSize"
                         app:layout_collapseMode="pin">
-
+                        <TextView
+                            android:id="@+id/prato"
+                            android:layout_gravity="center"
+                            android:padding="10dp"
+                            android:fontFamily="@font/roboto"
+                            android:textSize="24sp"
+                            android:text="@string/app_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
                     </android.support.v7.widget.Toolbar>
 
 
 
             </android.support.design.widget.CollapsingToolbarLayout>
-            <TextView
-                android:id="@+id/prato"
-                android:layout_gravity="center"
-                android:padding="10dp"
-                android:fontFamily="@font/roboto"
-                android:textSize="24sp"
-                android:text="@string/app_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+
             <android.support.design.widget.TabLayout
+                app:tabTextColor="@color/md_grey_500"
+                app:tabSelectedTextColor="@color/colorPrimaryDark"
                 android:id="@+id/tabs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
