@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "481541057548-mf43m3u2hsuct4vlpg9st64kt9h2hli7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.inlustris.cuccina",
+            "certificate_hash": "7079f2e50adb51d3144acf654427b19b72193d6c"
+          }
+        },
+        {
           "client_id": "481541057548-2a76goh3rq7gmq98m2nt3m1nt9ej3ure.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
