@@ -31,7 +31,7 @@ class StepsDB(val recipe: Recipe, activity: Activity) : ModelBase(activity) {
         for (d in dataSnapshot.children) {
             val s = d.getValue(Step::class.java)
             s?.let {
-                it.count = d.key
+                it.count = (d.key!!.toInt() + 1).toString()
                 stepslist.add(it)
             }
         }

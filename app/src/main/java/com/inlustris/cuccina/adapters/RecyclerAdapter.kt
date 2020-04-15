@@ -83,9 +83,8 @@ class RecyclerAdapter(private val activity: Activity, var recipes: ArrayList<Rec
     private fun startRecipe(recipe: Recipe, recipeCard: RecipeLayoutBinding) {
         val i = Intent(activity, StartrecipeActivity::class.java)
         i.putExtra("Recipe", recipe)
-        val p1: Pair<View, String> = Pair.create(recipeCard.pic as View, "RecipePicture")
         val p2: Pair<View, String> = Pair.create(recipeCard.receita as View, "RecipeName")
-        val options = ActivityOptions.makeSceneTransitionAnimation(activity, p1, p2)
+        val options = ActivityOptions.makeSceneTransitionAnimation(activity, p2)
         activity.startActivity(i, options.toBundle())
     }
 

@@ -43,6 +43,11 @@ class IngredientsDB(val recipe: Recipe, activity: Activity) : ModelBase(activity
                     if (q >= 2) {
                         if (i.medidas == "Unidade") {
                             it.medidas = ""
+                            if (it.ingrediente!!.contains(" ")) {
+                                val space = i.ingrediente!!.indexOf(" ")
+                                val i = it.ingrediente!!.substring(0, space - 1)
+                                it.ingrediente = i + "s"
+                            }
                         }
                     }
                 }

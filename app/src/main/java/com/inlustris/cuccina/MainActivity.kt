@@ -4,8 +4,7 @@ import android.app.Activity
 import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
-import android.content.res.ColorStateList
-import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -59,8 +58,7 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener, ModelL
         drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
         nav_view.setNavigationItemSelectedListener { item ->
-            actbind!!.maincontent.title.text = item.title.toString()
-            CarregarCategoria(item.title.toString())
+            CarregarCategoria(item.title.toString(), item.icon)
             true
         }
         configureRecycler()
@@ -86,7 +84,7 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener, ModelL
         val searchitem: MenuItem = menu!!.findItem(R.id.search)
         val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
         val searchView = searchitem.actionView as SearchView
-        searchView.backgroundTintList = ColorStateList.valueOf(Color.TRANSPARENT)
+        searchView.setBackgroundResource(R.drawable.transparent)
         searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
         searchView.queryHint = "Pesquise Receitas"
         searchView.setOnQueryTextListener(this)
@@ -117,16 +115,18 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener, ModelL
                         .build(), RC_SIGN_IN)
             }.show()
         } else {
-            CarregarCategoria("")
+            nav_view.setCheckedItem(R.id.nav_home)
             val header: View = nav_view.getHeaderView(0)
             val usertxt: TextView = header.findViewById(R.id.username)
             usertxt.text = user!!.displayName
         }
     }
 
-    private fun CarregarCategoria(categoria: String?) {
+    private fun CarregarCategoria(categoria: String?, icon: Drawable) {
         configureRecycler()
         if (categoria != "Sair") {
+            actbind?.maincontent?.toolbar?.title = categoria
+            actbind?.maincontent?.toolbar?.logo = icon
             val recipesDB = RecipesDB(this)
             recipesDB.carregar(this, categoria)
         } else {
@@ -189,7 +189,7 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener, ModelL
 
     override fun onQueryTextChange(newText: String?): Boolean {
         if (newText.isNullOrBlank()) {
-            CarregarCategoria("")
+            nav_view.setCheckedItem(R.id.nav_home)
         } else {
             Pesquisar(newText)
         }

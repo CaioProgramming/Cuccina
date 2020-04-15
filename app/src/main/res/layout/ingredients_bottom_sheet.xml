@@ -3,22 +3,25 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="10dp">
 
+
         <View
-            android:layout_width="50dp"
-            android:layout_height="5dp"
+            android:layout_height="8dp"
             android:layout_gravity="center"
-            android:background="@drawable/round"
-            android:backgroundTint="@color/colorAccent" />
+            android:layout_width="50dp"
+            android:background="@color/colorAccent" />
 
         <TextView
+            android:background="@drawable/bottom_line"
+            android:padding="10dp"
+            android:textAlignment="center"
+            android:textStyle="bold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Ingredientes"
-            android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
         <androidx.recyclerview.widget.RecyclerView

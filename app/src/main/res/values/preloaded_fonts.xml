@@ -3,5 +3,7 @@
     <array name="preloaded_fonts" translatable="false">
         <item>@font/engagement</item>
         <item>@font/italiana</item>
+        <item>@font/montserrat_alternates</item>
+        <item>@font/varela_round</item>
     </array>
 </resources>

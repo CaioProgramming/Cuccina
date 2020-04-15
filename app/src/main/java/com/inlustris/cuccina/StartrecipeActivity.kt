@@ -36,14 +36,16 @@ class StartrecipeActivity : AppCompatActivity() {
 
     private fun loadRecipe() {
         val recipe: Recipe = intent.getSerializableExtra("Recipe") as Recipe
-        startrecipeBinding!!.recipe = recipe
+        recipe.calorias = "🔥\n${recipe.calorias} kcal"
+        recipe.tempo = "⏰\n${recipe.tempo}"
+        startrecipeBinding?.recipe = recipe
         Glide.with(this).load(recipe.imageurl).into(foodpick)
         loadSteps(recipe)
         loadIngredients(recipe)
     }
 
-    private fun setupTabs() {
-        for (i in 0..tabs.childCount) {
+    private fun setupTabs(size: Int) {
+        for (i in 0..size) {
             tabs.getTabAt(i)?.setIcon(R.drawable.dot)
         }
     }
@@ -53,7 +55,7 @@ class StartrecipeActivity : AppCompatActivity() {
             override fun ingredientsLoaded(ingredients: ArrayList<Ingredient>) {
                 if (ingredients.size > 0) {
                     startrecipeBinding?.ingredientsSheet?.ingredientsRecycler?.adapter = RecycleIngredientsAdapter(this@StartrecipeActivity, ingredients)
-                    startrecipeBinding?.ingredientsSheet?.ingredientsRecycler?.layoutManager = GridLayoutManager(this@StartrecipeActivity, 2, VERTICAL, false)
+                    startrecipeBinding?.ingredientsSheet?.ingredientsRecycler?.layoutManager = GridLayoutManager(this@StartrecipeActivity, 1, VERTICAL, false)
                 } else {
                     Snacky.builder().setActivity(this@StartrecipeActivity).setText("Erro ao obter ingredientes da receita").build().show()
                 }
@@ -70,9 +72,9 @@ class StartrecipeActivity : AppCompatActivity() {
                     val adapter = StartRecipeAdapter(this@StartrecipeActivity, steps)
                     items.adapter = adapter
                     tabs.setupWithViewPager(items)
-                    setupTabs()
+                    setupTabs(steps.size)
                 } else {
-                    Snacky.builder().setActivity(this@StartrecipeActivity).setText("Erro ao obter passo a passo da receita").build().show()
+                    Snacky.builder().setActivity(this@StartrecipeActivity).setText("Erro ao obter passo a passo da receita").error().show()
                 }
             }
         })
