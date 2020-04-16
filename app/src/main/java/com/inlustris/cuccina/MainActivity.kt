@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener, ModelL
         drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
         nav_view.setNavigationItemSelectedListener { item ->
-            CarregarCategoria(item.title.toString(), item.icon)
+            carregarCategoria(item.title.toString(), item.icon)
             true
         }
         configureRecycler()
@@ -115,14 +115,14 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener, ModelL
                         .build(), RC_SIGN_IN)
             }.show()
         } else {
-            nav_view.getChildAt(0).isSelected = true
+            carregarCategoria("Home", getDrawable(R.drawable.ic_cherries)!!)
             val header: View = nav_view.getHeaderView(0)
             val usertxt: TextView = header.findViewById(R.id.username)
             usertxt.text = user!!.displayName
         }
     }
 
-    private fun CarregarCategoria(categoria: String?, icon: Drawable) {
+    private fun carregarCategoria(categoria: String?, icon: Drawable) {
         configureRecycler()
         if (categoria != "Sair") {
             actbind?.maincontent?.toolbar?.title = categoria
