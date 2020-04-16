@@ -20,7 +20,6 @@ class RecycleIngredientsAdapter(private val activity: Activity, private val ingr
     override fun onBindViewHolder(holder: IngredientViewHolder, position: Int) {
         val ingredient = ingredientList[position]
         holder.ingredientCardBinding.ingrediente.text = Html.fromHtml("<b>${ingredient.quantidade} ${ingredient.medidas}</b> ${ingredient.ingrediente}")
-
     }
 
 

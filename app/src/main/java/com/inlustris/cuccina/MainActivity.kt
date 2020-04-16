@@ -115,7 +115,7 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener, ModelL
                         .build(), RC_SIGN_IN)
             }.show()
         } else {
-            nav_view.setCheckedItem(R.id.nav_home)
+            nav_view.getChildAt(0).isSelected = true
             val header: View = nav_view.getHeaderView(0)
             val usertxt: TextView = header.findViewById(R.id.username)
             usertxt.text = user!!.displayName
