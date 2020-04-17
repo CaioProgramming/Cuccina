@@ -2,11 +2,15 @@ package com.inlustris.cuccina
 
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View.GONE
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView.VERTICAL
 import com.bumptech.glide.Glide
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_COLLAPSED
+import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED
 import com.inlustris.cuccina.adapters.RecycleIngredientsAdapter
 
 import com.inlustris.cuccina.adapters.StartRecipeAdapter
@@ -56,7 +60,14 @@ class StartrecipeActivity : AppCompatActivity() {
                 if (ingredients.size > 0) {
                     startrecipeBinding?.ingredientsSheet?.ingredientsRecycler?.adapter = RecycleIngredientsAdapter(this@StartrecipeActivity, ingredients)
                     startrecipeBinding?.ingredientsSheet?.ingredientsRecycler?.layoutManager = GridLayoutManager(this@StartrecipeActivity, 1, VERTICAL, false)
+                    bottomSheet.setOnClickListener {
+                        val behavior = BottomSheetBehavior.from(bottomSheet)
+                        behavior.state = if (behavior.state == STATE_COLLAPSED) STATE_EXPANDED else STATE_COLLAPSED
+                    }
+                    val behavior = BottomSheetBehavior.from(bottomSheet)
+                    behavior.state = STATE_EXPANDED
                 } else {
+                    startrecipeBinding?.ingredientsSheet?.ingredientView?.visibility = GONE
                     Snacky.builder().setActivity(this@StartrecipeActivity).setText("Erro ao obter ingredientes da receita").build().show()
                 }
 

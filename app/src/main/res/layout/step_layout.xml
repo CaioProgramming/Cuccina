@@ -14,16 +14,19 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
             <TextView
+                android:background="@color/colorPrimary"
+
+                android:backgroundTint="?android:textColorPrimary"
                 android:text="@{passo.count}"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
-                android:textColor="?android:textColorPrimary"
+                android:textColor="?android:colorBackground"
                 android:padding="10dp"
                 android:gravity="center"
                 android:id="@+id/counter"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="bold" />
+                android:layout_height="wrap_content" />
             <TextView
+                android:textStyle="bold"
                 android:layout_marginTop="8dp"
                 android:text="@{passo.passo}"
                 android:id="@+id/steptxt"

@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener, ModelL
         //supportActionBar?.setDisplayHomeAsUpEnabled(true)
         //supportActionBar?.setHomeButtonEnabled(true)
         //supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_left_align)
-        supportActionBar?.setDisplayShowTitleEnabled(false)
+        //supportActionBar?.setDisplayShowTitleEnabled(false)
     }
 
     override fun onBackPressed() {

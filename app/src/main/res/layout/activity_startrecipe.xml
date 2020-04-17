@@ -112,18 +112,16 @@
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
 
         <LinearLayout
+            android:id="@+id/bottomSheet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            app:behavior_peekHeight="60dp"
+            app:behavior_peekHeight="50dp"
             app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/bottomSheet"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                app:cardCornerRadius="15dp"
+                app:cardCornerRadius="10dp"
                 app:cardElevation="3dp">
 
                 <include
