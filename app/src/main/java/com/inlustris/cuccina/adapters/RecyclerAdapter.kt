@@ -16,6 +16,7 @@ import com.facebook.shimmer.ShimmerFrameLayout
 import com.inlustris.cuccina.R
 import com.inlustris.cuccina.StartrecipeActivity
 import com.inlustris.cuccina.beans.Recipe
+import com.inlustris.cuccina.databinding.BigRecipeLayoutBinding
 import com.inlustris.cuccina.databinding.CardHolderBinding
 import com.inlustris.cuccina.databinding.LastRecipeLayoutBinding
 import com.inlustris.cuccina.databinding.RecipeLayoutBinding
@@ -26,19 +27,23 @@ class RecyclerAdapter(private val activity: Activity, var recipes: ArrayList<Rec
 
     private val RECIPE = 1
     private val LAST = 2
-
+    private val BIGRECIPE = 0;
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return if (viewType == RECIPE)
-            RecipeViewHolder(DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.card_holder, parent, false))
-        else LastRecipeViewHolder(DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.last_recipe_layout, parent, false))
+        return when (viewType) {
+            RECIPE -> RecipeViewHolder(DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.recipe_layout, parent, false))
+            BIGRECIPE -> BigRecipeViewHolder(DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.big_recipe_layout, parent, false))
+            else -> LastRecipeViewHolder(DataBindingUtil.inflate(LayoutInflater.from(activity), R.layout.last_recipe_layout, parent, false))
+        }
+
     }
 
 
     override fun getItemViewType(position: Int): Int {
         if (recipes != null && recipes!!.size > 0) {
             val recipe = recipes!![position]
-            if (recipe.isLastRecipe()) return LAST else RECIPE
+            if (recipe.isLastRecipe()) return LAST else if (position == 0)
+                BIGRECIPE
         }
         return RECIPE
     }
@@ -59,14 +64,14 @@ class RecyclerAdapter(private val activity: Activity, var recipes: ArrayList<Rec
             val recipeViewHolder: RecipeViewHolder = holder as RecipeViewHolder
             if (recipes != null && recipes!!.size > 0) {
                 val recipe = recipes!![position]
-                recipeViewHolder.cardHolderBinding.recipecard.recipe = recipe
-                Glide.with(activity).load(recipe.imageurl).into(holder.cardHolderBinding.recipecard.pic)
-                recipeViewHolder.cardHolderBinding.mainshimmer.fadeIn().doOnComplete {
-                    stopShimmer(holder.cardHolderBinding.mainshimmer)
+                recipeViewHolder.recipeBinding.recipe = recipe
+                Glide.with(activity).load(recipe.imageurl).into(holder.recipeBinding.pic)
+                recipeViewHolder.recipeBinding.mainshimmer.fadeIn().doOnComplete {
+                    stopShimmer(holder.recipeBinding.mainshimmer)
                 }.subscribe()
-                recipeViewHolder.cardHolderBinding.recipecard.card.setOnClickListener { startRecipe(recipe, holder.cardHolderBinding.recipecard) }
+                recipeViewHolder.recipeBinding.card.setOnClickListener { startRecipe(recipe, holder.recipeBinding) }
             } else {
-                recipeViewHolder.cardHolderBinding.mainshimmer.startAnimation(AnimationUtils.loadAnimation(activity, R.anim.slide_in_bottom_repeat))
+                recipeViewHolder.recipeBinding.mainshimmer.startAnimation(AnimationUtils.loadAnimation(activity, R.anim.slide_in_bottom_repeat))
             }
         } else {
             val cookers = arrayOf("👨‍🍳", "👩‍🍳")
@@ -89,7 +94,8 @@ class RecyclerAdapter(private val activity: Activity, var recipes: ArrayList<Rec
     }
 
 
-    class RecipeViewHolder(val cardHolderBinding: CardHolderBinding) : RecyclerView.ViewHolder(cardHolderBinding.root)
+    class RecipeViewHolder(val recipeBinding: RecipeLayoutBinding) : RecyclerView.ViewHolder(recipeBinding.root)
+    class BigRecipeViewHolder(val bigRecipeLayoutBinding: BigRecipeLayoutBinding) : RecyclerView.ViewHolder(bigRecipeLayoutBinding.root)
     class LastRecipeViewHolder(val lastRecipeLayoutBinding: LastRecipeLayoutBinding) : RecyclerView.ViewHolder(lastRecipeLayoutBinding.root)
 
 

@@ -45,11 +45,7 @@
     <!--brown -->
 
     <!--grey-->
-    <color name="md_grey_50">#FAFAFA</color>
 
-    <color name="md_grey_300">#E0E0E0</color>
-    <color name="md_grey_500">#9E9E9E</color>
-    <color name="md_black_1000">#000000</color>
     <color name="md_white_1000">#ffffff</color>
 
     <!--blue grey-->
@@ -59,6 +55,5 @@
     <color name="colorPrimaryDark">#fb8c00</color>
     <color name="colorAccent">#FF6D00</color>
     <color name="lblack">#99050000</color>
-    <color name="oblack">#4D050000</color>
     <color name="transparent">#00ffffff</color>
 </resources>

@@ -96,7 +96,7 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener, ModelL
 
     private fun configureRecycler() {
         recyclerAdapter = RecyclerAdapter(this, null)
-        gridLayoutManager = GridLayoutManager(this, 2, VERTICAL, false)
+        gridLayoutManager = GridLayoutManager(this, 1, VERTICAL, false)
         recipes_recycler.adapter = recyclerAdapter
         recipes_recycler.layoutManager = gridLayoutManager
     }
