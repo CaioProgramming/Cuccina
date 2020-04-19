@@ -8,15 +8,12 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:src="@drawable/disghust_chief"
-            android:layout_width="100dp"
-            android:layout_height="100dp" />
         <TextView
+            android:fontFamily="@font/italiana"
             android:id="@+id/username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/engagement"
+            android:textStyle="bold"
             android:text="@string/app_name"
             android:textAlignment="center"
             android:textColor="@color/colorPrimary"

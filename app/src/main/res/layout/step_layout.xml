@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -13,9 +14,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-            <TextView
-                android:background="@color/colorPrimary"
 
+        <com.google.android.material.textview.MaterialTextView
+            app:autoSizeTextType="uniform"
+                android:background="@color/colorPrimary"
                 android:backgroundTint="?android:textColorPrimary"
                 android:text="@{passo.count}"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
@@ -25,7 +27,9 @@
                 android:id="@+id/counter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
-            <TextView
+
+        <com.google.android.material.textview.MaterialTextView
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
                 android:textStyle="bold"
                 android:layout_marginTop="8dp"
                 android:text="@{passo.passo}"
@@ -33,7 +37,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
+            app:autoSizeTextType="uniform" />
 
 
     </LinearLayout>

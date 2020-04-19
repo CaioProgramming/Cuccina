@@ -2,16 +2,14 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <LinearLayout
+        style="@style/InversedBackground"
         android:id="@+id/ingredientView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
 
-
-        <TextView
-            android:background="@color/white"
-            android:backgroundTint="?android:textColorPrimary"
+        <com.google.android.material.textview.MaterialTextView
             android:textColor="?android:colorBackground"
             android:padding="10dp"
             android:textAlignment="center"

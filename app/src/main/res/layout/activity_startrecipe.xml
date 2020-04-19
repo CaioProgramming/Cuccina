@@ -13,6 +13,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical"
         android:fitsSystemWindows="true"
+        android:backgroundTint="?android:colorBackground"
         android:background="?android:colorBackground"
         android:layout_height="match_parent"
         tools:context=".StartrecipeActivity">
@@ -20,6 +21,7 @@
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appbar"
             android:fitsSystemWindows="true"
+            app:elevation="0dp"
             android:background="?android:colorBackground"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -41,9 +43,9 @@
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="15dp"
+                        android:layout_margin="5dp"
                         app:cardBackgroundColor="?android:colorBackground"
-                        app:cardCornerRadius="15dp"
+                        app:cardCornerRadius="5dp"
                         app:cardElevation="0dp">
 
                         <ImageView
@@ -116,19 +118,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:behavior_peekHeight="50dp"
+            android:elevation="3dp"
             app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="3dp">
+            <include
+                android:id="@+id/ingredientsSheet"
+                layout="@layout/ingredients_bottom_sheet" />
 
-                <include
-                    android:id="@+id/ingredientsSheet"
-                    layout="@layout/ingredients_bottom_sheet" />
-
-            </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>
 

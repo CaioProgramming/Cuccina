@@ -141,13 +141,13 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener, ModelL
             if (recipes.isNotEmpty()) {
                 recyclerAdapter!!.recipes = recipes
                 recyclerAdapter!!.notifyDataSetChanged()
-                val onSpanSizeLookup: GridLayoutManager.SpanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
-                    override fun getSpanSize(position: Int): Int {
-                        return if (!recipes[position].isLastRecipe()) 1
-                        else 2
-                    }
-                }
-                gridLayoutManager?.spanSizeLookup = onSpanSizeLookup
+                /* val onSpanSizeLookup: GridLayoutManager.SpanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+                     override fun getSpanSize(position: Int): Int {
+                         return if (!recipes[position].isLastRecipe()) 1
+                         else 2
+                     }
+                 }
+                 gridLayoutManager?.spanSizeLookup = onSpanSizeLookup*/
             }
         } else {
             configureRecycler()

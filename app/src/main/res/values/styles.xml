@@ -11,6 +11,11 @@
         <item name="toolbarStyle">@style/AppToolbar</item>
     </style>
 
+    <style name="InversedBackground" parent="Widget.MaterialComponents.TextView">
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:backgroundTint">?android:textColorPrimary</item>
+        <item name="android:textColor">?android:colorBackground</item>
+    </style>
 
     <style name="AppToolbar" parent="Widget.AppCompat.Toolbar">
         <item name="android:elevation">3dp</item>

@@ -1,17 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <data>
 
-    <TextView
-        android:id="@+id/ingrediente"
-        android:layout_width="wrap_content"
+        <variable
+            name="ingredient"
+            type="com.inlustris.cuccina.beans.Ingredient" />
+    </data>
+
+    <LinearLayout
+        android:id="@+id/card"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="1dp"
-        android:background="@drawable/bottom_line"
-        android:padding="8dp"
-        android:paddingEnd="20dp"
-        android:text="10 xícaras de leite condensado"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
+        android:layout_marginBottom="2dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/quantidade"
+            style="@style/InversedBackground"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="8dp"
+            android:text="@{ingredient.quantidade}"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/ingredient"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:backgroundTint="?android:colorBackground"
+            android:padding="8dp"
+            android:text="@{ingredient.ingrediente}"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+            android:textColor="?android:textColorPrimary"
+            android:textStyle="bold" />
+
+
+    </LinearLayout>
 
 
 </layout>

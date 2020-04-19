@@ -5,6 +5,7 @@ import android.util.Log
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
+import com.inlustris.cuccina.IngredientsHelper
 import com.inlustris.cuccina.beans.Ingredient
 import com.inlustris.cuccina.beans.Recipe
 
@@ -32,28 +33,10 @@ class IngredientsDB(val recipe: Recipe, activity: Activity) : ModelBase(activity
             val i = d.getValue(Ingredient::class.java)
             i?.let {
                 it.count = d.key
-                it.ingrediente = i.ingrediente
-                it.quantidade = i.quantidade
-                it.medidas = i.medidas
                 if (it.quantidade == "0.5") {
                     it.quantidade = "1/2"
                 }
-                if (it.quantidade != "1/2") {
-                    val q = it.quantidade!!.toInt()
-                    if (q >= 2) {
-                        if (i.medidas == "Unidade") {
-                            it.medidas = ""
-                            if (it.ingrediente!!.contains(" ")) {
-                                val space = i.ingrediente!!.indexOf(" ")
-                                val i = it.ingrediente!!.substring(0, space - 1)
-                                it.ingrediente = i + "s"
-                            }
-                        }
-                    }
-                }
-                if (it.medidas == "Unidade") {
-                    it.medidas = ""
-                }
+                it.medidas = IngredientsHelper.abreviate(it.medidas?.toLowerCase())
                 ingredientArrayList.add(it)
             }
         }
