@@ -1,26 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:background="?android:colorControlHighlight"
+        android:layout_width="match_parent"
+        android:orientation="vertical">
 
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/bottom_line"
+            android:padding="8dp"
+            android:text="Novo ingrediente"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
         <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="wrap_content"
+            android:id="@+id/ingredientname"
+            android:layout_width="match_parent"
+            android:layout_margin="10dp"
+            android:background="@drawable/round_shape"
+            android:drawableEnd="@drawable/ic_cherries"
+            android:drawablePadding="8dp"
+            android:drawableTint="@color/colorPrimaryDark"
+            android:hint="Nome do ingrediente..."
             android:layout_height="wrap_content"
-            android:hint="Ingrediente" />
+            android:padding="10dp" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="wrap_content"
+        <LinearLayout
             android:layout_height="wrap_content"
-            android:hint="Quantidade" />
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:orientation="horizontal">
 
-        <Spinner
-            android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp"
+                    android:text="Quantidade"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                    android:textColor="@color/colorAccent" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/quantity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="4dp"
+                        android:background="@drawable/round_shape"
+                        android:hint="0"
+                        android:padding="10dp" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="4dp"
+                        android:background="@drawable/round_shape"
+                        android:orientation="horizontal"
+                        android:padding="10dp">
+
+                        <ImageButton
+                            android:id="@+id/addIngredient"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:backgroundTint="@color/transparent"
+                            android:src="@drawable/ic_add_black_24dp"
+                            android:tint="@color/colorAccent" />
+
+                        <ImageButton
+                            android:id="@+id/subtractIngredient"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:backgroundTint="@color/transparent"
+                            android:src="@drawable/ic_remove_black_24dp"
+                            android:tint="@color/colorAccent" />
+                    </LinearLayout>
+
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp"
+                    android:text="Medida"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                    android:textColor="@color/colorAccent" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:background="@drawable/round_shape"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+
+                    <Spinner
+                        android:id="@+id/medida"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:entries="@array/array_medidas" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:hint="Medida" />
+            android:layout_margin="16dp"
+            android:background="@color/colorAccent"
+            android:text="Adicionar Ingrediente"
+            android:textStyle="bold"
+            app:cornerRadius="10dp" />
+
 
     </LinearLayout>
 </layout>
