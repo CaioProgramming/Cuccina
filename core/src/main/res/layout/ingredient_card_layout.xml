@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.emoji2.widget.EmojiTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ingredient_card"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/padding_default_16dp"
+    android:background="@drawable/circle_shape"
+    android:backgroundTint="@color/material_grey100"
+    android:foreground="?attr/selectableItemBackground"
+    android:gravity="center"
+    android:textAlignment="center"
+    android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+    tools:text="🥩">
+
+</androidx.emoji2.widget.EmojiTextView>
