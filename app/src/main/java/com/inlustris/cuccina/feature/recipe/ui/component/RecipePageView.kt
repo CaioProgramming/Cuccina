@@ -30,7 +30,7 @@ import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.ilustris.cuccina.R
-import com.ilustris.cuccina.feature.recipe.category.domain.model.Category
+import com.inlustris.cuccina.feature.recipe.category.domain.model.Category
 import com.ilustris.cuccina.feature.recipe.category.ui.component.CategoryBadge
 import com.ilustris.cuccina.feature.recipe.ingredient.presentation.ui.IngredientItem
 import com.ilustris.cuccina.feature.recipe.step.presentation.ui.StepItem

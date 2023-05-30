@@ -21,7 +21,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.navigation.NavController
-import com.ilustris.cuccina.feature.home.ui.HOME_ROUTE
+import com.inlustris.cuccina.feature.home.ui.HOME_ROUTE
 import com.ilustris.cuccina.feature.recipe.form.presentation.viewmodel.NewRecipeViewModel
 import com.ilustris.cuccina.feature.recipe.ui.component.getStateComponent
 import com.ilustris.cuccina.ui.theme.getFormView

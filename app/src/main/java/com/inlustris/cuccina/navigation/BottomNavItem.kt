@@ -1,4 +1,4 @@
-package com.ilustris.cuccina.navigation
+package com.inlustris.cuccina.navigation
 
 import ai.atick.material.MaterialColor
 import androidx.compose.foundation.Image
@@ -28,26 +28,30 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
 import com.ilustris.cuccina.R
-import com.ilustris.cuccina.feature.home.ui.HOME_ROUTE
-import com.ilustris.cuccina.feature.home.ui.HomeView
-import com.ilustris.cuccina.feature.profile.ui.PROFILE_ROUTE
-import com.ilustris.cuccina.feature.profile.ui.ProfileView
+import com.inlustris.cuccina.feature.home.ui.HOME_ROUTE
+import com.inlustris.cuccina.feature.home.ui.HomeView
+import com.inlustris.cuccina.feature.profile.ui.PROFILE_ROUTE
+import com.inlustris.cuccina.feature.profile.ui.ProfileView
 import com.ilustris.cuccina.feature.recipe.form.ui.NEW_RECIPE_ROUTE
 import com.ilustris.cuccina.feature.recipe.form.ui.NewRecipeView
-import com.ilustris.cuccina.feature.recipe.start.ui.START_RECIPE_ROUTE
-import com.ilustris.cuccina.feature.recipe.start.ui.StartRecipeView
+import com.inlustris.cuccina.feature.recipe.start.ui.START_RECIPE_ROUTE
+import com.inlustris.cuccina.feature.recipe.start.ui.StartRecipeView
+import com.inlustris.cuccina.feature.recipe.category.ui.CATEGORY_ROUTE
+import com.inlustris.cuccina.feature.recipe.category.ui.CategoryView
 
 enum class BottomNavItem(
     val title: String,
     var icon: Int = R.drawable.cherry,
     val route: String,
-    val showOnNavigation: Boolean = true
+    val showOnNavigation: Boolean = true,
+    val showBottomNav: Boolean = true,
+    val showStatusBar: Boolean = true
 ) {
     HOME(title = "Home", route = HOME_ROUTE, icon = R.drawable.round_home_24),
     NEW_RECIPE(title = "Publicar", route = NEW_RECIPE_ROUTE, icon = R.drawable.cook),
-    START_RECIPE(title = "Fazer Receita", route = START_RECIPE_ROUTE, showOnNavigation = false),
-    PROFILE(title = "Eu", route = PROFILE_ROUTE, icon = R.drawable.ic_cherries)
-
+    PROFILE(title = "Eu", route = PROFILE_ROUTE, icon = R.drawable.ic_cherries, showBottomNav = false, showStatusBar = false),
+    START_RECIPE(title = "Iniciar Receita", route = START_RECIPE_ROUTE, showOnNavigation = false, showBottomNav = false, showStatusBar = false),
+    CATEGORY(title = "Categorias", route = CATEGORY_ROUTE, showOnNavigation = false, showStatusBar = false)
 }
 
 @Composable
@@ -58,16 +62,24 @@ fun NavigationGraph(navController: NavHostController, bottomPadding: Dp) {
         startDestination = HOME_ROUTE,
         modifier = Modifier.padding(bottom = bottomPadding)
     ) {
-        composable(BottomNavItem.HOME.route) {
+        composable(route = BottomNavItem.HOME.route) {
             HomeView(hiltViewModel(), navController)
         }
 
-        composable(BottomNavItem.NEW_RECIPE.route) {
+        composable(route = BottomNavItem.NEW_RECIPE.route) {
             NewRecipeView(hiltViewModel(), navController)
         }
 
         composable(
-            BottomNavItem.PROFILE.route,
+            route = BottomNavItem.CATEGORY.route,
+            arguments = listOf(navArgument("categoryId") { type = NavType.IntType })
+        ) {
+            val categoryId = it.arguments?.getInt("categoryId")
+            CategoryView(categoryId ?: 0, hiltViewModel(), navController)
+        }
+
+        composable(
+            route = BottomNavItem.PROFILE.route,
             arguments = listOf(navArgument("userId") { type = NavType.StringType })
         ) {
             val userId = it.arguments?.getString("userId")
@@ -75,12 +87,14 @@ fun NavigationGraph(navController: NavHostController, bottomPadding: Dp) {
         }
 
         composable(
-            BottomNavItem.START_RECIPE.route,
+            route = BottomNavItem.START_RECIPE.route,
             arguments = listOf(navArgument("recipeId") { type = NavType.StringType })
         ) {
             val recipeId = it.arguments?.getString("recipeId")
             StartRecipeView(recipeId, hiltViewModel(), navController)
         }
+
+
     }
 }
 

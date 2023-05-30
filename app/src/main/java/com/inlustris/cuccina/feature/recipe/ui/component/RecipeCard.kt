@@ -23,7 +23,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ilustris.cuccina.R
-import com.ilustris.cuccina.feature.recipe.category.domain.model.Category
+import com.inlustris.cuccina.feature.recipe.category.domain.model.Category
 import com.ilustris.cuccina.feature.recipe.domain.model.Recipe
 import com.ilustris.cuccina.ui.theme.CuccinaTheme
 import com.ilustris.cuccina.ui.theme.defaultRadius
@@ -86,7 +86,7 @@ fun RecipeCard(modifier: Modifier, recipe: Recipe, onClickRecipe: (Recipe) -> Un
                     )
                     .clip(RoundedCornerShape(defaultRadius))
             )
-            val category = Category.values().find { it.name == recipe.category } ?: Category.UNKNOW
+            val category = Category.values().find { it.name == recipe.category } ?: Category.UNKNOWN
             Text(
                 text = "${recipe.name} • ${recipe.time.toInt()} min • ${category.title.lowercase()}",
                 style = MaterialTheme.typography.bodyMedium,

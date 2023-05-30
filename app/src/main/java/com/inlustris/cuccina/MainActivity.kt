@@ -34,14 +34,16 @@ import androidx.navigation.compose.rememberNavController
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.ilustris.cuccina.feature.home.ui.HOME_ROUTE
-import com.ilustris.cuccina.feature.profile.ui.PROFILE_ROUTE
+import com.inlustris.cuccina.feature.home.ui.HOME_ROUTE
+import com.inlustris.cuccina.feature.profile.ui.PROFILE_ROUTE
 import com.ilustris.cuccina.feature.recipe.form.ui.NEW_RECIPE_ROUTE
-import com.ilustris.cuccina.feature.recipe.start.ui.START_RECIPE_ROUTE
+import com.inlustris.cuccina.feature.recipe.start.ui.START_RECIPE_ROUTE
 import com.ilustris.cuccina.feature.recipe.ui.component.getStateComponent
-import com.ilustris.cuccina.navigation.BottomNavigation
-import com.ilustris.cuccina.navigation.NavigationGraph
+import com.inlustris.cuccina.navigation.BottomNavigation
+import com.inlustris.cuccina.navigation.NavigationGraph
 import com.ilustris.cuccina.ui.theme.CuccinaTheme
+import com.inlustris.cuccina.feature.recipe.category.ui.CATEGORY_ROUTE
+import com.inlustris.cuccina.navigation.BottomNavItem
 import com.silent.ilustriscore.core.model.ViewModelBaseState
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -82,12 +84,7 @@ class MainActivity : ComponentActivity() {
                     .build()
 
 
-                fun showAppBar(state: MainViewModel.MainState?): Boolean {
-                    Log.i(javaClass.simpleName, "showAppBar: actual state -> $state")
-                    return state != MainViewModel.MainState.HideNavigation
-                }
 
-                showNavigation = showAppBar(appState.value)
 
                 Scaffold(bottomBar = {
                     AnimatedVisibility(
@@ -97,25 +94,28 @@ class MainActivity : ComponentActivity() {
                     ) {
                         BottomNavigation(navController = navController)
                     }
-                }) {
+                }) { padding ->
                     if (appState.value == MainViewModel.MainState.RequireLogin) {
+                        showNavigation = false
                         getStateComponent(state = ViewModelBaseState.RequireAuth, action = {
                             signInLauncher.launch(signInIntent)
                         })
                     } else {
+                        showNavigation = true
                         NavigationGraph(navController = navController, bottomPadding)
                     }
                 }
                 LaunchedEffect(navController) {
                     viewModel.checkUser()
                     navController.currentBackStackEntryFlow.collect { backStackEntry ->
-                        title = getRouteTitle(backStackEntry.destination.route)
-                        bottomPadding = getPaddingForRoute(backStackEntry.destination.route)
-                        showNavigation =
-                            (backStackEntry.destination.route != START_RECIPE_ROUTE && backStackEntry.destination.route != PROFILE_ROUTE)
-                        systemUiController.isStatusBarVisible =
-                            (backStackEntry.destination.route != START_RECIPE_ROUTE && backStackEntry.destination.route != PROFILE_ROUTE)
-
+                        val backStackRoute = backStackEntry.destination.route
+                        val routeItem = BottomNavItem.values().find { it.route == backStackRoute }
+                        routeItem?.let {
+                            title = it.title
+                            showNavigation = it.showBottomNav
+                            systemUiController.isStatusBarVisible = it.showStatusBar
+                            bottomPadding = getPaddingForRoute(backStackRoute)
+                        }
                     }
                 }
             }
@@ -125,7 +125,7 @@ class MainActivity : ComponentActivity() {
 
 fun getPaddingForRoute(route: String?) =
     when (route) {
-        HOME_ROUTE, NEW_RECIPE_ROUTE -> 50.dp
+        HOME_ROUTE, NEW_RECIPE_ROUTE, CATEGORY_ROUTE -> 50.dp
         else -> 0.dp
     }
 

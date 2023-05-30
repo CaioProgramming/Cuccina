@@ -3,7 +3,7 @@
     ExperimentalAnimationApi::class
 )
 
-package com.ilustris.cuccina.feature.profile.ui
+package com.inlustris.cuccina.feature.profile.ui
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.EaseInOut
@@ -37,7 +37,7 @@ import com.google.accompanist.pager.VerticalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.ilustris.cuccina.feature.profile.presentation.ProfileViewModel
-import com.ilustris.cuccina.feature.recipe.start.ui.START_RECIPE_ROUTE_IMPL
+import com.inlustris.cuccina.feature.recipe.start.ui.START_RECIPE_ROUTE_IMPL
 import com.ilustris.cuccina.feature.recipe.ui.component.StateComponent
 import com.ilustris.cuccina.ui.theme.CuccinaLoader
 import com.ilustris.cuccina.ui.theme.getPageView

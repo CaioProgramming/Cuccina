@@ -2,7 +2,10 @@ package com.ilustris.cuccina.ui.theme
 
 import ai.atick.material.MaterialColor
 import android.util.Log
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.*
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
@@ -40,7 +43,7 @@ fun appColors() =
     )
 
 @Composable
-fun CuccinaLoader() {
+fun CuccinaLoader(showText: Boolean = true) {
 
     Column(
         modifier = Modifier
@@ -79,12 +82,15 @@ fun CuccinaLoader() {
                 .size(100.dp)
         )
 
-        Text(
-            text = "Cuccina",
-            style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center
-        )
+        AnimatedVisibility(visible = showText, enter = fadeIn(), exit = fadeOut()) {
+            Text(
+                text = "Cuccina",
+                style = MaterialTheme.typography.headlineMedium,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center
+            )
+        }
+
 
 
     }

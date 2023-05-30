@@ -10,7 +10,7 @@
     ExperimentalAnimationApi::class, ExperimentalComposeUiApi::class
 )
 
-package com.ilustris.cuccina.feature.home.ui
+package com.inlustris.cuccina.feature.home.ui
 
 import ai.atick.material.MaterialColor
 import android.util.Log
@@ -60,17 +60,18 @@ import androidx.navigation.NavHostController
 import androidx.recyclerview.widget.RecyclerView
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.ilustris.cuccina.feature.home.presentation.HomeViewModel
+import com.ilustris.cuccina.feature.home.ui.HighLightSheet
 import com.ilustris.cuccina.feature.home.ui.component.BannerCard
-import com.ilustris.cuccina.feature.recipe.category.domain.model.Category
+import com.inlustris.cuccina.feature.recipe.category.domain.model.Category
 import com.ilustris.cuccina.feature.recipe.category.ui.component.CategoryBadge
-import com.ilustris.cuccina.feature.recipe.domain.model.RecipeGroup
 import com.ilustris.cuccina.feature.recipe.form.ui.NEW_RECIPE_ROUTE
-import com.ilustris.cuccina.feature.recipe.start.ui.START_RECIPE_ROUTE_IMPL
+import com.inlustris.cuccina.feature.recipe.start.ui.START_RECIPE_ROUTE_IMPL
 import com.ilustris.cuccina.feature.recipe.ui.RecipeGroupList
 import com.ilustris.cuccina.ui.theme.CuccinaLoader
 import com.ilustris.cuccina.ui.theme.Page
 import com.ilustris.cuccina.ui.theme.defaultRadius
 import com.ilustris.cuccina.ui.theme.getStateComponent
+import com.inlustris.cuccina.feature.recipe.category.ui.CATEGORY_ROUTE_IMPL
 import com.silent.ilustriscore.core.model.ViewModelBaseState
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
@@ -83,8 +84,7 @@ fun HomeView(homeViewModel: HomeViewModel?, navController: NavHostController) {
     val homeBaseState = homeViewModel?.viewModelState?.observeAsState()
     val homeList = homeViewModel?.homeList?.observeAsState()
     val highLights = homeViewModel?.highlightRecipes?.observeAsState()
-    val categories = Category.values().toList().sortedBy { it.description }
-    val selectedCategory = homeViewModel?.currentCategory?.observeAsState()
+    val categories = Category.values().toList().sortedBy { it.title }
     val systemUiController = rememberSystemUiController()
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
@@ -110,8 +110,10 @@ fun HomeView(homeViewModel: HomeViewModel?, navController: NavHostController) {
     }
 
     fun navigateToRecipe(recipeId: String) {
-        navController.navigate("${START_RECIPE_ROUTE_IMPL}${recipeId}")
+        navController.navigate("$START_RECIPE_ROUTE_IMPL${recipeId}")
     }
+
+
 
 
     ModalBottomSheetLayout(
@@ -261,9 +263,10 @@ fun HomeView(homeViewModel: HomeViewModel?, navController: NavHostController) {
                             items(categories.size) {
                                 CategoryBadge(
                                     category = categories[it],
-                                    selectedCategory?.value
+                                    selectedCategory = null,
                                 ) { category ->
-                                    homeViewModel?.updateCategory(category)
+                                    navController.navigate("${CATEGORY_ROUTE_IMPL}${category.ordinal}")
+
                                 }
                             }
                         }
@@ -290,6 +293,7 @@ fun HomeView(homeViewModel: HomeViewModel?, navController: NavHostController) {
                         ViewModelBaseState.LoadCompleteState -> {
                             Log.i(javaClass.simpleName, "HomeView: Load complete")
                         }
+
                         else -> {
                             item {
                                 getStateComponent(state = it) { state ->
@@ -303,36 +307,15 @@ fun HomeView(homeViewModel: HomeViewModel?, navController: NavHostController) {
                 }
 
                 Log.i(javaClass.simpleName, "HomeView: ${homeList?.value} ")
-                Log.i(javaClass.simpleName, "HomeView: current category ${selectedCategory?.value}")
 
-
-                fun getHomeList(): List<RecipeGroup> {
-                    return homeList?.value?.filter { it.title == selectedCategory?.value?.title }
-                        ?: emptyList()
-                }
-
-                if (selectedCategory?.value != null) {
-                    getHomeList().run {
-                        items(size) { index ->
-                            val group = this@run[index]
-                            RecipeGroupList(
-                                recipeGroup = group,
-                                orientation = RecyclerView.HORIZONTAL
-                            ) {
-                                navigateToRecipe(it.id)
-                            }
-                        }
-                    }
-                } else {
-                    homeList?.value?.let {
-                        items(it.size) { index ->
-                            val group = it[index]
-                            RecipeGroupList(
-                                recipeGroup = group,
-                                orientation = RecyclerView.HORIZONTAL
-                            ) { recipe ->
-                                navigateToRecipe(recipe.id)
-                            }
+                homeList?.value?.let {
+                    items(it.size) { index ->
+                        val group = it[index]
+                        RecipeGroupList(
+                            recipeGroup = group,
+                            orientation = RecyclerView.HORIZONTAL
+                        ) { recipe ->
+                            navigateToRecipe(recipe.id)
                         }
                     }
                 }
