@@ -1,206 +1,176 @@
-package com.inlustris.cuccina
+@file:OptIn(
+    ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
+    ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
+    ExperimentalMaterial3Api::class
+)
 
-import android.app.Activity
-import android.app.SearchManager
-import android.content.Context
-import android.content.Intent
-import android.graphics.drawable.Drawable
+package com.ilustris.cuccina
+
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
-import android.widget.TextView
-import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SearchView
-import androidx.core.view.GravityCompat
-import androidx.databinding.DataBindingUtil
-import androidx.emoji.text.EmojiCompat
-import androidx.emoji.text.FontRequestEmojiCompatConfig
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView.VERTICAL
+import android.util.Log
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.compose.setContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.compose.rememberNavController
 import com.firebase.ui.auth.AuthUI
-import com.firebase.ui.auth.AuthUI.IdpConfig
-import com.firebase.ui.auth.AuthUI.IdpConfig.GoogleBuilder
-import com.firebase.ui.auth.IdpResponse
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.firebase.auth.FirebaseAuth
-import com.inlustris.cuccina.adapters.RecyclerAdapter
-import com.inlustris.cuccina.beans.Recipe
-import com.inlustris.cuccina.databinding.ActivityMainBinding
-import com.inlustris.cuccina.model.ModelListener
-import com.inlustris.cuccina.model.RecipesDB
-import de.mateware.snacky.Snacky
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.app_bar_main.*
+import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.ilustris.cuccina.feature.home.ui.HOME_ROUTE
+import com.ilustris.cuccina.feature.profile.ui.PROFILE_ROUTE
+import com.ilustris.cuccina.feature.recipe.form.ui.NEW_RECIPE_ROUTE
+import com.ilustris.cuccina.feature.recipe.start.ui.START_RECIPE_ROUTE
+import com.ilustris.cuccina.feature.recipe.ui.component.getStateComponent
+import com.ilustris.cuccina.navigation.BottomNavigation
+import com.ilustris.cuccina.navigation.NavigationGraph
+import com.ilustris.cuccina.ui.theme.CuccinaTheme
+import com.silent.ilustriscore.core.model.ViewModelBaseState
+import dagger.hilt.android.AndroidEntryPoint
 
-class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener, ModelListener.RecipesListener {
-    private var user = FirebaseAuth.getInstance().currentUser
-    private var recyclerAdapter: RecyclerAdapter? = null
-    var actbind: ActivityMainBinding? = null
+@AndroidEntryPoint
+class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        val fontRequest = androidx.core.provider.FontRequest(
-                "com.google.android.gms.fonts",
-                "com.google.android.gms",
-                "Noto Color Emoji Compat",
-                R.array.com_google_android_gms_fonts_certs)
-        val config = FontRequestEmojiCompatConfig(this, fontRequest)
-        EmojiCompat.init(config)
         super.onCreate(savedInstanceState)
-        actbind = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        setContent {
+            val appName = LocalContext.current.getString(R.string.app_name)
+            CuccinaTheme {
+                val navController = rememberNavController()
+                val viewModel: MainViewModel = hiltViewModel()
+                val systemUiController = rememberSystemUiController()
 
-        setContentView(actbind!!.root)
-        setSupportActionBar(actbind!!.maincontent.toolbar)
-        val toggle = ActionBarDrawerToggle(
-                this, drawer_layout, actbind!!.maincontent.toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-        drawer_layout.addDrawerListener(toggle)
-        toggle.syncState()
-        nav_view.setNavigationItemSelectedListener { item ->
-            carregarCategoria(item.title.toString(), item.icon)
-            true
-        }
-        configureRecycler()
-        checkUser()
-        supportActionBar?.setDisplayShowHomeEnabled(true)
-        //supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        //supportActionBar?.setHomeButtonEnabled(true)
-        //supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_left_align)
-        //supportActionBar?.setDisplayShowTitleEnabled(false)
-    }
+                var title by remember {
+                    mutableStateOf(appName)
+                }
+                var showNavigation by remember {
+                    mutableStateOf(true)
+                }
 
-    override fun onBackPressed() {
-        if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
-            drawer_layout.closeDrawer(GravityCompat.START)
-        } else {
-            super.onBackPressed()
-        }
-    }
+                var bottomPadding by remember {
+                    mutableStateOf(50.dp)
+                }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.main, menu)
-        val searchitem: MenuItem = menu!!.findItem(R.id.search)
-        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-        val searchView = searchitem.actionView as SearchView
-        searchView.setBackgroundResource(R.drawable.transparent)
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
-        searchView.queryHint = "Pesquise Receitas"
-        searchView.setOnQueryTextListener(this)
-        return true
-    }
+                val appState = viewModel.state.observeAsState()
+
+                val signInLauncher = rememberLauncherForActivityResult(
+                    FirebaseAuthUIActivityResultContract()
+                ) { result ->
+                    viewModel.validateLogin(result)
+                }
+
+                val signInIntent = AuthUI.getInstance()
+                    .createSignInIntentBuilder()
+                    .setAvailableProviders(AppModule.loginProviders)
+                    .build()
 
 
-    private var gridLayoutManager: GridLayoutManager? = null
+                fun showAppBar(state: MainViewModel.MainState?): Boolean {
+                    Log.i(javaClass.simpleName, "showAppBar: actual state -> $state")
+                    return state != MainViewModel.MainState.HideNavigation
+                }
 
-    private fun configureRecycler() {
-        recyclerAdapter = RecyclerAdapter(this, null)
-        gridLayoutManager = GridLayoutManager(this, 1, VERTICAL, false)
-        recipes_recycler.adapter = recyclerAdapter
-        recipes_recycler.layoutManager = gridLayoutManager
-    }
+                showNavigation = showAppBar(appState.value)
 
+                Scaffold(bottomBar = {
+                    AnimatedVisibility(
+                        visible = showNavigation,
+                        enter = fadeIn(),
+                        exit = fadeOut()
+                    ) {
+                        BottomNavigation(navController = navController)
+                    }
+                }) {
+                    if (appState.value == MainViewModel.MainState.RequireLogin) {
+                        getStateComponent(state = ViewModelBaseState.RequireAuth, action = {
+                            signInLauncher.launch(signInIntent)
+                        })
+                    } else {
+                        NavigationGraph(navController = navController, bottomPadding)
+                    }
+                }
+                LaunchedEffect(navController) {
+                    viewModel.checkUser()
+                    navController.currentBackStackEntryFlow.collect { backStackEntry ->
+                        title = getRouteTitle(backStackEntry.destination.route)
+                        bottomPadding = getPaddingForRoute(backStackEntry.destination.route)
+                        showNavigation =
+                            (backStackEntry.destination.route != START_RECIPE_ROUTE && backStackEntry.destination.route != PROFILE_ROUTE)
+                        systemUiController.isStatusBarVisible =
+                            (backStackEntry.destination.route != START_RECIPE_ROUTE && backStackEntry.destination.route != PROFILE_ROUTE)
 
-    private fun checkUser() {
-        if (user == null) {
-            val builder = MaterialAlertDialogBuilder(this).setMessage("Faça login para ver o que tem para você comer hoje, mas se não quiser também não faz, quem ta perdendo é você.")
-            builder.setPositiveButton("Ok") { dialogInterface, i ->
-                val providers: List<IdpConfig> = listOf(
-                        GoogleBuilder().build())
-                startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder()
-                        .setLogo(R.mipmap.ic_launcher)
-                        .setAvailableProviders(providers)
-                        .setTheme(R.style.AppTheme)
-                        .build(), RC_SIGN_IN)
-            }.show()
-        } else {
-            carregarCategoria("Home", getDrawable(R.drawable.ic_cherries)!!)
-            val header: View = nav_view.getHeaderView(0)
-            val usertxt: TextView = header.findViewById(R.id.username)
-            usertxt.text = user!!.displayName
-        }
-    }
-
-    private fun carregarCategoria(categoria: String?, icon: Drawable) {
-        configureRecycler()
-        if (categoria != "Sair") {
-            actbind?.maincontent?.toolbar?.title = categoria
-            actbind?.maincontent?.toolbar?.logo = icon
-            val recipesDB = RecipesDB(this)
-            recipesDB.carregar(this, categoria)
-        } else {
-            FirebaseAuth.getInstance().signOut()
-            Snacky.builder().setActivity(this).info().setText("Você saiu de sua conta").show()
-        }
-    }
-
-    private fun updaterecycler(recipes: ArrayList<Recipe>) {
-
-        if (recyclerAdapter != null) {
-            if (recipes.isNotEmpty()) {
-                recyclerAdapter!!.recipes = recipes
-                recyclerAdapter!!.notifyDataSetChanged()
-                /* val onSpanSizeLookup: GridLayoutManager.SpanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
-                     override fun getSpanSize(position: Int): Int {
-                         return if (!recipes[position].isLastRecipe()) 1
-                         else 2
-                     }
-                 }
-                 gridLayoutManager?.spanSizeLookup = onSpanSizeLookup*/
-            }
-        } else {
-            configureRecycler()
-            updaterecycler(recipes)
-        }
-        actbind!!.maincontent.recipesRecycler.visibility = if (recipes.isNotEmpty()) VISIBLE else GONE
-        drawer_layout.closeDrawer(GravityCompat.START)
-    }
-
-    private fun Pesquisar(pesquisa: String) {
-
-        RecipesDB(this).carregar(object : ModelListener.RecipesListener {
-            override fun recipesLoaded(recipes: ArrayList<Recipe>) {
-                val filteredlist = recipes.filter { recipe -> recipe.prato!!.contains(pesquisa) }
-                updaterecycler(filteredlist as ArrayList<Recipe>)
-            }
-        }, null)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == RC_SIGN_IN) {
-            val response = IdpResponse.fromResultIntent(data)
-            if (resultCode != Activity.RESULT_OK) {
-                if (response != null) {
-                    Snacky.builder().setActivity(this).error().setText("Ocorreu um erro(${response.error!!.localizedMessage}) ao realizar o login gostaria de tentar novamente?")
-                            .setAction("Ok") { checkUser() }
-                            .show()
-                } else {
-                    checkUser()
+                    }
                 }
             }
         }
     }
+}
 
-    override fun onQueryTextSubmit(query: String?): Boolean {
-        return false
+fun getPaddingForRoute(route: String?) =
+    when (route) {
+        HOME_ROUTE, NEW_RECIPE_ROUTE -> 50.dp
+        else -> 0.dp
     }
 
-    override fun onQueryTextChange(newText: String?): Boolean {
-        if (newText.isNullOrBlank()) {
-            nav_view.setCheckedItem(R.id.nav_home)
-        } else {
-            Pesquisar(newText)
+
+fun getRouteTitle(route: String?): String {
+    if (route == null) return "Cuccina"
+    return when (route) {
+        HOME_ROUTE -> "Cuccina"
+        NEW_RECIPE_ROUTE -> "Nova receita"
+        START_RECIPE_ROUTE -> ""
+        else -> "Cuccina"
+    }
+}
+
+
+@Preview(showBackground = true)
+@Composable
+fun DefaultPreview() {
+    val navController = rememberNavController()
+    CuccinaTheme {
+
+
+        Scaffold(topBar = {
+            TopAppBar(
+                title = {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Image(
+                            painterResource(id = R.drawable.cherry),
+                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
+                            contentDescription = "category",
+                            modifier = Modifier
+                                .size(32.dp)
+                                .padding(4.dp)
+                        )
+                        Text(
+                            text = LocalContext.current.getString(R.string.app_name),
+                            style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.Black)
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background)
+            )
+        },
+            bottomBar = { BottomNavigation(navController = navController) }) {
+            NavigationGraph(navController = navController, 50.dp)
         }
-        return true
-    }
-
-    companion object {
-        private const val RC_SIGN_IN = 123
-    }
-
-    override fun recipesLoaded(recipes: ArrayList<Recipe>) {
-        updaterecycler(recipes)
     }
 }
