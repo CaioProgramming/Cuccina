@@ -98,11 +98,19 @@ class MainActivity : ComponentActivity() {
                     }
                 }) { padding ->
                     if (appState.value == MainViewModel.MainState.RequireLogin) {
+                        showBottomNav(false)
                         getStateComponent(state = ViewModelBaseState.RequireAuth, action = {
-                            showBottomNav(false)
                             signInLauncher.launch(signInIntent)
                         })
                     } else {
+                        val currentRoute = navController.currentBackStackEntry?.destination?.route
+                        val item = BottomNavItem.values().find { it.route == currentRoute }
+                        if (item != null) {
+                            title = item.title
+                            showBottomNav(item.showBottomNav)
+                            systemUiController.isStatusBarVisible = item.showStatusBar
+                            bottomPadding = getPaddingForRoute(currentRoute)
+                        }
                         NavigationGraph(navController = navController, bottomPadding)
                     }
                 }

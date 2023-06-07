@@ -7,9 +7,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -26,17 +24,19 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.ilustris.cuccina.R
 import com.ilustris.cuccina.feature.recipe.domain.model.Recipe
 import com.inlustris.cuccina.feature.recipe.start.ui.START_RECIPE_ROUTE_IMPL
-import com.ilustris.cuccina.feature.recipe.ui.component.RecipeCard
+import com.inlustris.cuccina.feature.recipe.ui.component.RecipeCard
 import com.ilustris.cuccina.feature.recipe.ui.component.getStateComponent
 import com.inlustris.cuccina.feature.recipe.category.domain.model.Category
 import com.ilustris.cuccina.ui.theme.CuccinaLoader
 import com.inlustris.cuccina.feature.recipe.category.presentation.CategoryViewModel
 import com.silent.ilustriscore.core.model.ViewModelBaseState
+import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
 import com.skydoves.landscapist.glide.GlideRequestType
 
@@ -80,16 +80,15 @@ fun CategoryView(
 
     AnimatedVisibility(visible = pageState.value is ViewModelBaseState.DataListRetrievedState) {
         LazyColumn(modifier = Modifier.fillMaxSize()) {
-
+            val coverSize = 350
             item {
                 GlideImage(
                     imageModel = { currentCategory.cover },
                     glideRequestType = GlideRequestType.BITMAP,
+                    imageOptions = ImageOptions(requestSize = IntSize(coverSize, coverSize)),
                     loading = {
                         Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(500.dp),
+                            modifier = Modifier.fillMaxSize(),
                             verticalArrangement = Arrangement.Center) {
                             CuccinaLoader(false)
 
@@ -107,7 +106,7 @@ fun CategoryView(
                     },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .fillMaxHeight(0.3f)
+                        .height(coverSize.dp)
                 )
             }
             stickyHeader {

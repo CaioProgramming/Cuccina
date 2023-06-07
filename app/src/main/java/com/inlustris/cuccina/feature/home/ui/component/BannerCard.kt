@@ -1,6 +1,15 @@
-package com.ilustris.cuccina.feature.home.ui.component
+@file:OptIn(ExperimentalAnimationApi::class)
+
+package com.inlustris.cuccina.feature.home.ui.component
 
 import ai.atick.material.MaterialColor
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.with
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,6 +31,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.ilustris.cuccina.R
@@ -33,70 +43,77 @@ import com.skydoves.landscapist.glide.GlideImage
 @Composable
 fun BannerCard(backgroundImage: String, onClickBanner: () -> Unit) {
 
-    ConstraintLayout(
-        modifier = Modifier
-            .wrapContentSize()
-            .padding(12.dp)
-            .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(defaultRadius))
-            .clickable {
-                onClickBanner()
-            }
-    ) {
-        val (background, text) = createRefs()
-
-        GlideImage(
-            imageModel = { backgroundImage },
-            imageOptions = ImageOptions(
-                contentScale = ContentScale.Crop,
-                alignment = Alignment.Center,
-            ), failure = {
-                Text(
-                    text = "Foto nao encontrada",
-                    style = MaterialTheme.typography.bodyMedium.copy(
-                        color = MaterialColor.White,
-                        shadow = Shadow(
-                            color = MaterialColor.Black,
-                            offset = Offset(1f, 1f),
-                            blurRadius = 1f
-                        )
-                    ),
-                    modifier = Modifier.padding(8.dp)
-                )
-            },
-            previewPlaceholder = R.drawable.ic_cherries,
+    AnimatedContent(targetState = backgroundImage, transitionSpec = { EnterTransition.None with ExitTransition.None }) {
+        ConstraintLayout(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(150.dp)
-                .blur(1.dp, 1.dp, edgeTreatment = BlurredEdgeTreatment.Rectangle)
-                .clip(RoundedCornerShape(defaultRadius))
-                .constrainAs(background) {
-                    top.linkTo(parent.top)
-                    bottom.linkTo(parent.bottom)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
+                .wrapContentSize()
+                .padding(16.dp)
+                .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(defaultRadius))
+                .clickable {
+                    onClickBanner()
                 }
-        )
 
-        Text(
-            text = "Vem conferir nossas melhores receitas",
-            style = MaterialTheme.typography.headlineSmall.copy(
-                fontWeight = FontWeight.SemiBold,
-                textAlign = TextAlign.Center,
-                color = MaterialColor.White,
-                shadow = Shadow(
-                    color = MaterialColor.Black,
-                    offset = Offset(1f, 1f),
-                    blurRadius = 1f
-                )
-            ),
-            modifier = Modifier
-                .constrainAs(text) {
-                    top.linkTo(parent.top)
-                    start.linkTo(parent.start)
-                }
-                .fillMaxWidth()
-                .padding(16.dp))
+
+        ) {
+            val (background, text) = createRefs()
+
+            GlideImage(
+                imageModel = { backgroundImage },
+                imageOptions = ImageOptions(
+                    requestSize = IntSize(150, 150),
+                    contentScale = ContentScale.Crop,
+                    alignment = Alignment.Center,
+                ), failure = {
+                    Text(
+                        text = "Foto nao encontrada",
+                        style = MaterialTheme.typography.bodyMedium.copy(
+                            color = MaterialColor.White,
+                            shadow = Shadow(
+                                color = MaterialColor.Black,
+                                offset = Offset(1f, 1f),
+                                blurRadius = 1f
+                            )
+                        ),
+                        modifier = Modifier.padding(8.dp)
+                    )
+                },
+                previewPlaceholder = R.drawable.ic_cherries,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(150.dp)
+                    .animateEnterExit(fadeIn(), fadeOut())
+                    .blur(1.dp, 1.dp, edgeTreatment = BlurredEdgeTreatment.Rectangle)
+                    .clip(RoundedCornerShape(defaultRadius))
+                    .constrainAs(background) {
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    }
+            )
+
+            Text(
+                text = "Vem conferir nossas melhores receitas",
+                style = MaterialTheme.typography.headlineMedium.copy(
+                    fontWeight = FontWeight.SemiBold,
+                    textAlign = TextAlign.Center,
+                    color = MaterialColor.White,
+                    shadow = Shadow(
+                        color = MaterialColor.Black,
+                        offset = Offset(1f, 1f),
+                        blurRadius = 1f
+                    )
+                ),
+                modifier = Modifier
+                    .constrainAs(text) {
+                        top.linkTo(parent.top)
+                        start.linkTo(parent.start)
+                    }
+                    .fillMaxWidth()
+                    .padding(16.dp))
+        }
     }
+
 }
 
 @Preview

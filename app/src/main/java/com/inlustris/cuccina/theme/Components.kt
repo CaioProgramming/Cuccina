@@ -44,41 +44,38 @@ fun appColors() =
 
 @Composable
 fun CuccinaLoader(showText: Boolean = true) {
-
+    val infiniteTransition = rememberInfiniteTransition()
+    val offsetAnimation = infiniteTransition.animateFloat(
+        initialValue = 0f,
+        targetValue = 100f,
+        animationSpec = infiniteRepeatable(
+            tween(1000, easing = LinearEasing),
+            repeatMode = RepeatMode.Reverse,
+        )
+    )
+    val brush = Brush.linearGradient(
+        appColors(),
+        start = Offset(offsetAnimation.value, offsetAnimation.value),
+        end = Offset(x = offsetAnimation.value * 10, y = offsetAnimation.value * 5)
+    )
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background),
+            .graphicsLayer(alpha = 0.99f)
+            .drawWithCache {
+                onDrawWithContent {
+                    drawContent()
+                    drawRect(brush, blendMode = BlendMode.SrcAtop)
+                }
+            },
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        val infiniteTransition = rememberInfiniteTransition()
-        val offsetAnimation = infiniteTransition.animateFloat(
-            initialValue = 0f,
-            targetValue = 100f,
-            animationSpec = infiniteRepeatable(
-                tween(1500, easing = LinearEasing),
-                repeatMode = RepeatMode.Reverse,
-            )
-        )
 
-
-        val brush = Brush.linearGradient(
-            appColors(),
-            start = Offset(offsetAnimation.value, offsetAnimation.value),
-            end = Offset(x = offsetAnimation.value * 5, y = offsetAnimation.value * 3)
-        )
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.cherry),
             contentDescription = "Cuccina",
             modifier = Modifier
-                .graphicsLayer(alpha = 0.99f)
-                .drawWithCache {
-                    onDrawWithContent {
-                        drawContent()
-                        drawRect(brush, blendMode = BlendMode.SrcAtop)
-                    }
-                }
                 .size(100.dp)
         )
 

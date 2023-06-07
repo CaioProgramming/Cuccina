@@ -13,6 +13,8 @@
 package com.inlustris.cuccina.feature.home.ui
 
 import ai.atick.material.MaterialColor
+import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.*
@@ -21,6 +23,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -35,7 +38,9 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material.icons.sharp.Close
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.*
@@ -45,8 +50,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
@@ -61,7 +71,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.ilustris.cuccina.feature.home.presentation.HomeViewModel
 import com.ilustris.cuccina.feature.home.ui.HighLightSheet
-import com.ilustris.cuccina.feature.home.ui.component.BannerCard
+import com.inlustris.cuccina.feature.home.ui.component.BannerCard
 import com.inlustris.cuccina.feature.recipe.category.domain.model.Category
 import com.ilustris.cuccina.feature.recipe.category.ui.component.CategoryBadge
 import com.ilustris.cuccina.feature.recipe.form.ui.NEW_RECIPE_ROUTE
@@ -71,6 +81,7 @@ import com.ilustris.cuccina.ui.theme.CuccinaLoader
 import com.ilustris.cuccina.ui.theme.Page
 import com.ilustris.cuccina.ui.theme.defaultRadius
 import com.ilustris.cuccina.ui.theme.getStateComponent
+import com.inlustris.cuccina.feature.profile.ui.component.SettingsSheet
 import com.inlustris.cuccina.feature.recipe.category.ui.CATEGORY_ROUTE_IMPL
 import com.silent.ilustriscore.core.model.ViewModelBaseState
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -78,13 +89,15 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 const val HOME_ROUTE = "home"
+private const val HIGHLIGHT_SHEET = "HIGHGLIGHT_SHEET"
+private const val SETTINGS_SHEET = "SETTINGS_SHEET"
 
 @Composable
 fun HomeView(homeViewModel: HomeViewModel?, navController: NavHostController) {
     val homeBaseState = homeViewModel?.viewModelState?.observeAsState()
     val homeList = homeViewModel?.homeList?.observeAsState()
     val highLights = homeViewModel?.highlightRecipes?.observeAsState()
-    val categories = Category.values().toList().sortedBy { it.title }
+    val categories = Category.values().toList().sortedBy { it.name }
     val systemUiController = rememberSystemUiController()
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
@@ -94,8 +107,13 @@ fun HomeView(homeViewModel: HomeViewModel?, navController: NavHostController) {
         skipHalfExpanded = true
     )
     val scope = rememberCoroutineScope()
+
     var query by remember {
         mutableStateOf("")
+    }
+
+    var currentSheet by remember {
+        mutableStateOf(HIGHLIGHT_SHEET)
     }
 
 
@@ -105,7 +123,7 @@ fun HomeView(homeViewModel: HomeViewModel?, navController: NavHostController) {
 
     LaunchedEffect(sheetState) {
         snapshotFlow { sheetState.currentValue }.distinctUntilChanged().collect {
-            systemUiController.isStatusBarVisible = it == ModalBottomSheetValue.Hidden
+            systemUiController.isStatusBarVisible = it == ModalBottomSheetValue.Hidden || currentSheet == SETTINGS_SHEET
         }
     }
 
@@ -114,25 +132,41 @@ fun HomeView(homeViewModel: HomeViewModel?, navController: NavHostController) {
     }
 
 
+    @Composable
+    fun getCurrentSheet() {
+        when (currentSheet) {
+            HIGHLIGHT_SHEET -> {
+                highLights?.value?.let {
+                    HighLightSheet(pages = it, autoSwipe = sheetState.isVisible, closeButton = {
+                        scope.launch {
+                            sheetState.hide()
+                        }
+                    }, openRecipe = { id ->
+                        navigateToRecipe(id)
+                    }, openNewRecipe = {
+                        navController.navigate(NEW_RECIPE_ROUTE)
+                    }, openChefPage = { chefId -> })
+                }
+            }
 
+            SETTINGS_SHEET -> {
+                SettingsSheet()
+            }
+        }
+    }
+
+    fun showSheet(requiredSheet: String) {
+        scope.launch {
+            currentSheet = requiredSheet
+            sheetState.show()
+        }
+    }
 
     ModalBottomSheetLayout(
         modifier = Modifier.animateContentSize(tween(500)),
         sheetState = sheetState,
-        sheetBackgroundColor = MaterialTheme.colorScheme.background,
-        sheetContent = {
-            highLights?.value?.let {
-                HighLightSheet(pages = it, autoSwipe = sheetState.isVisible, closeButton = {
-                    scope.launch {
-                        sheetState.hide()
-                    }
-                }, openRecipe = { id ->
-                    navigateToRecipe(id)
-                }, openNewRecipe = {
-                    navController.navigate(NEW_RECIPE_ROUTE)
-                }, openChefPage = { chefId -> })
-            }
-        }) {
+        sheetBackgroundColor = MaterialTheme.colorScheme.surface,
+        sheetContent = { getCurrentSheet() }) {
 
         BackHandler {
             if (sheetState.isVisible) {
@@ -144,7 +178,9 @@ fun HomeView(homeViewModel: HomeViewModel?, navController: NavHostController) {
             }
         }
 
-        fun isLoading() = homeBaseState?.value == ViewModelBaseState.LoadingState
+        fun isLoading() = homeBaseState?.value == ViewModelBaseState.LoadingState && homeList?.value == null
+
+        val context = LocalContext.current
 
         AnimatedVisibility(
             visible = isLoading(),
@@ -186,6 +222,17 @@ fun HomeView(homeViewModel: HomeViewModel?, navController: NavHostController) {
                                     style = MaterialTheme.typography.headlineLarge.copy(
                                         fontWeight = FontWeight.Black
                                     )
+                                )
+                            }
+                        },
+                        actions = {
+                            IconButton(onClick = {
+                                showSheet(SETTINGS_SHEET)
+                            }) {
+                                Icon(
+                                    Icons.Filled.Settings,
+                                    tint = MaterialTheme.colorScheme.onBackground,
+                                    contentDescription = "Configurações"
                                 )
                             }
                         },
@@ -279,9 +326,7 @@ fun HomeView(homeViewModel: HomeViewModel?, navController: NavHostController) {
                             highLights.find { it is Page.HighlightPage } as? Page.HighlightPage
                         highLightPage?.let { page ->
                             BannerCard(page.backgroundImage) {
-                                scope.launch {
-                                    sheetState.show()
-                                }
+                                showSheet(HIGHLIGHT_SHEET)
                             }
                         }
 
@@ -320,26 +365,68 @@ fun HomeView(homeViewModel: HomeViewModel?, navController: NavHostController) {
                     }
                 }
 
+                fun openPlayStorePage() {
+                    val intent = Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("https://play.google.com/store/apps/dev?id=8106172357045720296")
+                    )
+                    context.startActivity(intent)
+                }
+
                 if (homeList?.value?.isNotEmpty() == true) {
+
+                    val ilustrisBrush = listOf(
+                        MaterialColor.TealA400,
+                        MaterialColor.BlueA400,
+                        MaterialColor.LightBlueA700,
+                    )
+
                     item {
                         val currentYear = Calendar.getInstance().get(Calendar.YEAR)
                         Text(
                             text = "Todas as receitas foram obtidas através de sites públicos e não possuem fins lucrativos.",
-                            style = MaterialTheme.typography.bodySmall,
+                            style = MaterialTheme.typography.labelSmall.copy(
+                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                            ),
                             textAlign = TextAlign.Center,
                             modifier = Modifier
-                                .padding(16.dp)
+                                .padding(horizontal = 16.dp, vertical = 4.dp)
                                 .fillMaxWidth()
                         )
+                        Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
+                            Icon(
+                                Icons.Rounded.Star,
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .size(32.dp)
+                                    .clickable {
+                                        openPlayStorePage()
+                                    }
+                                    .graphicsLayer(alpha = 0.99f)
+                                    .drawWithCache {
+                                        onDrawWithContent {
+                                            drawContent()
+                                            drawRect(
+                                                brush = Brush.linearGradient(
+                                                    ilustrisBrush
+                                                ),
+                                                blendMode = BlendMode.SrcAtop
+                                            )
+                                        }
+                                    }
+                            )
+                        }
+
                         Text(
                             text = "Desenvolvido por ilustris em 2019 - $currentYear",
                             modifier = Modifier
-                                .padding(16.dp)
-                                .fillMaxWidth(),
+                                .padding(horizontal = 16.dp, vertical = 4.dp)
+                                .fillMaxWidth()
+                                .clickable { openPlayStorePage() },
                             textAlign = TextAlign.Center,
                             style = MaterialTheme.typography.labelMedium.copy(
                                 fontStyle = FontStyle.Italic,
-                                color = MaterialColor.LightBlueA100
+                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
                             )
                         )
                     }

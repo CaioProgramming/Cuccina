@@ -3,8 +3,11 @@ package com.ilustris.cuccina.feature.home.ui.component
 import ai.atick.material.MaterialColor
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.KeyboardArrowRight
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -78,28 +81,40 @@ fun HighLightPage(page: Page.HighlightPage, openRecipe: (String) -> Unit) {
             Text(
                 text = page.description,
                 modifier = Modifier.fillMaxWidth(),
-                style = MaterialTheme.typography.labelMedium.copy(
+                style = MaterialTheme.typography.bodyMedium.copy(
                     textAlign = TextAlign.Center,
                     color = MaterialColor.White
                 )
             )
         }
 
-        Button(shape = RoundedCornerShape(defaultRadius),
+        Button(
+            shape = RoundedCornerShape(topStart = defaultRadius, topEnd = defaultRadius),
             elevation = ButtonDefaults.buttonElevation(0.dp),
             contentPadding = PaddingValues(16.dp),
+            colors = ButtonDefaults
+                .buttonColors(
+                    containerColor = MaterialTheme.colorScheme.background,
+                    contentColor = MaterialTheme.colorScheme.primary
+                ),
             onClick = {
                 openRecipe(page.recipeId)
             },
             modifier = Modifier
                 .constrainAs(button) {
-                    bottom.linkTo(parent.bottom, 10.dp)
-                    start.linkTo(parent.start, 10.dp)
-                    end.linkTo(parent.end, 10.dp)
+                    bottom.linkTo(parent.bottom)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
                 }
-                .padding(16.dp)
                 .fillMaxWidth()) {
-            Text(text = "Ver Receita", fontWeight = FontWeight.Bold)
+            Row(
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(vertical = 16.dp)
+            ) {
+                Text(text = "Ver Receita", fontWeight = FontWeight.Bold)
+                Icon(Icons.Rounded.KeyboardArrowRight, contentDescription = null)
+            }
         }
 
 

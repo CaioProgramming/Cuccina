@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ilustris.cuccina.ui.theme.Page
+import com.inlustris.cuccina.feature.recipe.ui.component.RecipeCard
 
 @Composable
 fun RecipesPageView(page: Page.RecipeListPage, openRecipe: (String) -> Unit) {

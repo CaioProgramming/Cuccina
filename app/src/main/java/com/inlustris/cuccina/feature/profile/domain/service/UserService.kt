@@ -2,7 +2,7 @@ package com.ilustris.cuccina.feature.profile.domain.service
 
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.QueryDocumentSnapshot
-import com.ilustris.cuccina.feature.profile.domain.model.UserModel
+import com.inlustris.cuccina.feature.profile.domain.model.UserModel
 import com.silent.ilustriscore.core.bean.BaseBean
 import com.silent.ilustriscore.core.model.BaseService
 import com.silent.ilustriscore.core.model.DataException
