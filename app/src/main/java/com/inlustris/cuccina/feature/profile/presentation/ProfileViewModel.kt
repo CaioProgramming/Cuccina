@@ -4,7 +4,7 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.ilustris.cuccina.feature.profile.domain.model.UserModel
+import com.inlustris.cuccina.feature.profile.domain.model.UserModel
 import com.ilustris.cuccina.feature.profile.domain.service.UserService
 import com.ilustris.cuccina.feature.recipe.domain.model.Recipe
 import com.ilustris.cuccina.feature.recipe.domain.service.RecipeService

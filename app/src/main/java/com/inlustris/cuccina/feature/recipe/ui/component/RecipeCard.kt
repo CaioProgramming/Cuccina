@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalAnimationApi::class)
 
-package com.ilustris.cuccina.feature.recipe.ui.component
+package com.inlustris.cuccina.feature.recipe.ui.component
 
 import android.util.Log
 import androidx.compose.animation.*
@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.ilustris.cuccina.R
 import com.inlustris.cuccina.feature.recipe.category.domain.model.Category
@@ -34,14 +35,11 @@ import com.skydoves.landscapist.glide.GlideImage
 @Composable
 fun RecipeCard(modifier: Modifier, recipe: Recipe, onClickRecipe: (Recipe) -> Unit) {
 
-    var visibility by remember {
-        mutableStateOf(true)
-    }
 
-    AnimatedVisibility(
-        visible = visibility,
-        enter = scaleIn() + fadeIn(),
-        exit = fadeOut() + scaleOut()
+
+    AnimatedContent(
+        targetState = recipe,
+        transitionSpec = { EnterTransition.None with ExitTransition.None }
     ) {
         Column(modifier = Modifier
             .padding(vertical = 8.dp)
@@ -81,7 +79,7 @@ fun RecipeCard(modifier: Modifier, recipe: Recipe, onClickRecipe: (Recipe) -> Un
                     )
                     .border(
                         1.dp,
-                        MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f),
+                        MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f),
                         RoundedCornerShape(defaultRadius)
                     )
                     .clip(RoundedCornerShape(defaultRadius))
@@ -97,13 +95,6 @@ fun RecipeCard(modifier: Modifier, recipe: Recipe, onClickRecipe: (Recipe) -> Un
 
         }
     }
-
-    LaunchedEffect(Unit) {
-        delayedFunction(500) {
-            visibility = true
-        }
-    }
-
 }
 
 @Preview

@@ -1,4 +1,4 @@
-package com.ilustris.cuccina.feature.profile.ui.component
+package com.inlustris.cuccina.feature.profile.ui.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

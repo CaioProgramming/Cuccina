@@ -24,7 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ilustris.cuccina.feature.home.ui.component.HighLightPage
 import com.ilustris.cuccina.feature.profile.ui.component.ChefsPageView
-import com.ilustris.cuccina.feature.profile.ui.component.ProfilePageView
+import com.inlustris.cuccina.feature.profile.ui.component.ProfilePageView
 import com.ilustris.cuccina.feature.recipe.ingredient.domain.model.IngredientMapper
 import com.ilustris.cuccina.feature.recipe.ingredient.presentation.ui.IngredientsPageView
 import com.ilustris.cuccina.feature.recipe.step.presentation.ui.StepPageView
