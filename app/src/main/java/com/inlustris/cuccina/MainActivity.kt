@@ -4,10 +4,9 @@
     ExperimentalMaterial3Api::class
 )
 
-package com.ilustris.cuccina
+package com.inlustris.cuccina
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
@@ -30,12 +29,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.compose.rememberNavController
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.ilustris.cuccina.AppModule
+import com.ilustris.cuccina.MainViewModel
+import com.ilustris.cuccina.R
 import com.inlustris.cuccina.feature.home.ui.HOME_ROUTE
-import com.inlustris.cuccina.feature.profile.ui.PROFILE_ROUTE
 import com.ilustris.cuccina.feature.recipe.form.ui.NEW_RECIPE_ROUTE
 import com.inlustris.cuccina.feature.recipe.start.ui.START_RECIPE_ROUTE
 import com.ilustris.cuccina.feature.recipe.ui.component.getStateComponent
@@ -62,9 +64,7 @@ class MainActivity : ComponentActivity() {
                 var title by remember {
                     mutableStateOf(appName)
                 }
-                var showNavigation by remember {
-                    mutableStateOf(true)
-                }
+                val showNavigation = MutableLiveData(true)
 
                 var bottomPadding by remember {
                     mutableStateOf(50.dp)
@@ -83,12 +83,14 @@ class MainActivity : ComponentActivity() {
                     .setAvailableProviders(AppModule.loginProviders)
                     .build()
 
-
+                fun showBottomNav(enableBottomNav: Boolean) {
+                    showNavigation.value = enableBottomNav
+                }
 
 
                 Scaffold(bottomBar = {
                     AnimatedVisibility(
-                        visible = showNavigation,
+                        visible = showNavigation.observeAsState().value ?: true,
                         enter = fadeIn(),
                         exit = fadeOut()
                     ) {
@@ -96,15 +98,17 @@ class MainActivity : ComponentActivity() {
                     }
                 }) { padding ->
                     if (appState.value == MainViewModel.MainState.RequireLogin) {
-                        showNavigation = false
                         getStateComponent(state = ViewModelBaseState.RequireAuth, action = {
+                            showBottomNav(false)
                             signInLauncher.launch(signInIntent)
                         })
                     } else {
-                        showNavigation = true
                         NavigationGraph(navController = navController, bottomPadding)
                     }
                 }
+
+
+
                 LaunchedEffect(navController) {
                     viewModel.checkUser()
                     navController.currentBackStackEntryFlow.collect { backStackEntry ->
@@ -112,7 +116,7 @@ class MainActivity : ComponentActivity() {
                         val routeItem = BottomNavItem.values().find { it.route == backStackRoute }
                         routeItem?.let {
                             title = it.title
-                            showNavigation = it.showBottomNav
+                            showBottomNav(it.showBottomNav)
                             systemUiController.isStatusBarVisible = it.showStatusBar
                             bottomPadding = getPaddingForRoute(backStackRoute)
                         }
@@ -129,6 +133,10 @@ fun getPaddingForRoute(route: String?) =
         else -> 0.dp
     }
 
+fun showBottomNavForRoute(route: String?) = when (route) {
+    HOME_ROUTE, NEW_RECIPE_ROUTE, CATEGORY_ROUTE -> true
+    else -> false
+}
 
 fun getRouteTitle(route: String?): String {
     if (route == null) return "Cuccina"
