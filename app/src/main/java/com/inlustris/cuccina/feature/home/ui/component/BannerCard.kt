@@ -31,12 +31,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.ilustris.cuccina.R
 import com.ilustris.cuccina.ui.theme.CuccinaTheme
 import com.ilustris.cuccina.ui.theme.defaultRadius
+import com.ilustris.cuccina.ui.theme.getDeviceMultiplier
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
 
@@ -55,12 +55,12 @@ fun BannerCard(backgroundImage: String, onClickBanner: () -> Unit) {
 
 
         ) {
-            val (background, text) = createRefs()
 
+
+            val (background, text) = createRefs()
             GlideImage(
                 imageModel = { backgroundImage },
                 imageOptions = ImageOptions(
-                    requestSize = IntSize(150, 150),
                     contentScale = ContentScale.Crop,
                     alignment = Alignment.Center,
                 ), failure = {
@@ -80,9 +80,9 @@ fun BannerCard(backgroundImage: String, onClickBanner: () -> Unit) {
                 previewPlaceholder = R.drawable.ic_cherries,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(150.dp)
+                    .height(200.dp * getDeviceMultiplier())
                     .animateEnterExit(fadeIn(), fadeOut())
-                    .blur(1.dp, 1.dp, edgeTreatment = BlurredEdgeTreatment.Rectangle)
+                    .blur(5.dp, 5.dp, edgeTreatment = BlurredEdgeTreatment.Rectangle)
                     .clip(RoundedCornerShape(defaultRadius))
                     .constrainAs(background) {
                         top.linkTo(parent.top)
@@ -107,6 +107,7 @@ fun BannerCard(backgroundImage: String, onClickBanner: () -> Unit) {
                 modifier = Modifier
                     .constrainAs(text) {
                         top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
                         start.linkTo(parent.start)
                     }
                     .fillMaxWidth()

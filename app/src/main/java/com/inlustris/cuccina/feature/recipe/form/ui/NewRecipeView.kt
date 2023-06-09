@@ -23,7 +23,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.navigation.NavController
 import com.inlustris.cuccina.feature.home.ui.HOME_ROUTE
 import com.ilustris.cuccina.feature.recipe.form.presentation.viewmodel.NewRecipeViewModel
-import com.ilustris.cuccina.feature.recipe.ui.component.getStateComponent
+import com.inlustris.cuccina.theme.getStateComponent
 import com.ilustris.cuccina.ui.theme.getFormView
 import com.silent.ilustriscore.core.model.ViewModelBaseState
 import kotlinx.coroutines.launch

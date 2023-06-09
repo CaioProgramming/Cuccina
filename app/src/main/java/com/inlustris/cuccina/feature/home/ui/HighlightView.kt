@@ -1,31 +1,42 @@
 @file:OptIn(
     ExperimentalFoundationApi::class, ExperimentalPagerApi::class,
-    ExperimentalPagerApi::class, ExperimentalFoundationApi::class
+    ExperimentalPagerApi::class, ExperimentalFoundationApi::class, ExperimentalAnimationApi::class,
+    ExperimentalAnimationApi::class
 )
 
 package com.ilustris.cuccina.feature.home.ui
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.KeyboardArrowRight
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.*
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.ilustris.cuccina.ui.theme.Page
-import com.ilustris.cuccina.ui.theme.PageIndicators
-import com.ilustris.cuccina.ui.theme.getPageView
+import com.inlustris.cuccina.theme.PageIndicators
+import com.ilustris.cuccina.ui.theme.defaultRadius
+import com.inlustris.cuccina.theme.getPageView
+import com.inlustris.cuccina.theme.pagerCircularRevealTransition
+import com.inlustris.cuccina.theme.pagerFadeTransition
 import kotlinx.coroutines.launch
-import kotlin.math.absoluteValue
 
 
 @Composable
@@ -40,7 +51,8 @@ fun HighLightSheet(
     ConstraintLayout {
         val pagerState = rememberPagerState()
         val scope = rememberCoroutineScope()
-        val (pager, indicators, closeButton) = createRefs()
+        val (pager, indicators, button, closeButton) = createRefs()
+        fun currentPage() = pages[pagerState.currentPage]
 
         HorizontalPager(
             pageCount = pages.size,
@@ -54,13 +66,20 @@ fun HighLightSheet(
                 }
                 .fillMaxSize()
         ) { index ->
-            getPageView(page = pages[index], openRecipe, openChefPage, openNewRecipe)
+            getPageView(
+                page = pages[index],
+                pageModifier = Modifier.pagerCircularRevealTransition(pagerState),
+                openRecipe,
+                openChefPage,
+                openNewRecipe
+            )
         }
 
         PageIndicators(
             count = pages.size,
             currentPage = pagerState.currentPage,
             enableAutoSwipe = autoSwipe,
+            clearPreviousPage = false,
             modifier = Modifier
                 .constrainAs(indicators) {
                     top.linkTo(closeButton.top)
@@ -94,19 +113,50 @@ fun HighLightSheet(
                 tint = MaterialTheme.colorScheme.onBackground
             )
         }
+
+        AnimatedVisibility(
+            visible = currentPage() is Page.HighlightPage,
+            enter = scaleIn(),
+            exit = scaleOut(),
+            modifier = Modifier
+                .constrainAs(button) {
+                    bottom.linkTo(parent.bottom)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                }
+                .padding(16.dp)
+        ) {
+            Button(
+                shape = RoundedCornerShape(defaultRadius),
+                elevation = ButtonDefaults.buttonElevation(0.dp),
+                contentPadding = PaddingValues(8.dp),
+                colors = ButtonDefaults
+                    .buttonColors(
+                        containerColor = MaterialTheme.colorScheme.background,
+                        contentColor = MaterialTheme.colorScheme.primary
+                    ),
+                onClick = {
+                    val page = currentPage()
+                    if (page is Page.HighlightPage) {
+                        openRecipe(page.recipeId)
+                    }
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Row(
+                    horizontalArrangement = Arrangement.SpaceAround,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(vertical = 8.dp)
+                ) {
+                    Text(text = "Ver Receita", fontWeight = FontWeight.Bold)
+                    Icon(Icons.Rounded.KeyboardArrowRight, contentDescription = null)
+                }
+            }
+        }
+
+
     }
 
 }
 
 
-// extension method for current page offset
-@OptIn(ExperimentalFoundationApi::class)
-fun PagerState.calculateCurrentOffsetForPage(page: Int): Float {
-    return (currentPage - page) + currentPageOffsetFraction
-}
-
-fun Modifier.pagerFadeTransition(page: Int, pagerState: PagerState) =
-    graphicsLayer {
-        val pageOffset = pagerState.calculateCurrentOffsetForPage(page)
-        alpha = 1 - pageOffset.absoluteValue
-    }

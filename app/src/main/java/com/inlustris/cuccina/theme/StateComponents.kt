@@ -1,4 +1,4 @@
-package com.ilustris.cuccina.feature.recipe.ui.component
+package com.inlustris.cuccina.theme
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -76,7 +76,7 @@ fun StateComponent(
             if (action != null && buttonText != null) {
                 Button(
                     onClick = action, modifier = Modifier
-                        .fillMaxWidth()
+                        .fillMaxWidth(0.5f)
                         .padding(16.dp)
                 ) {
                     Text(text = buttonText)

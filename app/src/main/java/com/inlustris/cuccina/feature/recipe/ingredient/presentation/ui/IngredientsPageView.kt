@@ -1,4 +1,4 @@
-package com.ilustris.cuccina.feature.recipe.ingredient.presentation.ui
+package com.inlustris.cuccina.feature.recipe.ingredient.presentation.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.ilustris.cuccina.feature.recipe.ingredient.presentation.ui.HorizontalIngredientItem
 import com.ilustris.cuccina.ui.theme.Page
 
 @Composable

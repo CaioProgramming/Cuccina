@@ -31,7 +31,7 @@ import com.ilustris.cuccina.R
 import com.ilustris.cuccina.feature.recipe.domain.model.Recipe
 import com.inlustris.cuccina.feature.recipe.start.ui.START_RECIPE_ROUTE_IMPL
 import com.inlustris.cuccina.feature.recipe.ui.component.RecipeCard
-import com.ilustris.cuccina.feature.recipe.ui.component.getStateComponent
+import com.inlustris.cuccina.theme.getStateComponent
 import com.inlustris.cuccina.feature.recipe.category.domain.model.Category
 import com.ilustris.cuccina.ui.theme.CuccinaLoader
 import com.inlustris.cuccina.feature.recipe.category.presentation.CategoryViewModel

@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalFoundationApi::class)
+
 package com.ilustris.cuccina.ui.theme
 
 import ai.atick.material.MaterialColor
@@ -6,14 +8,20 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.*
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
@@ -30,8 +38,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.airbnb.lottie.compose.*
 import com.ilustris.cuccina.R
-import com.ilustris.cuccina.feature.recipe.ui.component.StateComponent
+import com.inlustris.cuccina.theme.StateComponent
 import com.silent.ilustriscore.core.model.ViewModelBaseState
+import kotlin.math.roundToInt
 
 
 @Composable
@@ -87,7 +96,6 @@ fun CuccinaLoader(showText: Boolean = true) {
                 textAlign = TextAlign.Center
             )
         }
-
 
 
     }
@@ -157,10 +165,11 @@ fun annotatedPage(text: String, annotations: List<String>, color: Color) = build
 }
 
 @Composable
-fun SimplePageView(page: Page.SimplePage) {
+fun SimplePageView(page: Page.SimplePage, modifier: Modifier) {
+
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .background(page.backColor ?: MaterialTheme.colorScheme.background)
             .padding(16.dp)
             .fillMaxSize(), verticalArrangement = Arrangement.Center
@@ -192,7 +201,7 @@ fun SimplePageView(page: Page.SimplePage) {
 }
 
 @Composable
-fun AnimatedTextPage(page: Page.AnimatedTextPage) {
+fun AnimatedTextPage(page: Page.AnimatedTextPage, modifier: Modifier? = Modifier) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -269,9 +278,13 @@ fun AnimatedTextPage(page: Page.AnimatedTextPage) {
 }
 
 @Composable
-fun SuccessPageView(page: Page.SuccessPage, pageAction: () -> Unit) {
-    Column(
-        modifier = Modifier
+fun SuccessPageView(
+    page: Page.SuccessPage,
+    modifier: Modifier = Modifier,
+    pageAction: () -> Unit
+) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
             .background(page.backColor ?: MaterialTheme.colorScheme.background)
             .padding(16.dp)
             .fillMaxSize(), verticalArrangement = Arrangement.Center
@@ -318,9 +331,10 @@ fun SuccessPageView(page: Page.SuccessPage, pageAction: () -> Unit) {
 
         Button(
             onClick = pageAction,
+            shape = RoundedCornerShape(defaultRadius),
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 16.dp)
+                .fillMaxWidth(0.5f)
+                .padding(vertical = 16.dp * getDeviceMultiplier())
         ) {
             Text(
                 text = page.actionText
@@ -329,3 +343,29 @@ fun SuccessPageView(page: Page.SuccessPage, pageAction: () -> Unit) {
     }
 }
 
+@Composable
+fun CounterTextComponent(count: Int, label: String, textColor: Color) {
+    var countValue by remember { mutableStateOf(0) }
+    val postCounter by animateFloatAsState(
+        targetValue = countValue.toFloat(),
+        animationSpec = tween(
+            durationMillis = 2000,
+            easing = FastOutSlowInEasing
+        )
+    )
+    LaunchedEffect(Unit) {
+        countValue = count
+    }
+    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(16.dp)) {
+        Text(
+            postCounter.roundToInt().toString(),
+            color = textColor,
+            style = MaterialTheme.typography.headlineLarge
+        )
+        Text(
+            label,
+            color = textColor.copy(alpha = 0.6f),
+            style = MaterialTheme.typography.labelSmall
+        )
+    }
+}

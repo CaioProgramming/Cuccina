@@ -19,7 +19,7 @@ import javax.inject.Inject
 class StartRecipeViewModel @Inject constructor(
     application: Application,
     override val service: RecipeService,
-    val userService: UserService
+    private val userService: UserService
 ) : BaseViewModel<Recipe>(application) {
 
     val pages = MutableLiveData<List<Page>>()
@@ -50,7 +50,7 @@ class StartRecipeViewModel @Inject constructor(
             add(
                 Page.IngredientsPage(
                     "Ingredientes",
-                    "Reúna os ingredientes, você vai precisar de ${recipe.ingredients.size} itens.\nQuando estiver pronto só precisa clicar em continuar}",
+                    "Reúna os ingredientes, você vai precisar de ${recipe.ingredients.size} itens.\nQuando estiver pronto só precisa prosseguir.",
                     recipe.ingredients
                 )
             )
@@ -60,20 +60,21 @@ class StartRecipeViewModel @Inject constructor(
             recipe.steps.forEachIndexed { index, step ->
                 stepsDescription += when (index) {
                     0 -> {
-                        "A primeira etapa é ${step.title}, e possui ${step.instructions.size} instruções."
+                        "\nA primeira etapa é ${step.title} e possui ${step.instructions.size} instruções."
                     }
                     recipe.steps.lastIndex -> {
-                        "A última etapa é ${step.title}, e possui ${step.instructions.size} instruções."
+                        "\nA última etapa é ${step.title} e possui ${step.instructions.size} instruções."
                     }
                     else -> {
-                        "A próxima etapa é ${step.title}, e possui ${step.instructions.size} instruções."
+                        "\nA próxima etapa é ${step.title} e possui ${step.instructions.size} instruções."
                     }
                 }
             }
             add(
                 Page.SimplePage(
                     "Hora de cozinhar",
-                    "Essa receita tem ${recipe.steps.size} etapa$stepPlural.$stepsDescription\nvamos começar?"
+                    "Essa receita tem ${recipe.steps.size} etapa$stepPlural.$stepsDescription\nvamos começar?",
+                    annotatedTexts = listOf("vamos começar?").plus(recipe.steps.map { it.title  }),
                 )
             )
             recipe.steps.forEachIndexed { index, step ->

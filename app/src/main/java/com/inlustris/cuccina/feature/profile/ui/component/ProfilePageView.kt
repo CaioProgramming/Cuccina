@@ -1,7 +1,16 @@
 package com.inlustris.cuccina.feature.profile.ui.component
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -11,23 +20,35 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import com.ilustris.cuccina.ui.theme.CounterTextComponent
 import com.ilustris.cuccina.ui.theme.CuccinaLoader
 import com.ilustris.cuccina.ui.theme.Page
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
+import kotlin.math.roundToInt
 
 @Composable
 fun ProfilePageView(page: Page.ProfilePage) {
-    ConstraintLayout(
+
+    Column(
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxSize()
             .background(
@@ -41,26 +62,20 @@ fun ProfilePageView(page: Page.ProfilePage) {
             )
             .padding(16.dp)
     ) {
-        val (profilePic, username) = createRefs()
         val user = page.userModel
         GlideImage(
             imageModel = { user.photoUrl },
             imageOptions = ImageOptions(
+                requestSize = IntSize(300, 300),
                 alignment = Alignment.Center,
-                "",
+                contentDescription = user.name,
                 contentScale = ContentScale.Fit
             ),
             loading = {
                 CuccinaLoader()
             },
             modifier = Modifier
-                .constrainAs(profilePic) {
-                    top.linkTo(parent.top)
-                    bottom.linkTo(parent.bottom)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                }
-                .size(150.dp)
+                .size(300.dp)
                 .clip(CircleShape)
                 .padding(16.dp)
                 .border(
@@ -76,22 +91,39 @@ fun ProfilePageView(page: Page.ProfilePage) {
                 )
                 .clip(CircleShape)
         )
-
+        val textColor = page.textColor ?: MaterialTheme.colorScheme.onBackground
         Text(
             user.name,
-            style = MaterialTheme.typography.headlineMedium.copy(
-                color = page.textColor ?: MaterialTheme.colorScheme.onBackground,
+            style = MaterialTheme.typography.headlineLarge.copy(
+                color = textColor,
                 fontWeight = FontWeight.Black
             ),
             textAlign = TextAlign.Center,
             modifier = Modifier
-                .constrainAs(username) {
-                    top.linkTo(profilePic.bottom)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                }
                 .fillMaxWidth()
         )
 
+
+        Row(modifier = Modifier.padding(16.dp), horizontalArrangement = Arrangement.Center) {
+
+            AnimatedVisibility(visible = page.postCount > 0, enter = fadeIn(), exit = fadeOut()) {
+                CounterTextComponent(count = page.postCount, label = "Posts", textColor = textColor)
+
+            }
+            AnimatedVisibility(visible = page.favoriteCount > 0, enter = fadeIn(), exit = fadeOut()) {
+                CounterTextComponent(
+                    count = page.favoriteCount,
+                    label = "Favoritos",
+                    textColor = textColor
+                )
+            }
+
+        }
+
+
     }
 }
+
+
+
+

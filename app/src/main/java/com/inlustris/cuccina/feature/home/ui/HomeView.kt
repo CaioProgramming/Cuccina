@@ -25,6 +25,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -38,7 +39,6 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material.icons.sharp.Close
@@ -69,19 +69,18 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.recyclerview.widget.RecyclerView
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.ilustris.cuccina.feature.home.presentation.HomeViewModel
+import com.inlustris.cuccina.feature.home.presentation.HomeViewModel
 import com.ilustris.cuccina.feature.home.ui.HighLightSheet
 import com.inlustris.cuccina.feature.home.ui.component.BannerCard
 import com.inlustris.cuccina.feature.recipe.category.domain.model.Category
 import com.ilustris.cuccina.feature.recipe.category.ui.component.CategoryBadge
 import com.ilustris.cuccina.feature.recipe.form.ui.NEW_RECIPE_ROUTE
 import com.inlustris.cuccina.feature.recipe.start.ui.START_RECIPE_ROUTE_IMPL
-import com.ilustris.cuccina.feature.recipe.ui.RecipeGroupList
+import com.inlustris.cuccina.feature.recipe.ui.RecipeGroupList
 import com.ilustris.cuccina.ui.theme.CuccinaLoader
 import com.ilustris.cuccina.ui.theme.Page
 import com.ilustris.cuccina.ui.theme.defaultRadius
 import com.ilustris.cuccina.ui.theme.getStateComponent
-import com.inlustris.cuccina.feature.profile.ui.component.SettingsSheet
 import com.inlustris.cuccina.feature.recipe.category.ui.CATEGORY_ROUTE_IMPL
 import com.silent.ilustriscore.core.model.ViewModelBaseState
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -149,9 +148,7 @@ fun HomeView(homeViewModel: HomeViewModel?, navController: NavHostController) {
                 }
             }
 
-            SETTINGS_SHEET -> {
-                SettingsSheet()
-            }
+
         }
     }
 
@@ -163,7 +160,7 @@ fun HomeView(homeViewModel: HomeViewModel?, navController: NavHostController) {
     }
 
     ModalBottomSheetLayout(
-        modifier = Modifier.animateContentSize(tween(500)),
+        modifier = Modifier.animateContentSize(tween(500)).fillMaxSize(),
         sheetState = sheetState,
         sheetBackgroundColor = MaterialTheme.colorScheme.surface,
         sheetContent = { getCurrentSheet() }) {
@@ -222,17 +219,6 @@ fun HomeView(homeViewModel: HomeViewModel?, navController: NavHostController) {
                                     style = MaterialTheme.typography.headlineLarge.copy(
                                         fontWeight = FontWeight.Black
                                     )
-                                )
-                            }
-                        },
-                        actions = {
-                            IconButton(onClick = {
-                                showSheet(SETTINGS_SHEET)
-                            }) {
-                                Icon(
-                                    Icons.Filled.Settings,
-                                    tint = MaterialTheme.colorScheme.onBackground,
-                                    contentDescription = "Configurações"
                                 )
                             }
                         },

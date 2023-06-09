@@ -38,6 +38,7 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
+
     fun getUserRecipes(userID: String) {
         viewModelScope.launch(Dispatchers.IO) {
             when (val queryTask = recipeService.getRecipesByUser(userID)) {
@@ -54,6 +55,7 @@ class ProfileViewModel @Inject constructor(
                         "getUserRecipes: error ${queryTask.errorException.code}"
                     )
                 }
+
                 is ServiceResult.Success -> {
                     updatePages(
                         Page.RecipeListPage(
@@ -62,6 +64,14 @@ class ProfileViewModel @Inject constructor(
                             queryTask.data as List<Recipe>
                         )
                     )
+                    pages.value?.run {
+                        val profileIndex = indexOfFirst { it is Page.ProfilePage }
+                        val profilePage = this[profileIndex] as Page.ProfilePage
+                        profilePage.postCount = queryTask.data.size
+                        this[profileIndex] = profilePage
+                        pages.postValue(this)
+                    }
+
                 }
             }
         }
@@ -83,14 +93,22 @@ class ProfileViewModel @Inject constructor(
                         "getUserFavoriteRecipes: error ${queryTask.errorException.code}",
                     )
                 }
+
                 is ServiceResult.Success -> {
                     updatePages(
                         Page.RecipeListPage(
                             "Receitas favoritas",
                             "Você tem ${queryTask.data.size} receitas favoritas. Esperamos que encontre mais receitas que goste!",
-                            (queryTask.data as List<Recipe>).take(2)
+                            queryTask.data as List<Recipe>
                         )
                     )
+                    pages.value?.run {
+                        val profileIndex = indexOfFirst { it is Page.ProfilePage }
+                        val profilePage = this[profileIndex] as Page.ProfilePage
+                        profilePage.favoriteCount = queryTask.data.size
+                        this[profileIndex] = profilePage
+                        pages.postValue(this)
+                    }
                 }
             }
         }
@@ -105,8 +123,10 @@ class ProfileViewModel @Inject constructor(
                     is ServiceResult.Success -> {
                         delay(1000)
                         user.postValue(userTask.data as UserModel)
-                        updatePages(Page.ProfilePage(userModel = userTask.data as UserModel))
+                        val profilePage = Page.ProfilePage(userModel = userTask.data as UserModel)
+                        updatePages(profilePage)
                     }
+
                     is ServiceResult.Error -> {
                         updateViewState(ViewModelBaseState.ErrorState(userTask.errorException))
                     }
@@ -115,6 +135,7 @@ class ProfileViewModel @Inject constructor(
             }
         }
     }
+
 
 
 }

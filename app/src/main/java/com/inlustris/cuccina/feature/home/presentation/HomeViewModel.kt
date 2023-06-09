@@ -1,4 +1,4 @@
-package com.ilustris.cuccina.feature.home.presentation
+package com.inlustris.cuccina.feature.home.presentation
 
 import ai.atick.material.MaterialColor
 import android.app.Application
@@ -36,7 +36,7 @@ class HomeViewModel @Inject constructor(
             val data = service.getAllData()
             if (data.isSuccess) {
                 val recipes = data.success.data as List<Recipe>
-                getHighlights(recipes.sortedByDescending { it.publishDate }.take(3))
+                getHighlights(recipes.sortedBy { it.publishDate }.take(3))
                 groupRecipes(recipes)
             } else {
                 updateViewState(ViewModelBaseState.ErrorState(data.error.errorException))

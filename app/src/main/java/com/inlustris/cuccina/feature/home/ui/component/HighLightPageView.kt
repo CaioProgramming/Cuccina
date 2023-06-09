@@ -1,4 +1,4 @@
-package com.ilustris.cuccina.feature.home.ui.component
+package com.inlustris.cuccina.feature.home.ui.component
 
 import ai.atick.material.MaterialColor
 import androidx.compose.foundation.layout.*
@@ -28,10 +28,10 @@ import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
-fun HighLightPage(page: Page.HighlightPage, openRecipe: (String) -> Unit) {
+fun HighLightPage(page: Page.HighlightPage, modifier: Modifier) {
 
-    ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-        val (background, info, button) = createRefs()
+    ConstraintLayout(modifier = modifier.fillMaxSize()) {
+        val (background, info) = createRefs()
 
         GlideImage(
             imageModel = { page.backgroundImage },
@@ -88,34 +88,7 @@ fun HighLightPage(page: Page.HighlightPage, openRecipe: (String) -> Unit) {
             )
         }
 
-        Button(
-            shape = RoundedCornerShape(topStart = defaultRadius, topEnd = defaultRadius),
-            elevation = ButtonDefaults.buttonElevation(0.dp),
-            contentPadding = PaddingValues(16.dp),
-            colors = ButtonDefaults
-                .buttonColors(
-                    containerColor = MaterialTheme.colorScheme.background,
-                    contentColor = MaterialTheme.colorScheme.primary
-                ),
-            onClick = {
-                openRecipe(page.recipeId)
-            },
-            modifier = Modifier
-                .constrainAs(button) {
-                    bottom.linkTo(parent.bottom)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                }
-                .fillMaxWidth()) {
-            Row(
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(vertical = 16.dp)
-            ) {
-                Text(text = "Ver Receita", fontWeight = FontWeight.Bold)
-                Icon(Icons.Rounded.KeyboardArrowRight, contentDescription = null)
-            }
-        }
+
 
 
     }

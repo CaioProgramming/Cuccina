@@ -40,7 +40,7 @@ import com.ilustris.cuccina.R
 import com.inlustris.cuccina.feature.home.ui.HOME_ROUTE
 import com.ilustris.cuccina.feature.recipe.form.ui.NEW_RECIPE_ROUTE
 import com.inlustris.cuccina.feature.recipe.start.ui.START_RECIPE_ROUTE
-import com.ilustris.cuccina.feature.recipe.ui.component.getStateComponent
+import com.inlustris.cuccina.theme.getStateComponent
 import com.inlustris.cuccina.navigation.BottomNavigation
 import com.inlustris.cuccina.navigation.NavigationGraph
 import com.ilustris.cuccina.ui.theme.CuccinaTheme

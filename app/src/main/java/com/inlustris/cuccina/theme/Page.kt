@@ -11,7 +11,8 @@ sealed class Page(
     var title: String,
     var description: String,
     var backColor: Color? = null,
-    var textColor: Color? = null
+    var textColor: Color? = null,
+    var showOnIndicator: Boolean = true
 ) {
     class SimplePage(
         title: String,
@@ -38,7 +39,9 @@ sealed class Page(
     class ProfilePage(
         title: String = "",
         description: String = "",
-        val userModel: UserModel
+        val userModel: UserModel,
+        var postCount: Int = 0,
+        var favoriteCount: Int = 0
     ) : Page(
         title,
         description,
@@ -50,7 +53,7 @@ sealed class Page(
         title: String,
         description: String,
         val recipes: List<Recipe>
-    ) : Page(title, description)
+    ) : Page(title, description, showOnIndicator = false)
 
     class RecipePage(
         title: String,
@@ -77,12 +80,12 @@ sealed class Page(
         title: String,
         description: String,
         val actionText: String
-    ) : Page(title, description)
+    ) : Page(title, description, showOnIndicator = false)
 
     class OtherChefsPage(
         title: String,
         description: String,
         val chefs: List<UserModel>
-    ) : Page(title, description)
+    ) : Page(title, description, showOnIndicator = false)
 }
 
