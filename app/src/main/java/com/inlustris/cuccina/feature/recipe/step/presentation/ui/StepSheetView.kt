@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
 
-package com.ilustris.cuccina.feature.recipe.step.presentation.ui
+package com.inlustris.cuccina.feature.recipe.step.presentation.ui
 
 import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
@@ -53,7 +53,8 @@ fun StepSheet(savedIngredients: List<Ingredient>, newStep: (Step) -> Unit) {
             item {
                 Text(
                     text = "Adicionar etapa",
-                    style = MaterialTheme.typography.headlineMedium,
+                    style = MaterialTheme.typography.headlineSmall,
+                    textAlign = TextAlign.Center,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp)
@@ -85,7 +86,7 @@ fun StepSheet(savedIngredients: List<Ingredient>, newStep: (Step) -> Unit) {
                         focusedIndicatorColor = Color.Transparent,
                         unfocusedIndicatorColor = Color.Transparent,
                     ),
-                    textStyle = MaterialTheme.typography.headlineMedium.copy(color = MaterialTheme.colorScheme.secondary),
+                    textStyle = MaterialTheme.typography.headlineMedium,
                 )
 
                 fun getInstructionCount() = instructions.size + 1

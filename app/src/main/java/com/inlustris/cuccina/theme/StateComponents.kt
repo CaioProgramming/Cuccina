@@ -93,7 +93,7 @@ fun StateComponent(
 
 
 @Composable
-fun getStateComponent(state: ViewModelBaseState, action: (ViewModelBaseState) -> Unit) {
+fun GetStateComponent(state: ViewModelBaseState, action: (ViewModelBaseState) -> Unit) {
 
 
     val message = when (state) {
@@ -106,12 +106,12 @@ fun getStateComponent(state: ViewModelBaseState, action: (ViewModelBaseState) ->
         is ViewModelBaseState.DataSavedState -> "Dados salvos com sucesso"
         is ViewModelBaseState.DataUpdateState -> "Dados atualizados com sucesso"
         is ViewModelBaseState.FileUploadedState -> "Arquivos enviados com sucesso"
-        is ViewModelBaseState.ErrorState -> "Ocorreu um erro inesperado(${state.dataException.code.message}"
+        is ViewModelBaseState.ErrorState -> "Ocorreu um erro inesperado\n(${state.dataException.code.message})"
     }
 
     val buttonText = when (state) {
         ViewModelBaseState.DataDeletedState -> "Ok"
-        ViewModelBaseState.RequireAuth -> "Fazer login"
+        ViewModelBaseState.RequireAuth -> "Entrar"
         is ViewModelBaseState.ErrorState -> "Tentar novamente"
         is ViewModelBaseState.DataSavedState -> "Ok"
         else -> null

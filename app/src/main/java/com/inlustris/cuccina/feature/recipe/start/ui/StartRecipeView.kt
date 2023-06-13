@@ -42,9 +42,11 @@ import com.ilustris.cuccina.feature.recipe.domain.model.Recipe
 import com.ilustris.cuccina.feature.recipe.form.ui.NEW_RECIPE_ROUTE
 import com.ilustris.cuccina.feature.recipe.start.presentation.StartRecipeViewModel
 import com.inlustris.cuccina.theme.StateComponent
-import com.inlustris.cuccina.theme.getStateComponent
+import com.inlustris.cuccina.theme.GetStateComponent
 import com.inlustris.cuccina.theme.PageIndicators
 import com.ilustris.cuccina.ui.theme.defaultRadius
+import com.inlustris.cuccina.feature.recipe.category.ui.CATEGORY_ROUTE_IMPL
+import com.inlustris.cuccina.feature.recipe.ui.component.RecipeAction
 import com.inlustris.cuccina.theme.getPageView
 import com.inlustris.cuccina.theme.pagerFadeTransition
 import com.silent.ilustriscore.core.model.ViewModelBaseState
@@ -100,7 +102,7 @@ fun StartRecipeView(
                     .animateContentSize(tween(1000))
                     .fillMaxSize()
             ) {
-                val (title, pager, indicator, nextButton, progressBar, backButton, favoriteButton, dropDown, alertDialog) = createRefs()
+                val (title, pager, indicator, nextButton, progressBar, backButton, favoriteButton, alertDialog) = createRefs()
 
                 pages?.value?.let { pages ->
 
@@ -154,8 +156,6 @@ fun StartRecipeView(
                     )
 
 
-
-
                     LaunchedEffect(pagerState) {
                         snapshotFlow { pagerState.currentPage }.distinctUntilChanged()
                             .collect { page ->
@@ -177,6 +177,21 @@ fun StartRecipeView(
                         }
                     }
 
+                    fun handlePageAction(recipeAction: RecipeAction) {
+                        when(recipeAction) {
+                            is RecipeAction.OpenCategoryPage -> {
+                                navController.navigate("$CATEGORY_ROUTE_IMPL${recipeAction.category.ordinal}")
+                            }
+                            is RecipeAction.OpenChefPage -> {
+                                navController.navigate("$PROFILE_ROUTE_IMPL${recipeAction.chefId}")
+                            }
+                            RecipeAction.StartRecipe -> {
+                                scope.launch {
+                                    pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                                }
+                            }
+                        }
+                    }
 
                     HorizontalPager(
                         pageCount = pages.size,
@@ -210,11 +225,7 @@ fun StartRecipeView(
                             navigateToNewRecipe = {
                                 navController.navigate(NEW_RECIPE_ROUTE)
                             },
-                            pageAction = {
-                                scope.launch {
-                                    pagerState.animateScrollToPage(pagerState.currentPage + 1)
-                                }
-                            })
+                            pageAction =  ::handlePageAction )
                     }
 
                     AnimatedVisibility(visible = showTitle,
@@ -531,7 +542,7 @@ fun StartRecipeView(
     state?.value?.run {
         when (this) {
             ViewModelBaseState.LoadingState -> StateComponent(message = "Carregando receita...")
-            ViewModelBaseState.DataDeletedState -> getStateComponent(state = this, action = {
+            ViewModelBaseState.DataDeletedState -> GetStateComponent(state = this, action = {
                 navController.popBackStack()
             })
 

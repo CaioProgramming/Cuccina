@@ -1,14 +1,18 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.ilustris.cuccina.feature.recipe.step.presentation.ui
+package com.inlustris.cuccina.feature.recipe.step.presentation.ui
 
-import android.util.Log
+import ai.atick.material.MaterialColor
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -20,13 +24,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import com.ilustris.cuccina.R
+import com.ilustris.cuccina.ui.theme.annotatedPage
 import com.ilustris.cuccina.ui.theme.defaultRadius
 
 @Composable
@@ -40,81 +45,58 @@ fun InstructionItem(
     iconDescription: String? = "",
     onSelectInstruction: (String) -> Unit,
 ) {
-
-
-    fun annotatedIngredient(instruction: String, color: Color) = buildAnnotatedString {
-        append(instruction)
-        Log.i(
-            "InstructionItem",
-            "annotatedIngredient: validating ingredients -> $savedIngredients on ($instruction)"
-        )
-        savedIngredients.forEach { ingredient ->
-            if (instruction.contains(ingredient, true)) {
-                val startIndex = instruction.indexOf(ingredient)
-                val endIndex = instruction.indexOf(ingredient) + ingredient.length
-                if (startIndex != -1 && endIndex != instruction.length) {
-                    Log.i(javaClass.simpleName, "annotatedIngredient: adding style to $ingredient")
-                    addStyle(
-                        SpanStyle(
-                            color = color,
-                            fontWeight = FontWeight.Bold
-                        ),
-                        start = instruction.indexOf(ingredient),
-                        end = (instruction.indexOf(ingredient) + ingredient.length)
-                    )
-                }
-            }
-        }
+    val instructionValue = remember {
+        mutableStateOf(instruction)
     }
 
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 8.dp),
-        verticalAlignment = Alignment.Top,
-        horizontalArrangement = Arrangement.Start
-    ) {
-        val animatedSize by animateDpAsState(
-            targetValue = 25.dp,
-            animationSpec = tween(2500, easing = FastOutSlowInEasing)
+
+    ConstraintLayout(modifier = Modifier
+        .fillMaxWidth()
+        .padding(horizontal = 4.dp)) {
+
+
+        val (instructionText, counterText, dividerText) = createRefs()
+        val instructionTextModifier = Modifier.constrainAs(instructionText) {
+            top.linkTo(counterText.top)
+            bottom.linkTo(parent.bottom)
+            start.linkTo(counterText.end)
+            end.linkTo(parent.end)
+            width = Dimension.fillToConstraints
+            height = Dimension.wrapContent
+        }.padding(8.dp)
+        Text(
+            text = (count).toString(),
+            modifier = Modifier
+                .constrainAs(counterText) {
+                    top.linkTo(parent.top)
+                    start.linkTo(parent.start)
+                }
+                .background(
+                    MaterialTheme.colorScheme.onBackground, CircleShape
+                )
+                .padding(8.dp),
+            style = MaterialTheme.typography.labelMedium.copy(
+                color = MaterialTheme.colorScheme.background,
+                textAlign = TextAlign.Center,
+                fontWeight = FontWeight.Black
+            ),
         )
-
-
-        val dividerModifier = Modifier
-            .width(2.dp)
-            .height(animatedSize)
-            .background(MaterialTheme.colorScheme.onBackground, RoundedCornerShape(defaultRadius))
-            .padding(horizontal = 16.dp)
-        Column(
-            modifier = Modifier.padding(horizontal = 16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = (count).toString(),
-                modifier = Modifier
-                    .background(
-                        MaterialTheme.colorScheme.onBackground, RoundedCornerShape(
-                            defaultRadius
-                        )
-                    )
-                    .padding(16.dp),
-                style = MaterialTheme.typography.headlineSmall.copy(
-                    color = MaterialTheme.colorScheme.background,
-                    textAlign = TextAlign.Center,
-                    fontWeight = FontWeight.Black
-                ),
-            )
-            if (!isLastItem) {
-                Divider(modifier = dividerModifier)
+        AnimatedVisibility(
+            visible = !isLastItem, enter = fadeIn(), exit = fadeOut(),
+            modifier = Modifier.constrainAs(dividerText) {
+                top.linkTo(counterText.bottom)
+                bottom.linkTo(instructionText.bottom)
+                start.linkTo(counterText.start, margin = 10.dp)
+                end.linkTo(counterText.end, margin = 10.dp)
+                height = Dimension.fillToConstraints
             }
-        }
+        ) {
+            Divider(
+                modifier = Modifier.width(2.dp),
+                color = MaterialTheme.colorScheme.onBackground,
+                thickness = 2.dp)
 
-        val instructionValue = remember {
-            mutableStateOf(instruction)
         }
-
-        val instructionTextModifier = Modifier.fillMaxWidth()
 
         if (editable) {
             TextField(
@@ -140,7 +122,7 @@ fun InstructionItem(
                 placeholder = {
                     Text(
                         text = "Escreva a ${count}º instrução",
-                        modifier = Modifier.wrapContentSize()
+                        modifier = Modifier.fillMaxWidth(),
                     )
                 },
                 colors = TextFieldDefaults.colors(
@@ -161,19 +143,22 @@ fun InstructionItem(
             )
         } else {
             Text(
-                text = annotatedIngredient(
-                    instructionValue.value,
+                text = annotatedPage(
+                    instruction,
+                    savedIngredients,
                     MaterialTheme.colorScheme.primary
                 ),
-                modifier = instructionTextModifier.clickable {
-                    onSelectInstruction(instructionValue.value)
-                },
-                style = MaterialTheme.typography.bodyMedium.copy(
+                modifier = instructionTextModifier
+                    .clickable {
+                        onSelectInstruction(instructionValue.value)
+                    },
+                style = MaterialTheme.typography.bodyLarge.copy(
                     color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Start
                 ),
             )
         }
+
     }
 }
 
@@ -189,7 +174,7 @@ fun InstructionItemPreview() {
         ).forEachIndexed { index, s ->
             InstructionItem(
                 instruction = s,
-                savedIngredients = listOf("bacon", "carne"),
+                savedIngredients = listOf("bacon", "carne", "sal", "pimenta"),
                 count = index + 1,
                 editable = index % 2 == 0,
                 isLastItem = index == 3,

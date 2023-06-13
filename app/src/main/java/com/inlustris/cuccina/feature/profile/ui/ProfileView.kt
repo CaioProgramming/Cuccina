@@ -63,10 +63,13 @@ fun ProfileView(
 
     val baseState = profileViewModel.viewModelState.observeAsState()
     val user = profileViewModel.user.observeAsState()
+    val isUserPage = profileViewModel.isUserPage.observeAsState().value
     val pages = profileViewModel.pages.observeAsState()
     val systemUiController = rememberSystemUiController()
+
     LaunchedEffect(Unit) {
-        profileViewModel.getUserData(userId?.replace("{userId}", ""))
+        if (user.value == null)
+            profileViewModel.getUserData(userId?.replace("{userId}", ""))
     }
 
     LaunchedEffect(user) {
@@ -171,9 +174,14 @@ fun ProfileView(
                         width = Dimension.fillToConstraints
                         height = Dimension.fillToConstraints
                     }) {
-                    getPageView(page = pages.value!![it], pageModifier = Modifier.pagerFadeTransition(pagerState), openRecipe = { id ->
-                        openRecipe(id)
-                    }, openChefPage = {}, navigateToNewRecipe = {})
+                    getPageView(
+                        page = pages.value!![it],
+                        pageModifier = Modifier.pagerFadeTransition(pagerState),
+                        openRecipe = { id ->
+                            openRecipe(id)
+                        },
+                        openChefPage = {},
+                        navigateToNewRecipe = {})
                 }
 
 
@@ -234,18 +242,26 @@ fun ProfileView(
                     }
                 }
 
-                IconButton(onClick = {
-                    showSheet()
-                }, modifier = Modifier.constrainAs(settingsButton) {
-                    top.linkTo(parent.top)
-                    end.linkTo(parent.end)
-                }) {
-                    Icon(
-                        Icons.Filled.Settings,
-                        tint = MaterialTheme.colorScheme.onBackground,
-                        contentDescription = "Configurações"
-                    )
+                AnimatedVisibility(
+                    visible = isUserPage ?: false,
+                    modifier = Modifier.constrainAs(settingsButton) {
+                        top.linkTo(parent.top)
+                        end.linkTo(parent.end)
+                    },
+                    enter = scaleIn(),
+                    exit = fadeOut()
+                ) {
+                    IconButton(onClick = {
+                        showSheet()
+                    },) {
+                        Icon(
+                            Icons.Filled.Settings,
+                            tint = MaterialTheme.colorScheme.onBackground,
+                            contentDescription = "Configurações"
+                        )
+                    }
                 }
+
 
             }
         }

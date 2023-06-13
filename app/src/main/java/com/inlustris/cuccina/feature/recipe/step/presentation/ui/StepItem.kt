@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import com.ilustris.cuccina.R
 import com.ilustris.cuccina.feature.recipe.ingredient.domain.model.Ingredient
 import com.ilustris.cuccina.feature.recipe.step.domain.model.Step
+import com.inlustris.cuccina.feature.recipe.step.presentation.ui.InstructionItem
 
 @Composable
 fun StepItem(

@@ -31,9 +31,10 @@ import com.ilustris.cuccina.R
 import com.ilustris.cuccina.feature.recipe.domain.model.Recipe
 import com.inlustris.cuccina.feature.recipe.start.ui.START_RECIPE_ROUTE_IMPL
 import com.inlustris.cuccina.feature.recipe.ui.component.RecipeCard
-import com.inlustris.cuccina.theme.getStateComponent
+import com.inlustris.cuccina.theme.GetStateComponent
 import com.inlustris.cuccina.feature.recipe.category.domain.model.Category
 import com.ilustris.cuccina.ui.theme.CuccinaLoader
+import com.ilustris.cuccina.ui.theme.getDeviceMultiplier
 import com.inlustris.cuccina.feature.recipe.category.presentation.CategoryViewModel
 import com.silent.ilustriscore.core.model.ViewModelBaseState
 import com.skydoves.landscapist.ImageOptions
@@ -73,15 +74,15 @@ fun CategoryView(
     }
 
     AnimatedVisibility(visible = pageState.value is ViewModelBaseState.ErrorState) {
-        getStateComponent(state = pageState.value!!, action = {
+        GetStateComponent(state = pageState.value!!, action = {
             categoryViewModel.getCategoryRecipes(currentCategory.name)
         })
     }
 
     AnimatedVisibility(visible = pageState.value is ViewModelBaseState.DataListRetrievedState) {
         LazyColumn(modifier = Modifier.fillMaxSize()) {
-            val coverSize = 350
             item {
+                val coverSize = 350 * getDeviceMultiplier()
                 GlideImage(
                     imageModel = { currentCategory.cover },
                     glideRequestType = GlideRequestType.BITMAP,
@@ -90,19 +91,17 @@ fun CategoryView(
                         Column(
                             modifier = Modifier.fillMaxSize(),
                             verticalArrangement = Arrangement.Center) {
-                            CuccinaLoader(false)
+                            CuccinaLoader(true)
 
                         }
                     },
                     failure = {
-                        Image(
-                            painterResource(id = R.drawable.cherry),
-                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
-                            contentDescription = "Cuccina",
-                            modifier = Modifier
-                                .size(32.dp)
-                                .padding(4.dp)
-                        )
+                        Column(
+                            modifier = Modifier.fillMaxSize(),
+                            verticalArrangement = Arrangement.Center) {
+                            CuccinaLoader(false)
+
+                        }
                     },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -149,7 +148,7 @@ fun CategoryView(
                 RecipeCard(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(250.dp)
+                        .height(250.dp * getDeviceMultiplier())
                         .padding(16.dp),
                     recipe = it,
                     onClickRecipe = { recipe ->

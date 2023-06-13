@@ -34,12 +34,13 @@ import com.inlustris.cuccina.feature.recipe.ingredient.presentation.ui.Ingredien
 import com.ilustris.cuccina.feature.recipe.step.presentation.ui.StepPageView
 import com.inlustris.cuccina.feature.recipe.step.presentation.ui.StepsPageView
 import com.inlustris.cuccina.feature.recipe.ui.component.RecipePageView
-import com.ilustris.cuccina.feature.recipe.ui.component.RecipesPageView
+import com.inlustris.cuccina.feature.recipe.ui.component.RecipesPageView
 import com.ilustris.cuccina.ui.theme.AnimatedTextPage
 import com.ilustris.cuccina.ui.theme.CuccinaTheme
 import com.ilustris.cuccina.ui.theme.Page
 import com.ilustris.cuccina.ui.theme.SimplePageView
 import com.ilustris.cuccina.ui.theme.SuccessPageView
+import com.inlustris.cuccina.feature.recipe.ui.component.RecipeAction
 
 @Preview(showBackground = true)
 @Composable
@@ -142,7 +143,7 @@ fun getPageView(
     openRecipe: ((String) -> Unit)? = null,
     openChefPage: ((String) -> Unit)? = null,
     navigateToNewRecipe: (() -> Unit)? = null,
-    pageAction: (() -> Unit)? = null
+    pageAction: ((RecipeAction) -> Unit)? = null
 ) {
 
     return when (page) {
@@ -152,8 +153,7 @@ fun getPageView(
         is Page.StepPage -> StepPageView(page)
         is Page.RecipePage -> RecipePageView(
             page,
-            pageAction = { pageAction?.invoke() },
-            openChefPage = { openChefPage?.invoke(it) }
+            pageAction = { pageAction?.invoke(it) }
         )
 
         is Page.HighlightPage -> HighLightPage(page = page, modifier = pageModifier)

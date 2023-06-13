@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalFoundationApi::class)
 
-package com.ilustris.cuccina.feature.recipe.ui.component
+package com.inlustris.cuccina.feature.recipe.ui.component
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
@@ -36,7 +36,7 @@ fun RecipesPageView(page: Page.RecipeListPage, openRecipe: (String) -> Unit) {
         item(span = StaggeredGridItemSpan.FullLine) {
             Text(
                 text = page.description,
-                style = MaterialTheme.typography.bodyMedium,
+                style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier.fillMaxWidth()
             )
         }

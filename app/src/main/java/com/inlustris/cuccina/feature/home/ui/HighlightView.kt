@@ -36,6 +36,7 @@ import com.ilustris.cuccina.ui.theme.defaultRadius
 import com.inlustris.cuccina.theme.getPageView
 import com.inlustris.cuccina.theme.pagerCircularRevealTransition
 import com.inlustris.cuccina.theme.pagerFadeTransition
+import com.inlustris.cuccina.theme.pagerScaleTransition
 import kotlinx.coroutines.launch
 
 
@@ -68,7 +69,7 @@ fun HighLightSheet(
         ) { index ->
             getPageView(
                 page = pages[index],
-                pageModifier = Modifier.pagerCircularRevealTransition(pagerState),
+                pageModifier = Modifier.pagerScaleTransition(pagerState),
                 openRecipe,
                 openChefPage,
                 openNewRecipe

@@ -69,6 +69,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.recyclerview.widget.RecyclerView
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.ilustris.cuccina.R
 import com.inlustris.cuccina.feature.home.presentation.HomeViewModel
 import com.ilustris.cuccina.feature.home.ui.HighLightSheet
 import com.inlustris.cuccina.feature.home.ui.component.BannerCard
@@ -96,7 +97,7 @@ fun HomeView(homeViewModel: HomeViewModel?, navController: NavHostController) {
     val homeBaseState = homeViewModel?.viewModelState?.observeAsState()
     val homeList = homeViewModel?.homeList?.observeAsState()
     val highLights = homeViewModel?.highlightRecipes?.observeAsState()
-    val categories = Category.values().toList().sortedBy { it.name }
+    val categories = Category.values().toList().filter { it.title != "Outros" }.sortedBy { it.title }
     val systemUiController = rememberSystemUiController()
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
@@ -207,7 +208,7 @@ fun HomeView(homeViewModel: HomeViewModel?, navController: NavHostController) {
                         title = {
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Image(
-                                    painterResource(id = com.ilustris.cuccina.R.drawable.cherry),
+                                    painterResource(id = R.drawable.cherry),
                                     colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
                                     contentDescription = "Cuccina",
                                     modifier = Modifier

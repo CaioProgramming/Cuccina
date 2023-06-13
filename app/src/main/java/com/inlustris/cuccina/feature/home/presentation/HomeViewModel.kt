@@ -36,7 +36,7 @@ class HomeViewModel @Inject constructor(
             val data = service.getAllData()
             if (data.isSuccess) {
                 val recipes = data.success.data as List<Recipe>
-                getHighlights(recipes.sortedBy { it.publishDate }.take(3))
+                getHighlights(recipes.sortedBy { it.likes.size }.take(recipes.size / 2))
                 groupRecipes(recipes)
             } else {
                 updateViewState(ViewModelBaseState.ErrorState(data.error.errorException))

@@ -138,9 +138,6 @@ fun CaloriesComponent(calories: Int? = null, newCalories: (Int) -> Unit) {
                     imeAction = ImeAction.Done,
                 ),
                 keyboardActions = KeyboardActions(onDone = {
-                    if (calorieInput.value.isNotEmpty() && calorieInput.value.isNotBlank()) {
-                        newCalories(calorieInput.value.toInt())
-                    }
 
                 }),
                 onValueChange = { newValue ->

@@ -1,19 +1,31 @@
-@file:OptIn(ExperimentalFoundationApi::class)
+@file:OptIn(ExperimentalFoundationApi::class, ExperimentalAnimationApi::class)
 
 package com.ilustris.cuccina.ui.theme
 
 import ai.atick.material.MaterialColor
 import android.util.Log
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.*
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.with
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.rounded.KeyboardArrowDown
+import androidx.compose.material.icons.rounded.KeyboardArrowUp
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,6 +48,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import com.airbnb.lottie.compose.*
 import com.ilustris.cuccina.R
 import com.inlustris.cuccina.theme.StateComponent
@@ -201,9 +215,9 @@ fun SimplePageView(page: Page.SimplePage, modifier: Modifier) {
 }
 
 @Composable
-fun AnimatedTextPage(page: Page.AnimatedTextPage, modifier: Modifier? = Modifier) {
+fun AnimatedTextPage(page: Page.AnimatedTextPage, modifier: Modifier = Modifier) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(page.backColor ?: MaterialTheme.colorScheme.background)
     ) {
@@ -283,7 +297,8 @@ fun SuccessPageView(
     modifier: Modifier = Modifier,
     pageAction: () -> Unit
 ) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally,
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .background(page.backColor ?: MaterialTheme.colorScheme.background)
             .padding(16.dp)
@@ -333,7 +348,7 @@ fun SuccessPageView(
             onClick = pageAction,
             shape = RoundedCornerShape(defaultRadius),
             modifier = Modifier
-                .fillMaxWidth(0.5f)
+                .fillMaxWidth()
                 .padding(vertical = 16.dp * getDeviceMultiplier())
         ) {
             Text(
@@ -341,6 +356,77 @@ fun SuccessPageView(
             )
         }
     }
+}
+
+@Composable
+fun ExpandableComponent(
+    modifier: Modifier,
+    expanded: Boolean = false,
+    onExpandClick: (Boolean) -> Unit,
+    headerView: @Composable () -> Unit,
+    innerContent: @Composable () -> Unit
+) {
+
+    var expanded by remember {
+        mutableStateOf(expanded)
+    }
+
+    AnimatedContent(targetState = expanded, modifier = modifier, transitionSpec = {
+        fadeIn() with fadeOut()
+    }) { expand ->
+        ConstraintLayout(modifier = Modifier.animateContentSize()) {
+            val (icon, header, content) = createRefs()
+            IconButton(onClick = {
+                expanded = !expanded
+                onExpandClick(expanded)
+            }, modifier = Modifier.constrainAs(icon) {
+                end.linkTo(parent.end)
+                top.linkTo(parent.top)
+            }) {
+                val iconRes = if (expanded) {
+                    Icons.Rounded.KeyboardArrowUp
+                } else {
+                    Icons.Rounded.KeyboardArrowDown
+                }
+                val description = if (expanded) {
+                    "Fechar"
+                } else {
+                    "Abrir"
+                }
+                Icon(
+                    iconRes,
+                    tint = MaterialTheme.colorScheme.onBackground,
+                    contentDescription = description
+                )
+            }
+            Box(modifier = Modifier.constrainAs(header) {
+                start.linkTo(parent.start)
+                end.linkTo(icon.start)
+                top.linkTo(parent.top)
+                width = Dimension.fillToConstraints
+                height = Dimension.wrapContent
+            }) {
+                headerView()
+            }
+
+            Box(modifier = Modifier.constrainAs(content) {
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+                top.linkTo(header.bottom)
+                width = Dimension.fillToConstraints
+                height = Dimension.wrapContent
+            }) {
+                AnimatedVisibility(visible = expanded, enter = fadeIn(), exit = fadeOut()) {
+                    innerContent()
+                }
+            }
+
+        }
+
+    }
+
+
+
 }
 
 @Composable
@@ -367,5 +453,23 @@ fun CounterTextComponent(count: Int, label: String, textColor: Color) {
             color = textColor.copy(alpha = 0.6f),
             style = MaterialTheme.typography.labelSmall
         )
+    }
+}
+
+
+@Preview
+@Composable
+fun ExpandCardPreview() {
+    CuccinaTheme() {
+        ExpandableComponent(modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+            .background(
+                MaterialTheme.colorScheme.surface, RoundedCornerShape(
+                    defaultRadius
+                )
+            ), onExpandClick = {}, headerView = { Text(text = "Expand card") }) {
+            Text(text = "Inner content")
+        }
     }
 }

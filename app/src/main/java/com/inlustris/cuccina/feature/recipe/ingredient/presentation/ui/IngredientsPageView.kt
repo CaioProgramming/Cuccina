@@ -5,13 +5,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.ilustris.cuccina.feature.recipe.ingredient.presentation.ui.HorizontalIngredientItem
 import com.ilustris.cuccina.ui.theme.Page
 
 @Composable
@@ -32,8 +32,8 @@ fun IngredientsPageView(page: Page.IngredientsPage) {
             )
         }
 
-        items(page.ingredients.size) { index ->
-            HorizontalIngredientItem(ingredient = page.ingredients[index])
+        items(page.ingredients.sortedBy { it.name }) {
+            HorizontalIngredientItem(ingredient = it)
         }
 
     }

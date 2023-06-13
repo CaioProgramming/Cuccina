@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalFoundationApi::class)
+@file:OptIn(ExperimentalFoundationApi::class, ExperimentalFoundationApi::class)
 
 package com.inlustris.cuccina.feature.profile.ui.component
 
@@ -23,6 +23,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.ilustris.cuccina.ui.theme.CuccinaLoader
 import com.ilustris.cuccina.ui.theme.Page
+import com.ilustris.cuccina.ui.theme.getDeviceMultiplier
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
 
@@ -32,6 +33,7 @@ fun ChefsPageView(page: Page.OtherChefsPage, openChefPage: (String) -> Unit) {
 
     LazyVerticalStaggeredGrid(
         columns = StaggeredGridCells.Fixed(2),
+        verticalItemSpacing = 8.dp,
         modifier = Modifier
             .background(page.backColor ?: MaterialTheme.colorScheme.background)
             .padding(16.dp)
@@ -63,7 +65,8 @@ fun ChefsPageView(page: Page.OtherChefsPage, openChefPage: (String) -> Unit) {
                     CuccinaLoader()
                 },
                 modifier = Modifier
-                    .size(170.dp)
+                    .height(200.dp * getDeviceMultiplier())
+                    .fillMaxWidth()
                     .background(MaterialTheme.colorScheme.surface, CircleShape)
                     .clip(CircleShape)
                     .padding(8.dp)

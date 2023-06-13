@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalFoundationApi::class)
+@file:OptIn(ExperimentalFoundationApi::class, ExperimentalFoundationApi::class)
 
 package com.inlustris.cuccina.theme
 
@@ -6,6 +6,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
@@ -31,8 +32,8 @@ fun Modifier.pagerFadeTransition(pagerState: PagerState) =
         alpha = 1 - pageOffset.absoluteValue
     }
 
-@Composable
-fun Modifier.pagerScaleTransition(pagerState: PagerState) = graphicsLayer {
+fun Modifier.pagerScaleTransition(pagerState: PagerState) =
+    graphicsLayer {
     // get a scale value between 1 and 1.75f, 1.75 will be when its resting,
     // 1f is the smallest it'll be when not the focused page
     val page = pagerState.currentPage
@@ -43,7 +44,6 @@ fun Modifier.pagerScaleTransition(pagerState: PagerState) = graphicsLayer {
     scaleY = scale
 }
 
-@Composable
 fun Modifier.pagerCircularRevealTransition(state: PagerState) = graphicsLayer {
     // MAKE THE PAGE NOT MOVE
     val page = state.currentPage

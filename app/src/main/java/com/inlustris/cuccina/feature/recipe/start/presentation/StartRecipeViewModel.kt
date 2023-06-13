@@ -104,7 +104,7 @@ class StartRecipeViewModel @Inject constructor(
             add(
                 Page.SuccessPage(
                     "Parabéns! Você concluiu a receita.",
-                    "Agora é só aproveitar! Que tal compartilhar uma receita própria também?",
+                    "Tomara que sua receita ${recipe.name} tenha ficado deliciosa. Que tal compartilhar uma receita própria também?",
                     "Publicar receita"
                 )
             )
