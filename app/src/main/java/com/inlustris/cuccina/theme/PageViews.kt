@@ -80,7 +80,6 @@ fun PageIndicators(
     Row(
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
     ) {
         repeat(count) { index ->
 

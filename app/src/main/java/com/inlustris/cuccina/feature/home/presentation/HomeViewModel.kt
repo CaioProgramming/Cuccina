@@ -5,8 +5,8 @@ import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.inlustris.cuccina.feature.recipe.category.domain.model.Category
-import com.ilustris.cuccina.feature.recipe.domain.model.Recipe
-import com.ilustris.cuccina.feature.recipe.domain.model.RecipeGroup
+import com.inlustris.cuccina.feature.recipe.domain.model.Recipe
+import com.inlustris.cuccina.feature.recipe.domain.model.RecipeGroup
 import com.ilustris.cuccina.feature.recipe.domain.service.RecipeService
 import com.ilustris.cuccina.feature.recipe.ingredient.domain.model.IngredientMapper
 import com.ilustris.cuccina.ui.theme.Page
@@ -36,7 +36,7 @@ class HomeViewModel @Inject constructor(
             val data = service.getAllData()
             if (data.isSuccess) {
                 val recipes = data.success.data as List<Recipe>
-                getHighlights(recipes.sortedBy { it.likes.size }.take(recipes.size / 2))
+                getHighlights(recipes.sortedBy { it.publishDate }.take(recipes.size / 2))
                 groupRecipes(recipes)
             } else {
                 updateViewState(ViewModelBaseState.ErrorState(data.error.errorException))

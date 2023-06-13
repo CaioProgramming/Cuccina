@@ -1,4 +1,4 @@
-package com.ilustris.cuccina.feature.recipe.domain.model
+package com.inlustris.cuccina.feature.recipe.domain.model
 
 import com.inlustris.cuccina.feature.recipe.ingredient.domain.model.Ingredient
 import com.ilustris.cuccina.feature.recipe.step.domain.model.Step
@@ -11,7 +11,6 @@ data class Recipe(
     var description: String = "",
     var time: Long = 0,
     var portions: Int = 0,
-    var author: String = "",
     var userID: String = "",
     var ingredients: List<Ingredient> = emptyList(),
     var steps: List<Step> = emptyList(),

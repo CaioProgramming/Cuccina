@@ -38,8 +38,8 @@ class SettingsViewModel @Inject constructor (application: Application,
                 when (val userTask = service.getSingleData(uid)) {
                     is ServiceResult.Success -> {
                         delay(1000)
-                        userInfo.postValue(it)
                         user.postValue(userTask.data as UserModel)
+                        userInfo.postValue(it)
                     }
                     is ServiceResult.Error -> {
                         updateViewState(ViewModelBaseState.ErrorState(userTask.errorException))

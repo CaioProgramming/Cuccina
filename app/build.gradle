@@ -9,6 +9,24 @@ plugins {
 }
 
 android {
+
+    def versionPropsFile = file('version.properties')
+    Properties versionProps = new Properties()
+
+    if (versionPropsFile.canRead()) {
+        versionProps.load(new FileInputStream(versionPropsFile))
+    }
+    else {
+        throw new GradleException("Could not read version.properties!")
+    }
+
+    def versionMajor = versionProps['VERSION_MAJOR'].toInteger()
+    def versionMinor = versionProps['VERSION_MINOR'].toInteger()
+    def versionPatch = versionProps['VERSION_PATCH'].toInteger()
+    def versionBuild = versionProps['VERSION_BUILD'].toInteger()
+    def versionNumber = versionProps['VERSION_NUMBER'].toInteger()
+    def vName = "${rootProject.ext.applicationName}-${versionMajor}.${versionMinor}.${versionPatch}.${versionBuild}-${versionNumber}"
+
     namespace 'com.ilustris.cuccina'
     compileSdk 33
 
@@ -16,8 +34,8 @@ android {
         applicationId "com.inlustris.cuccina"
         minSdk 28
         targetSdk 33
-        versionCode 3
-        versionName "1.5.3"
+        versionCode versionNumber
+        versionName vName
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -28,6 +46,11 @@ android {
     buildTypes {
         release {
             minifyEnabled false
+            resValue("string","version_text",vName + "-release")
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            resValue("string","version_text",vName + "-release")
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }

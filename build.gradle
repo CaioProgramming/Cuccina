@@ -4,6 +4,7 @@ buildscript {
         ilustris_version = '2.5.5'
         hiltVersion = '2.44'
         kotlinVersion = '1.7.0'
+        applicationName = 'Cuccina'
     }
     dependencies {
         classpath 'com.google.gms:google-services:4.3.15'

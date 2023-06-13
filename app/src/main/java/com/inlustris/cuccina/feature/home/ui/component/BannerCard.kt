@@ -25,6 +25,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.BlurredEdgeTreatment
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.BlendMode
@@ -90,6 +92,7 @@ fun BannerCard(backgroundImage: String, onClickBanner: () -> Unit) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(150.dp * getDeviceMultiplier())
+                    .blur(3.dp, edgeTreatment = BlurredEdgeTreatment.Unbounded)
                     .animateEnterExit(fadeIn(), fadeOut())
                     .clip(RoundedCornerShape(defaultRadius))
                     .constrainAs(background) {
@@ -113,8 +116,8 @@ fun BannerCard(backgroundImage: String, onClickBanner: () -> Unit) {
                 val labelTextSize = MaterialTheme.typography.labelLarge.fontSize * getDeviceMultiplier()
                 val textShadow =  Shadow(
                     color = MaterialColor.Black.copy(alpha = 0.5f),
-                    offset = Offset(1.5f, 2f),
-                    blurRadius = 15f
+                    offset = Offset(1f, -2f),
+                    blurRadius = 10f
                 )
                 Text(
                     text = "De dar água na boca!",

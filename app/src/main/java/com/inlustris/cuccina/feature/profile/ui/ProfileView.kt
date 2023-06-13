@@ -243,7 +243,7 @@ fun ProfileView(
                 }
 
                 AnimatedVisibility(
-                    visible = isUserPage ?: false,
+                    visible = isUserPage ?: false && pagerState.currentPage == 0,
                     modifier = Modifier.constrainAs(settingsButton) {
                         top.linkTo(parent.top)
                         end.linkTo(parent.end)

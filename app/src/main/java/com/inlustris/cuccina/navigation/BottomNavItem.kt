@@ -32,8 +32,8 @@ import com.inlustris.cuccina.feature.home.ui.HOME_ROUTE
 import com.inlustris.cuccina.feature.home.ui.HomeView
 import com.inlustris.cuccina.feature.profile.ui.PROFILE_ROUTE
 import com.inlustris.cuccina.feature.profile.ui.ProfileView
-import com.ilustris.cuccina.feature.recipe.form.ui.NEW_RECIPE_ROUTE
-import com.ilustris.cuccina.feature.recipe.form.ui.NewRecipeView
+import com.inlustris.cuccina.feature.recipe.form.ui.NEW_RECIPE_ROUTE
+import com.inlustris.cuccina.feature.recipe.form.ui.NewRecipeView
 import com.inlustris.cuccina.feature.recipe.start.ui.START_RECIPE_ROUTE
 import com.inlustris.cuccina.feature.recipe.start.ui.StartRecipeView
 import com.inlustris.cuccina.feature.recipe.category.ui.CATEGORY_ROUTE

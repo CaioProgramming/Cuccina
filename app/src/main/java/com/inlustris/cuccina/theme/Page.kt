@@ -3,7 +3,7 @@ package com.ilustris.cuccina.ui.theme
 import ai.atick.material.MaterialColor
 import androidx.compose.ui.graphics.Color
 import com.inlustris.cuccina.feature.profile.domain.model.UserModel
-import com.ilustris.cuccina.feature.recipe.domain.model.Recipe
+import com.inlustris.cuccina.feature.recipe.domain.model.Recipe
 import com.inlustris.cuccina.feature.recipe.ingredient.domain.model.Ingredient
 import com.ilustris.cuccina.feature.recipe.step.domain.model.Step
 

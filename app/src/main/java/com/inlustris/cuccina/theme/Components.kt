@@ -65,7 +65,7 @@ fun appColors() =
     )
 
 @Composable
-fun CuccinaLoader(showText: Boolean = true) {
+fun CuccinaLoader(showText: Boolean = true, customIcon: Int = R.drawable.cherry) {
     val infiniteTransition = rememberInfiniteTransition()
     val offsetAnimation = infiniteTransition.animateFloat(
         initialValue = 0f,
@@ -95,7 +95,7 @@ fun CuccinaLoader(showText: Boolean = true) {
     ) {
 
         Icon(
-            imageVector = ImageVector.vectorResource(id = R.drawable.cherry),
+            imageVector = ImageVector.vectorResource(id = customIcon),
             contentDescription = "Cuccina",
             modifier = Modifier
                 .size(100.dp)

@@ -15,8 +15,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.recyclerview.widget.RecyclerView.HORIZONTAL
 import androidx.recyclerview.widget.RecyclerView.VERTICAL
-import com.ilustris.cuccina.feature.recipe.domain.model.Recipe
-import com.ilustris.cuccina.feature.recipe.domain.model.RecipeGroup
+import com.inlustris.cuccina.feature.recipe.domain.model.Recipe
+import com.inlustris.cuccina.feature.recipe.domain.model.RecipeGroup
 import com.inlustris.cuccina.feature.recipe.ui.component.RecipeCard
 import com.ilustris.cuccina.ui.theme.CuccinaTheme
 import com.ilustris.cuccina.ui.theme.getDeviceMultiplier

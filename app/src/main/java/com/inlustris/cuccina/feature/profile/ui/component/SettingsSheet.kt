@@ -42,15 +42,19 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.ilustris.cuccina.BuildConfig
 import com.ilustris.cuccina.R
 import com.inlustris.cuccina.theme.CuccinaLoader
 import com.ilustris.cuccina.ui.theme.defaultRadius
 import com.ilustris.cuccina.ui.theme.getDeviceMultiplier
 import com.inlustris.cuccina.feature.profile.presentation.SettingsViewModel
+import com.inlustris.cuccina.theme.annotatedPage
 import com.silent.ilustriscore.core.model.ViewModelBaseState
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
@@ -108,6 +112,22 @@ fun SettingsSheet() {
                     modifier = Modifier.padding(horizontal = 16.dp)
                 )
 
+                userInfo?.providerData?.last()?.run {
+                    Text(
+                        annotatedPage(
+                            "conectado via $providerId.",
+                            listOf(providerId),
+                            color = MaterialColor.BlueA100
+                        ),
+                        style = MaterialTheme.typography.labelSmall.copy(
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
+                            fontWeight = FontWeight.Light
+                        ),
+                        modifier = Modifier.padding(4.dp)
+                    )
+
+                }
+
                 Text(
                     text = userInfo?.uid ?: "",
                     style = MaterialTheme.typography.labelSmall.copy(
@@ -142,7 +162,9 @@ fun SettingsSheet() {
                     Text(
                         text = "Desconectar",
                         style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.padding(8.dp).background(Color.Transparent)
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .background(Color.Transparent)
                     )
                 }
 
@@ -166,9 +188,6 @@ fun SettingsSheet() {
                     )
                 }
 
-                fun openPrivacyPage() {
-
-                }
 
                 val appName = context.getString(R.string.app_name)
 
@@ -184,6 +203,15 @@ fun SettingsSheet() {
 
                         }
                 )
+
+                Text(
+                    text = stringResource(id = R.string.version_text),
+                    style = MaterialTheme.typography.labelSmall.copy(
+                        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.3f),
+                        textAlign = TextAlign.Center
+                    ),
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
+                )
             }
 
 
@@ -194,7 +222,7 @@ fun SettingsSheet() {
             ) {
                 AlertDialog(modifier = Modifier
                     .wrapContentSize()
-                    .padding(16.dp )
+                    .padding(16.dp)
                     .background(
                         MaterialTheme.colorScheme.surface, RoundedCornerShape(
                             defaultRadius

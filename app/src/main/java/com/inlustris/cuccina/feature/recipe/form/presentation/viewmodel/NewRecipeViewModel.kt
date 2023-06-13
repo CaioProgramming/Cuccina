@@ -3,19 +3,13 @@ package com.inlustris.cuccina.feature.recipe.form.presentation.viewmodel
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
-import com.ilustris.cuccina.feature.recipe.domain.model.Recipe
+import com.inlustris.cuccina.feature.recipe.domain.model.Recipe
 import com.ilustris.cuccina.feature.recipe.domain.service.RecipeService
 import com.inlustris.cuccina.feature.recipe.ingredient.domain.model.Ingredient
 import com.ilustris.cuccina.feature.recipe.step.domain.model.Step
 import com.ilustris.cuccina.ui.theme.FormPage
 import com.silent.ilustriscore.core.model.BaseViewModel
-import com.silent.ilustriscore.core.model.DataException
-import com.silent.ilustriscore.core.model.ViewModelBaseState
-import com.silent.ilustriscore.core.utilities.delayedFunction
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
 
@@ -27,36 +21,8 @@ class NewRecipeViewModel @Inject constructor(
 
     val recipe = MutableLiveData(Recipe())
     val pages = MutableLiveData<ArrayList<FormPage>>(arrayListOf())
-
-
-    fun saveRecipe(time: Long) {
-        updateViewState(ViewModelBaseState.LoadingState)
-        viewModelScope.launch(Dispatchers.IO) {
-            recipe.value?.let {
-                val saveTask =
-                    service.addData(
-                        it.copy(
-                            author = service.currentUser()?.displayName ?: "",
-                            time = time,
-                            publishDate = Calendar.getInstance().timeInMillis
-                        )
-                    )
-                if (saveTask.isSuccess) {
-                    updateViewState(ViewModelBaseState.DataSavedState(it))
-                } else {
-                    updateViewState(ViewModelBaseState.ErrorState(saveTask.error.errorException))
-                }
-                clearRecipe()
-                delayedFunction(2000) {
-                    updateViewState(ViewModelBaseState.LoadCompleteState)
-
-                }
-            } ?: kotlin.run {
-                updateViewState(ViewModelBaseState.ErrorState(DataException.UNKNOWN))
-            }
-        }
-
-    }
+    val currentPage = MutableLiveData(0)
+    val requireValidateEmail = MutableLiveData(false)
 
     private fun clearRecipe() {
         recipe.postValue(Recipe())
@@ -141,7 +107,7 @@ class NewRecipeViewModel @Inject constructor(
         recipe.value = recipe.value?.copy(steps = step)
         recipe.value?.let {
             saveData(it.apply {
-                time = Calendar.getInstance().timeInMillis
+                publishDate = Calendar.getInstance().timeInMillis
                 steps = step
             })
         }
@@ -179,15 +145,25 @@ class NewRecipeViewModel @Inject constructor(
                 add(page)
                 pages.postValue(this)
             }
-            pages.postValue(this)
         } ?: run {
             pages.postValue(arrayListOf(page))
         }
+        currentPage.postValue(pages.value?.size ?: 0)
     }
 
     fun buildFirstPage() {
-        updatePage(FormPage.CategoryFormPage {
-            updateRecipeCategory(it)
-        })
+        getUser()?.let {
+            if (it.isEmailVerified) {
+                updatePage(FormPage.CategoryFormPage {
+                    updateRecipeCategory(it)
+                })
+            } else {
+                requireValidateEmail.postValue(true)
+            }
+        }
+    }
+
+    fun pushValidationEmail() {
+        getUser()?.sendEmailVerification()
     }
 }

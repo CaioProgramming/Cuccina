@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.inlustris.cuccina.feature.profile.domain.model.UserModel
 import com.ilustris.cuccina.feature.profile.domain.service.UserService
-import com.ilustris.cuccina.feature.recipe.domain.model.Recipe
+import com.inlustris.cuccina.feature.recipe.domain.model.Recipe
 import com.ilustris.cuccina.feature.recipe.domain.service.RecipeService
 import com.ilustris.cuccina.ui.theme.Page
 import com.silent.ilustriscore.core.model.BaseViewModel
@@ -28,7 +28,7 @@ class ProfileViewModel @Inject constructor(
 
     val user = MutableLiveData<UserModel>()
     val pages = MutableLiveData<ArrayList<Page>>()
-    val isUserPage = MutableLiveData<Boolean>(false)
+    val isUserPage = MutableLiveData(false)
 
     private fun updatePages(page: Page) {
         pages.value?.let {
@@ -42,17 +42,16 @@ class ProfileViewModel @Inject constructor(
 
     fun getUserRecipes(userID: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val isUserPage = userID == service.currentUser()?.uid
 
             when (val queryTask = recipeService.getRecipesByUser(userID)) {
                 is ServiceResult.Error -> {
-                    val title = if (isUserPage) {
+                    val title = if (isUserPage.value == true) {
                         "Minhas receitas"
                     } else {
                         "Receitas de ${user.value?.name}"
                     }
 
-                    val message = if (isUserPage) {
+                    val message = if (isUserPage.value == true) {
                         "Você ainda não tem receitas publicadas. \nQue tal começar agora mesmo?"
                     } else {
                         "${user.value?.name} ainda não tem receitas publicadas."
@@ -71,8 +70,8 @@ class ProfileViewModel @Inject constructor(
                 }
 
                 is ServiceResult.Success -> {
-                    val message = if (isUserPage) {
-                        "Desde que entrou no Cuccina você publicou ${queryTask.data.size} receitas.\n Continue assim!"
+                    val message = if (isUserPage.value == true) {
+                        "Desde que entrou no Cuccina você publicou ${queryTask.data.size} receitas.\nContinue assim!"
                     } else {
                         "${user.value?.name} publicou ${queryTask.data.size} receitas."
                     }
@@ -98,10 +97,9 @@ class ProfileViewModel @Inject constructor(
 
     fun getUserFavoriteRecipes(userID: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val isUserPage = userID == service.currentUser()?.uid
             when (val queryTask = recipeService.getRecipesByUserLike(userID)) {
                 is ServiceResult.Error -> {
-                    val message = if (isUserPage) {
+                    val message = if (isUserPage.value == true) {
                         "Você ainda não tem receitas favoritas. \nQue tal dar uma olhada nas receitas e favoritar as que mais gostar?"
                     } else {
                         "Este usuário ainda não tem receitas favoritas."
@@ -120,7 +118,7 @@ class ProfileViewModel @Inject constructor(
                 }
 
                 is ServiceResult.Success -> {
-                    val message = if (isUserPage) {
+                    val message = if (isUserPage.value == true) {
                         "Você tem ${queryTask.data.size} receitas favoritas. Esperamos que encontre mais receitas que goste!"
                     } else {
                         "${user.value?.name} tem ${queryTask.data.size} receitas favoritas."
@@ -153,7 +151,7 @@ class ProfileViewModel @Inject constructor(
                     is ServiceResult.Success -> {
                         delay(1000)
                         user.postValue(userTask.data as UserModel)
-                        isUserPage.postValue(userId == service.currentUser()?.uid)
+                        isUserPage.postValue(userId == service.currentUser()?.uid || userId.isNullOrEmpty())
                         val profilePage = Page.ProfilePage(userModel = userTask.data as UserModel)
                         updatePages(profilePage)
                     }

@@ -2,15 +2,14 @@ package com.inlustris.cuccina.feature.recipe.category.presentation
 
 import android.app.Application
 import androidx.lifecycle.viewModelScope
-import com.ilustris.cuccina.feature.recipe.domain.model.Recipe
+import com.inlustris.cuccina.feature.recipe.domain.model.Recipe
 import com.ilustris.cuccina.feature.recipe.domain.service.RecipeService
-import com.silent.ilustriscore.core.model.BaseService
 import com.silent.ilustriscore.core.model.BaseViewModel
-import com.silent.ilustriscore.core.model.ErrorType
 import com.silent.ilustriscore.core.model.ServiceResult
 import com.silent.ilustriscore.core.model.ViewModelBaseState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,6 +25,7 @@ class CategoryViewModel @Inject constructor(application: Application, override v
                 updateViewState(ViewModelBaseState.ErrorState(categoryQuery.errorException))
             }
             is ServiceResult.Success -> {
+                delay(2000)
                 updateViewState(ViewModelBaseState.DataListRetrievedState(categoryQuery.data))
             }
         }
