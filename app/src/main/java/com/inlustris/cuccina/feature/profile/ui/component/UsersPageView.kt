@@ -21,7 +21,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.ilustris.cuccina.ui.theme.CuccinaLoader
+import com.inlustris.cuccina.theme.CuccinaLoader
 import com.ilustris.cuccina.ui.theme.Page
 import com.ilustris.cuccina.ui.theme.getDeviceMultiplier
 import com.skydoves.landscapist.ImageOptions

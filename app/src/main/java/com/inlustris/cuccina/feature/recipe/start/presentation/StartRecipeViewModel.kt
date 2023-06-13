@@ -1,4 +1,4 @@
-package com.ilustris.cuccina.feature.recipe.start.presentation
+package com.inlustris.cuccina.feature.recipe.start.presentation
 
 import android.app.Application
 import androidx.lifecycle.MutableLiveData

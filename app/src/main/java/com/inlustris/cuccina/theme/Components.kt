@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalFoundationApi::class, ExperimentalAnimationApi::class)
 
-package com.ilustris.cuccina.ui.theme
+package com.inlustris.cuccina.theme
 
 import ai.atick.material.MaterialColor
 import android.util.Log
@@ -14,13 +14,9 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.with
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.material.icons.rounded.KeyboardArrowUp
 import androidx.compose.material3.Button
@@ -52,7 +48,10 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.airbnb.lottie.compose.*
 import com.ilustris.cuccina.R
-import com.inlustris.cuccina.theme.StateComponent
+import com.ilustris.cuccina.ui.theme.CuccinaTheme
+import com.ilustris.cuccina.ui.theme.Page
+import com.ilustris.cuccina.ui.theme.defaultRadius
+import com.ilustris.cuccina.ui.theme.getDeviceMultiplier
 import com.silent.ilustriscore.core.model.ViewModelBaseState
 import kotlin.math.roundToInt
 
@@ -116,7 +115,7 @@ fun CuccinaLoader(showText: Boolean = true) {
 }
 
 @Composable
-fun getStateComponent(state: ViewModelBaseState, action: (ViewModelBaseState) -> Unit) {
+fun BuildtStateComponent(state: ViewModelBaseState, action: (ViewModelBaseState) -> Unit) {
 
 
     val message = when (state) {
@@ -373,7 +372,7 @@ fun ExpandableComponent(
 
     AnimatedContent(targetState = expanded, modifier = modifier, transitionSpec = {
         fadeIn() with fadeOut()
-    }) { expand ->
+    }) {
         ConstraintLayout(modifier = Modifier.animateContentSize()) {
             val (icon, header, content) = createRefs()
             IconButton(onClick = {

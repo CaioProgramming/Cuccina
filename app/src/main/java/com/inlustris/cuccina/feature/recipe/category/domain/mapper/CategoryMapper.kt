@@ -1,4 +1,4 @@
-package com.ilustris.cuccina.feature.recipe.category.domain.mapper
+package com.inlustris.cuccina.feature.recipe.category.domain.mapper
 
 import ai.atick.material.MaterialColor
 import androidx.compose.runtime.Composable

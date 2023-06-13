@@ -35,11 +35,8 @@ import com.ilustris.cuccina.feature.recipe.step.presentation.ui.StepPageView
 import com.inlustris.cuccina.feature.recipe.step.presentation.ui.StepsPageView
 import com.inlustris.cuccina.feature.recipe.ui.component.RecipePageView
 import com.inlustris.cuccina.feature.recipe.ui.component.RecipesPageView
-import com.ilustris.cuccina.ui.theme.AnimatedTextPage
 import com.ilustris.cuccina.ui.theme.CuccinaTheme
 import com.ilustris.cuccina.ui.theme.Page
-import com.ilustris.cuccina.ui.theme.SimplePageView
-import com.ilustris.cuccina.ui.theme.SuccessPageView
 import com.inlustris.cuccina.feature.recipe.ui.component.RecipeAction
 
 @Preview(showBackground = true)

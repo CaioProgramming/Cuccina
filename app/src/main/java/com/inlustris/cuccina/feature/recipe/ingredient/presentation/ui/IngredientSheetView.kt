@@ -23,10 +23,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.chargemap.compose.numberpicker.ListItemPicker
-import com.ilustris.cuccina.feature.recipe.ingredient.domain.model.Ingredient
+import com.inlustris.cuccina.feature.recipe.ingredient.domain.model.Ingredient
 import com.ilustris.cuccina.feature.recipe.ingredient.domain.model.IngredientMapper
-import com.ilustris.cuccina.feature.recipe.ingredient.domain.model.IngredientType
-import com.ilustris.cuccina.feature.recipe.ingredient.domain.model.Texture
+import com.inlustris.cuccina.feature.recipe.ingredient.domain.model.IngredientType
+import com.inlustris.cuccina.feature.recipe.ingredient.domain.model.Texture
 import com.ilustris.cuccina.ui.theme.defaultRadius
 
 @OptIn(ExperimentalAnimationApi::class)

@@ -34,8 +34,6 @@ import androidx.navigation.compose.rememberNavController
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.ilustris.cuccina.AppModule
-import com.ilustris.cuccina.MainViewModel
 import com.ilustris.cuccina.R
 import com.inlustris.cuccina.feature.home.ui.HOME_ROUTE
 import com.ilustris.cuccina.feature.recipe.form.ui.NEW_RECIPE_ROUTE

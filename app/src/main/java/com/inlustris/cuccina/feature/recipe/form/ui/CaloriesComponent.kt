@@ -1,4 +1,4 @@
-package com.ilustris.cuccina.feature.recipe.domain.ui
+package com.inlustris.cuccina.feature.recipe.form.ui
 
 import ai.atick.material.MaterialColor
 import androidx.compose.animation.core.FastOutLinearInEasing

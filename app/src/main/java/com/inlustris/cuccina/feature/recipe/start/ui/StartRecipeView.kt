@@ -40,7 +40,7 @@ import com.ilustris.cuccina.R
 import com.inlustris.cuccina.feature.profile.ui.PROFILE_ROUTE_IMPL
 import com.ilustris.cuccina.feature.recipe.domain.model.Recipe
 import com.ilustris.cuccina.feature.recipe.form.ui.NEW_RECIPE_ROUTE
-import com.ilustris.cuccina.feature.recipe.start.presentation.StartRecipeViewModel
+import com.inlustris.cuccina.feature.recipe.start.presentation.StartRecipeViewModel
 import com.inlustris.cuccina.theme.StateComponent
 import com.inlustris.cuccina.theme.GetStateComponent
 import com.inlustris.cuccina.theme.PageIndicators
@@ -297,8 +297,8 @@ fun StartRecipeView(
                                     color = MaterialTheme.colorScheme.onSurface
                                 )
                                 Button(onClick = {
-                                    recipeId?.let {
-                                        startRecipeViewModel.deleteData(it)
+                                    recipeId?.let { recipe ->
+                                        startRecipeViewModel.deleteData(recipe)
                                         dialogState.value = false
                                     }
                                 }) {

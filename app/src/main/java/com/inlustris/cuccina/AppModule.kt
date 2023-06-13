@@ -1,4 +1,4 @@
-package com.ilustris.cuccina
+package com.inlustris.cuccina
 
 import com.firebase.ui.auth.AuthUI
 import com.ilustris.cuccina.feature.profile.domain.service.UserService

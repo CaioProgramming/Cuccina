@@ -39,8 +39,8 @@ import com.chargemap.compose.numberpicker.NumberPicker
 import com.ilustris.cuccina.R
 import com.inlustris.cuccina.feature.recipe.category.domain.model.Category
 import com.ilustris.cuccina.feature.recipe.category.ui.component.CategoryIcon
-import com.ilustris.cuccina.feature.recipe.domain.ui.CaloriesComponent
-import com.ilustris.cuccina.feature.recipe.ingredient.domain.model.Ingredient
+import com.inlustris.cuccina.feature.recipe.form.ui.CaloriesComponent
+import com.inlustris.cuccina.feature.recipe.ingredient.domain.model.Ingredient
 import com.inlustris.cuccina.feature.recipe.ingredient.presentation.ui.IngredientItem
 import com.inlustris.cuccina.feature.recipe.ingredient.presentation.ui.IngredientSheet
 import com.ilustris.cuccina.feature.recipe.step.domain.model.Step

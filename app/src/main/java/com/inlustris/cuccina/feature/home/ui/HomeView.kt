@@ -78,10 +78,10 @@ import com.ilustris.cuccina.feature.recipe.category.ui.component.CategoryBadge
 import com.ilustris.cuccina.feature.recipe.form.ui.NEW_RECIPE_ROUTE
 import com.inlustris.cuccina.feature.recipe.start.ui.START_RECIPE_ROUTE_IMPL
 import com.inlustris.cuccina.feature.recipe.ui.RecipeGroupList
-import com.ilustris.cuccina.ui.theme.CuccinaLoader
+import com.inlustris.cuccina.theme.CuccinaLoader
 import com.ilustris.cuccina.ui.theme.Page
 import com.ilustris.cuccina.ui.theme.defaultRadius
-import com.ilustris.cuccina.ui.theme.getStateComponent
+import com.inlustris.cuccina.theme.BuildtStateComponent
 import com.inlustris.cuccina.feature.recipe.category.ui.CATEGORY_ROUTE_IMPL
 import com.silent.ilustriscore.core.model.ViewModelBaseState
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -328,7 +328,7 @@ fun HomeView(homeViewModel: HomeViewModel?, navController: NavHostController) {
 
                         else -> {
                             item {
-                                getStateComponent(state = it) { state ->
+                                BuildtStateComponent(state = it) { state ->
                                     if (state is ViewModelBaseState.ErrorState) {
                                         homeViewModel.loadHome()
                                     }
