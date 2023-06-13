@@ -10,15 +10,18 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -38,11 +41,11 @@ import com.inlustris.cuccina.feature.recipe.category.domain.model.Category
 import com.ilustris.cuccina.feature.recipe.category.ui.component.CategoryIcon
 import com.ilustris.cuccina.feature.recipe.domain.ui.CaloriesComponent
 import com.ilustris.cuccina.feature.recipe.ingredient.domain.model.Ingredient
-import com.ilustris.cuccina.feature.recipe.ingredient.presentation.ui.IngredientItem
-import com.ilustris.cuccina.feature.recipe.ingredient.presentation.ui.IngredientSheet
+import com.inlustris.cuccina.feature.recipe.ingredient.presentation.ui.IngredientItem
+import com.inlustris.cuccina.feature.recipe.ingredient.presentation.ui.IngredientSheet
 import com.ilustris.cuccina.feature.recipe.step.domain.model.Step
 import com.ilustris.cuccina.feature.recipe.step.presentation.ui.StepItem
-import com.ilustris.cuccina.feature.recipe.step.presentation.ui.StepSheet
+import com.inlustris.cuccina.feature.recipe.step.presentation.ui.StepSheet
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
 import kotlinx.coroutines.launch
@@ -87,7 +90,7 @@ fun FormPage(formPage: FormPage) {
                     color = textColor.copy(alpha = 0.5f)
                 )
             },
-            textStyle = MaterialTheme.typography.bodyLarge.copy(textAlign = TextAlign.Center),
+            textStyle = MaterialTheme.typography.bodyMedium.copy(textAlign = TextAlign.Center, fontWeight = FontWeight.Light),
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = Color.Transparent,
                 unfocusedContainerColor = Color.Transparent,
@@ -101,7 +104,10 @@ fun FormPage(formPage: FormPage) {
 
         Button(
             enabled = formText.value.isNotEmpty(),
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 16.dp),
+            shape = RoundedCornerShape(defaultRadius),
             onClick = {
                 formPage.sendData(formText.value)
             }) {
@@ -205,7 +211,8 @@ fun ImageForm(formPage: FormPage.ImageFormPage) {
         )
 
         Button(
-            enabled = selectedImage.value != null,
+            enabled = selectedImage.value.isNotEmpty(),
+            shape = RoundedCornerShape(defaultRadius),
             modifier = Modifier.fillMaxWidth(),
             onClick = {
                 selectedImage.value.let { formPage.sendData(it) }
@@ -256,7 +263,9 @@ fun TimeForm(formPage: FormPage.TimeFormPage) {
 
 
 
-        Row(modifier = Modifier.fillMaxWidth()) {
+        Row(modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp)) {
             NumberPicker(
                 value = hours,
                 label = {
@@ -289,7 +298,8 @@ fun TimeForm(formPage: FormPage.TimeFormPage) {
 
         Button(
             enabled = hours != 0 || minutes != 0,
-            modifier = Modifier.fillMaxWidth(0.5f),
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(defaultRadius),
             onClick = {
                 formPage.sendData(getTime(hours, minutes))
             }) {
@@ -338,6 +348,7 @@ fun CaloriesForm(formPage: FormPage.CaloriesFormPage) {
         Button(
             enabled = calories.value != 0,
             modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(defaultRadius),
             onClick = {
                 formPage.sendData(calories.value)
             }) {
@@ -389,13 +400,42 @@ fun IngredientsForm(formPage: FormPage.IngredientsFormPage) {
             )
 
 
-            LazyRow(
-                verticalAlignment = Alignment.CenterVertically,
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(3),
                 horizontalArrangement = Arrangement.SpaceAround,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 8.dp)
+                    .padding(vertical = 16.dp)
             ) {
+                item(span = { GridItemSpan(3) }) {
+                    Row(horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
+                        IconButton(
+                            onClick = {
+                                scope.launch {
+                                    Log.i("IngredientForm", "IngredientsForm: showing sheet")
+                                    sheetState.show()
+                                }
+                            }, modifier = Modifier
+                                .padding(16.dp)
+                                .background(
+                                    MaterialTheme.colorScheme.onBackground.copy(alpha = 0.3f),
+                                    CircleShape
+                                )
+                                .clip(CircleShape)
+                        ) {
+                            Icon(
+                                Icons.Rounded.Add,
+                                contentDescription = "Adicionar ingredientes",
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(8.dp),
+                                tint = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.3f)
+                            )
+                        }
+                    }
+
+                }
+
                 items(ingredients.size) { index ->
                     ingredients[index].run {
                         IngredientItem(
@@ -407,42 +447,23 @@ fun IngredientsForm(formPage: FormPage.IngredientsFormPage) {
 
                 }
 
-                item {
-                    IconButton(
+                item(span = { GridItemSpan(3) }) {
+                    Button(
+                        enabled = ingredients.isNotEmpty(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp),
+                        shape = RoundedCornerShape(defaultRadius),
                         onClick = {
-                            scope.launch {
-                                Log.i("IngredientForm", "IngredientsForm: showing sheet")
-                                sheetState.show()
-                            }
-                        }, modifier = Modifier
-                            .size(64.dp)
-                            .background(
-                                MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f),
-                                CircleShape
-                            )
-                            .clip(CircleShape)
-                    ) {
-                        Icon(
-                            imageVector = ImageVector.vectorResource(id = R.drawable.baseline_add_24),
-                            contentDescription = "Adicionar ingredientes",
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(8.dp),
-                            tint = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.3f)
-                        )
+                            formPage.sendData(ingredients)
+                        }) {
+                        Text(text = formPage.actionText, color = textColor)
                     }
                 }
             }
 
 
-            Button(
-                enabled = ingredients.isNotEmpty(),
-                modifier = Modifier.fillMaxWidth(),
-                onClick = {
-                    formPage.sendData(ingredients)
-                }) {
-                Text(text = formPage.actionText, color = textColor)
-            }
+
 
         }
 
@@ -467,6 +488,7 @@ fun StepsForm(formPage: FormPage.StepsFormPage) {
     ModalBottomSheetLayout(modifier = Modifier.fillMaxSize(),
         sheetBackgroundColor = MaterialTheme.colorScheme.surface,
         sheetState = sheetState,
+        sheetShape = RoundedCornerShape(defaultRadius),
         sheetContent = {
             StepSheet(savedIngredients = formPage.currentIngredients, newStep = {
                 steps.add(it)
@@ -501,13 +523,10 @@ fun StepsForm(formPage: FormPage.StepsFormPage) {
                     .fillMaxWidth()
                     .padding(vertical = 8.dp)
             ) {
-                items(steps.size) { index ->
-                    steps[index].run {
-                        StepItem(step = this, true) { selectedStep ->
-                            steps.add(selectedStep)
-                        }
+                items(steps.reversed()) {
+                    StepItem(step = it, true) { selectedStep ->
+                        steps.add(selectedStep)
                     }
-
                 }
 
                 item {
@@ -545,6 +564,7 @@ fun StepsForm(formPage: FormPage.StepsFormPage) {
                 item {
                     Button(
                         enabled = steps.isNotEmpty(),
+                        shape = RoundedCornerShape(defaultRadius),
                         modifier = Modifier.fillMaxWidth(),
                         onClick = {
                             formPage.sendData(steps)
@@ -592,7 +612,7 @@ fun CategoryForm(formPage: FormPage.CategoryFormPage) {
         LazyVerticalGrid(
             columns = GridCells.Fixed(4),
             horizontalArrangement = Arrangement.Center,
-            modifier = Modifier.padding(vertical = 8.dp)
+            modifier = Modifier.padding(vertical = 16.dp)
         ) {
             val categories = Category.values()
             items(categories.size) {
@@ -609,6 +629,7 @@ fun CategoryForm(formPage: FormPage.CategoryFormPage) {
         Button(
             enabled = selectedCategory.value != null,
             modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(defaultRadius),
             onClick = {
                 selectedCategory.value?.let {
                     formPage.sendData(it.name)
@@ -682,6 +703,7 @@ fun PortionsForm(formPage: FormPage.PortionsFormPage) {
         Button(
             enabled = portions.value.isNotEmpty() && portions.value.toInt() > 0,
             modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(defaultRadius),
             onClick = {
                 formPage.sendData(portions.value.toInt())
             }) {

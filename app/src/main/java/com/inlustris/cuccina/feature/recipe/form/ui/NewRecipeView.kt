@@ -22,8 +22,8 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.navigation.NavController
 import com.inlustris.cuccina.feature.home.ui.HOME_ROUTE
-import com.ilustris.cuccina.feature.recipe.form.presentation.viewmodel.NewRecipeViewModel
-import com.ilustris.cuccina.feature.recipe.ui.component.getStateComponent
+import com.inlustris.cuccina.feature.recipe.form.presentation.viewmodel.NewRecipeViewModel
+import com.inlustris.cuccina.theme.GetStateComponent
 import com.ilustris.cuccina.ui.theme.getFormView
 import com.silent.ilustriscore.core.model.ViewModelBaseState
 import kotlinx.coroutines.launch
@@ -63,7 +63,7 @@ fun NewRecipeView(newRecipeViewModel: NewRecipeViewModel, navController: NavCont
 
     AnimatedVisibility(visible = !showPages, enter = fadeIn(), exit = fadeOut()) {
         baseState?.let {
-            getStateComponent(state = it, action = {
+            GetStateComponent(state = it, action = {
                 if (it is ViewModelBaseState.DataSavedState) {
                     navController.navigate(HOME_ROUTE)
                 }

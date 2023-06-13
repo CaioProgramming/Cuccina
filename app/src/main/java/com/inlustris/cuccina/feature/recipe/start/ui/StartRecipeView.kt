@@ -29,20 +29,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.navigation.NavHostController
 import com.google.accompanist.pager.ExperimentalPagerApi
+import com.ilustris.cuccina.R
 import com.inlustris.cuccina.feature.profile.ui.PROFILE_ROUTE_IMPL
 import com.ilustris.cuccina.feature.recipe.domain.model.Recipe
 import com.ilustris.cuccina.feature.recipe.form.ui.NEW_RECIPE_ROUTE
 import com.ilustris.cuccina.feature.recipe.start.presentation.StartRecipeViewModel
-import com.ilustris.cuccina.feature.recipe.ui.component.StateComponent
-import com.ilustris.cuccina.feature.recipe.ui.component.getStateComponent
-import com.ilustris.cuccina.ui.theme.PageIndicators
+import com.inlustris.cuccina.theme.StateComponent
+import com.inlustris.cuccina.theme.GetStateComponent
+import com.inlustris.cuccina.theme.PageIndicators
 import com.ilustris.cuccina.ui.theme.defaultRadius
-import com.ilustris.cuccina.ui.theme.getPageView
+import com.inlustris.cuccina.feature.recipe.category.ui.CATEGORY_ROUTE_IMPL
+import com.inlustris.cuccina.feature.recipe.ui.component.RecipeAction
+import com.inlustris.cuccina.theme.getPageView
+import com.inlustris.cuccina.theme.pagerFadeTransition
 import com.silent.ilustriscore.core.model.ViewModelBaseState
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
@@ -66,6 +72,7 @@ fun StartRecipeView(
     val isUserRecipe = startRecipeViewModel?.isUserRecipe?.observeAsState()
     val pages = startRecipeViewModel?.pages?.observeAsState()
     var progress by remember { mutableStateOf(0f) }
+    var showTitle: Boolean by remember { mutableStateOf(true) }
     val progressAnimation by animateFloatAsState(
         targetValue = progress,
         animationSpec = tween(1000)
@@ -95,7 +102,7 @@ fun StartRecipeView(
                     .animateContentSize(tween(1000))
                     .fillMaxSize()
             ) {
-                val (title, pager, indicator, nextButton, progressBar, backButton, favoriteButton, dropDown, alertDialog) = createRefs()
+                val (title, pager, indicator, nextButton, progressBar, backButton, favoriteButton, alertDialog) = createRefs()
 
                 pages?.value?.let { pages ->
 
@@ -108,30 +115,55 @@ fun StartRecipeView(
                     val pagerState = rememberPagerState()
                     val scope = rememberCoroutineScope()
 
-                    val isComplete = pagerState.currentPage == pages.lastIndex
+                    fun isComplete() =
+                        pagerState.currentPage >= pages.filter { pageFilter -> pageFilter.showOnIndicator }.lastIndex
 
+                    fun isLastPage() = pagerState.currentPage == pages.lastIndex
+                    fun isFirstPage() = pagerState.currentPage == 0
                     val iconColor =
-                        if (isComplete) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.background
+                        if (isComplete()) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.background
                     val backColor =
-                        if (isComplete) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground
+                        if (isComplete()) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground
                     val icon =
-                        if (isComplete) Icons.Default.Check else Icons.Default.KeyboardArrowRight
+                        if (isComplete()) Icons.Default.Check else Icons.Default.KeyboardArrowRight
+
 
                     val iconColorAnimation by animateColorAsState(
                         targetValue = iconColor,
-                        animationSpec = tween(1000)
+                        animationSpec = tween(500)
                     )
                     val backColorAnimation by animateColorAsState(
                         targetValue = backColor,
-                        animationSpec = tween(1000)
+                        animationSpec = tween(1500)
                     )
 
+
+                    val topIconColorAnimation by animateColorAsState(
+                        targetValue = if (pagerState.currentPage == 0) {
+                            MaterialColor.Black
+                        } else {
+                            MaterialTheme.colorScheme.onBackground
+                        },
+                        animationSpec = tween(1000)
+                    )
+                    val topBackColorAnimation by animateColorAsState(
+                        targetValue = if (pagerState.currentPage == 0) {
+                            MaterialColor.White.copy(alpha = 0.3f)
+                        } else {
+                            MaterialTheme.colorScheme.background
+                        },
+                        animationSpec = tween(1000)
+                    )
 
 
                     LaunchedEffect(pagerState) {
                         snapshotFlow { pagerState.currentPage }.distinctUntilChanged()
                             .collect { page ->
-                                progress = getPageProgress(page, pages.lastIndex)
+                                progress = getPageProgress(
+                                    page,
+                                    pages.filter { pageFilter -> pageFilter.showOnIndicator }.lastIndex
+                                )
+                                showTitle = !isFirstPage()
                             }
                     }
 
@@ -145,50 +177,83 @@ fun StartRecipeView(
                         }
                     }
 
-
-
+                    fun handlePageAction(recipeAction: RecipeAction) {
+                        when(recipeAction) {
+                            is RecipeAction.OpenCategoryPage -> {
+                                navController.navigate("$CATEGORY_ROUTE_IMPL${recipeAction.category.ordinal}")
+                            }
+                            is RecipeAction.OpenChefPage -> {
+                                navController.navigate("$PROFILE_ROUTE_IMPL${recipeAction.chefId}")
+                            }
+                            RecipeAction.StartRecipe -> {
+                                scope.launch {
+                                    pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                                }
+                            }
+                        }
+                    }
 
                     HorizontalPager(
                         pageCount = pages.size,
                         userScrollEnabled = false,
                         state = pagerState,
                         modifier = Modifier.constrainAs(pager) {
-                            top.linkTo(title.bottom)
-                            bottom.linkTo(indicator.top)
+                            if (isFirstPage()) {
+                                top.linkTo(parent.top)
+                            } else {
+                                top.linkTo(title.bottom)
+                            }
+                            if (pagerState.currentPage != 0 && !isComplete()) {
+                                bottom.linkTo(indicator.top)
+                            } else {
+                                bottom.linkTo(parent.bottom)
+                            }
                             start.linkTo(parent.start)
                             end.linkTo(parent.end)
                             height = Dimension.fillToConstraints
                             width = Dimension.fillToConstraints
                         }) { index ->
-                        getPageView(page = pages[index], { id ->
-                            navController.navigate(START_RECIPE_ROUTE_IMPL + id)
-                        }, { chefId ->
-                            navController.navigate("$PROFILE_ROUTE_IMPL$chefId")
-                        }) {
-                            navController.navigate(NEW_RECIPE_ROUTE)
-                        }
+                        getPageView(
+                            page = pages[index],
+                            pageModifier = Modifier.pagerFadeTransition(pagerState),
+                            openRecipe = { id ->
+                                navController.navigate(START_RECIPE_ROUTE_IMPL + id)
+                            },
+                            openChefPage = { chefId ->
+                                navController.navigate("$PROFILE_ROUTE_IMPL$chefId")
+                            },
+                            navigateToNewRecipe = {
+                                navController.navigate(NEW_RECIPE_ROUTE)
+                            },
+                            pageAction =  ::handlePageAction )
                     }
 
-                    Text(
-                        text = it.name,
-                        maxLines = 1,
-                        color = MaterialTheme.colorScheme.onBackground,
+                    AnimatedVisibility(visible = showTitle,
+                        enter = fadeIn(),
+                        exit = fadeOut(),
                         modifier = Modifier
                             .constrainAs(title) {
                                 top.linkTo(parent.top)
                                 start.linkTo(backButton.end)
                                 end.linkTo(favoriteButton.start)
                                 width = Dimension.fillToConstraints
-                            }
-                            .padding(16.dp),
-                        style = MaterialTheme.typography.headlineSmall.copy(
-                            shadow = Shadow(
-                                color = MaterialColor.Black,
-                                offset = Offset(1f, 1f),
-                                blurRadius = 1.3f
+                            }) {
+                        Text(
+                            text = it.name,
+                            maxLines = 1,
+                            color = MaterialTheme.colorScheme.onBackground,
+                            modifier = Modifier
+                                .padding(16.dp),
+                            style = MaterialTheme.typography.headlineSmall.copy(
+                                shadow = Shadow(
+                                    color = MaterialColor.Black,
+                                    offset = Offset(1f, 1f),
+                                    blurRadius = 1.3f
+                                )
                             )
                         )
-                    )
+                    }
+
 
 
                     AnimatedVisibility(
@@ -267,18 +332,27 @@ fun StartRecipeView(
                             end.linkTo(parent.end)
                             height = Dimension.wrapContent
                         }
+                        .padding(8.dp)
                         .animateContentSize()) {
 
-                        IconButton(onClick = {
-                            startRecipeViewModel.favoriteRecipe(it)
-                        }) {
+                        IconButton(
+                            onClick = {
+                                startRecipeViewModel.favoriteRecipe(it)
+                            }, modifier = Modifier
+                                .padding(4.dp)
+                                .background(topBackColorAnimation, CircleShape)
+                        ) {
                             val favoriteIcon =
                                 if (isFavorite?.value == true) Icons.Default.Favorite else Icons.Default.FavoriteBorder
                             val color =
-                                if (isFavorite?.value == true) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.onBackground
+                                if (isFavorite?.value == true) MaterialColor.RedA400 else topIconColorAnimation
                             val description =
                                 if (isFavorite?.value == true) "Desfavoritar" else "Favoritar"
-                            Icon(favoriteIcon, tint = color, contentDescription = description)
+                            Icon(
+                                favoriteIcon,
+                                tint = color,
+                                contentDescription = description,
+                            )
                         }
 
                         AnimatedVisibility(
@@ -286,13 +360,17 @@ fun StartRecipeView(
                             enter = scaleIn(),
                             exit = scaleOut()
                         ) {
-                            IconButton(onClick = {
-                                dropDownState = !dropDownState
-                            }) {
+                            IconButton(
+                                onClick = {
+                                    dropDownState = !dropDownState
+                                }, modifier = Modifier
+                                    .padding(4.dp)
+                                    .background(topBackColorAnimation, CircleShape)
+                            ) {
                                 Icon(
-                                    Icons.Default.Menu,
-                                    tint = MaterialTheme.colorScheme.onBackground,
-                                    contentDescription = "Opções"
+                                    ImageVector.vectorResource(id = R.drawable.round_more_horiz_24),
+                                    tint = topIconColorAnimation,
+                                    contentDescription = "Opções",
                                 )
                             }
                         }
@@ -324,12 +402,14 @@ fun StartRecipeView(
                             top.linkTo(title.top)
                             bottom.linkTo(title.bottom)
                             start.linkTo(parent.start)
-                            height = Dimension.fillToConstraints
+                            height = Dimension.wrapContent
                         }
+                        .padding(8.dp)
+                        .background(topBackColorAnimation, CircleShape)
                         .animateContentSize(), onClick = {
                         scope.launch {
                             if (pagerState.currentPage > 0) {
-                                pagerState.animateScrollToPage(0)
+                                pagerState.animateScrollToPage(pagerState.currentPage - 1)
                             } else {
                                 navController.popBackStack()
                             }
@@ -338,14 +418,14 @@ fun StartRecipeView(
                         Icon(
                             Icons.Default.KeyboardArrowLeft,
                             contentDescription = "Voltar",
-                            tint = MaterialTheme.colorScheme.onBackground
+                            tint = topIconColorAnimation,
                         )
                     }
 
 
-                    PageIndicators(
-                        count = pages.size,
-                        currentPage = pagerState.currentPage,
+                    AnimatedVisibility(visible = !isFirstPage() && !isComplete(),
+                        enter = fadeIn(tween(1000)),
+                        exit = fadeOut(tween(1000)),
                         modifier = Modifier
                             .constrainAs(indicator) {
                                 bottom.linkTo(nextButton.bottom)
@@ -354,71 +434,99 @@ fun StartRecipeView(
                                 end.linkTo(nextButton.start)
                                 width = Dimension.fillToConstraints
                             }
-                            .padding(horizontal = 16.dp)
-                            .wrapContentHeight(),
-                        onSelectIndicator = {
-                            scope.launch {
-                                pagerState.animateScrollToPage(it)
-                            }
-                        },
-                        onFinishPageLoad = {
-                            scope.launch {
-                                if (pagerState.currentPage != pages.lastIndex) {
-                                    pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                            .wrapContentHeight()) {
+                        PageIndicators(
+                            count = pages.filter { pageFilter -> pageFilter.showOnIndicator }.size,
+                            currentPage = pagerState.currentPage,
+                            clearPreviousPage = false,
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp)
+                                .wrapContentHeight(),
+                            onSelectIndicator = {
+                                scope.launch {
+                                    pagerState.animateScrollToPage(it)
+                                }
+                            },
+                            onFinishPageLoad = {
+                                scope.launch {
+                                    if (pagerState.currentPage != pages.lastIndex) {
+                                        pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                                    }
                                 }
                             }
-                        }
-                    )
+                        )
+                    }
 
 
-                    IconButton(modifier = Modifier
-                        .constrainAs(nextButton) {
-                            top.linkTo(progressBar.top, 4.dp)
-                            bottom.linkTo(progressBar.bottom, 4.dp)
-                            start.linkTo(progressBar.start, 4.dp)
-                            end.linkTo(progressBar.end, 4.dp)
-                            width = Dimension.fillToConstraints
-                            height = Dimension.fillToConstraints
-
-                        }
-                        .padding(8.dp)
-                        .background(backColorAnimation, CircleShape),
-                        onClick = {
-                            scope.launch {
-                                if (pagerState.currentPage != pages.lastIndex) {
-                                    pagerState.animateScrollToPage(pagerState.currentPage + 1)
-                                }
+                    AnimatedVisibility(visible = !isFirstPage(),
+                        enter = fadeIn() + scaleIn(),
+                        exit = fadeOut(),
+                        modifier = Modifier
+                            .constrainAs(nextButton) {
+                                top.linkTo(progressBar.top, 4.dp)
+                                bottom.linkTo(progressBar.bottom, 4.dp)
+                                start.linkTo(progressBar.start, 4.dp)
+                                end.linkTo(progressBar.end, 4.dp)
+                                width = Dimension.fillToConstraints
+                                height = Dimension.fillToConstraints
                             }
-                        }) {
-                        AnimatedContent(targetState = icon, transitionSpec = {
-                            EnterTransition.None with ExitTransition.None
-                        }) { target ->
-                            Icon(
-                                target,
-                                modifier = Modifier.animateEnterExit(
-                                    enter = scaleIn(),
-                                    exit = scaleOut()
-                                ),
-                                contentDescription = if (!isComplete) "Voltar" else "Finalizar Receita",
-                                tint = iconColorAnimation
-                            )
+                            .padding(8.dp)
+                            .background(backColorAnimation, CircleShape)) {
+                        IconButton(
+                            onClick = {
+                                scope.launch {
+                                    if (!isLastPage()) {
+                                        pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                                    } else {
+                                        pagerState.animateScrollToPage(0)
+                                    }
+                                }
+                            }) {
+                            AnimatedContent(targetState = icon, transitionSpec = {
+                                EnterTransition.None with ExitTransition.None
+                            }) { target ->
+                                Icon(
+                                    target,
+                                    modifier = Modifier.animateEnterExit(
+                                        enter = scaleIn(),
+                                        exit = scaleOut()
+                                    ),
+                                    contentDescription = if (!isComplete()) "Voltar" else "Finalizar Receita",
+                                    tint = iconColorAnimation
+                                )
+                            }
                         }
                     }
 
 
-                    CircularProgressIndicator(
-                        progress = progressAnimation,
-                        color = MaterialTheme.colorScheme.primary,
-                        strokeWidth = 2.dp,
-                        strokeCap = StrokeCap.Round,
+
+                    AnimatedVisibility(
+                        visible = !isFirstPage(),
+                        enter = fadeIn(tween(500)),
+                        exit = fadeOut(tween(1000)),
                         modifier = Modifier
                             .constrainAs(progressBar) {
                                 bottom.linkTo(parent.bottom)
                                 end.linkTo(parent.end)
+                                if (!isComplete()) {
+                                    end.linkTo(parent.end)
+                                } else {
+                                    start.linkTo(parent.start)
+                                    end.linkTo(parent.end)
+                                }
                             }
                             .size(70.dp)
                             .padding(8.dp)
-                    )
+                    ) {
+                        CircularProgressIndicator(
+                            progress = progressAnimation,
+                            color = MaterialTheme.colorScheme.primary,
+                            strokeWidth = 2.dp,
+                            strokeCap = StrokeCap.Round,
+                        )
+                    }
+
+
                 } ?: kotlin.run {
                     StateComponent(message = "Carregando...")
                 }
@@ -434,9 +542,10 @@ fun StartRecipeView(
     state?.value?.run {
         when (this) {
             ViewModelBaseState.LoadingState -> StateComponent(message = "Carregando receita...")
-            ViewModelBaseState.DataDeletedState -> getStateComponent(state = this, action = {
+            ViewModelBaseState.DataDeletedState -> GetStateComponent(state = this, action = {
                 navController.popBackStack()
             })
+
             is ViewModelBaseState.DataRetrievedState -> {
                 val foundedRecipe = this.data as Recipe
                 recipe.value = foundedRecipe
@@ -456,6 +565,7 @@ fun StartRecipeView(
                         recipeId?.let { startRecipeViewModel.getSingleData(it) }
                     })
             }
+
             else -> {}
 
         }

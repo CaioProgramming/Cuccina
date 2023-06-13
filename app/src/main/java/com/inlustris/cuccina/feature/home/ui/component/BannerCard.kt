@@ -12,6 +12,9 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.with
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -25,25 +28,33 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.BlurredEdgeTreatment
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.ilustris.cuccina.R
+import com.ilustris.cuccina.ui.theme.CuccinaLoader
 import com.ilustris.cuccina.ui.theme.CuccinaTheme
 import com.ilustris.cuccina.ui.theme.defaultRadius
+import com.ilustris.cuccina.ui.theme.getDeviceMultiplier
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
 fun BannerCard(backgroundImage: String, onClickBanner: () -> Unit) {
 
-    AnimatedContent(targetState = backgroundImage, transitionSpec = { EnterTransition.None with ExitTransition.None }) {
+    AnimatedContent(
+        targetState = backgroundImage,
+        transitionSpec = { EnterTransition.None with ExitTransition.None }) {
         ConstraintLayout(
             modifier = Modifier
                 .wrapContentSize()
@@ -52,37 +63,39 @@ fun BannerCard(backgroundImage: String, onClickBanner: () -> Unit) {
                 .clickable {
                     onClickBanner()
                 }
-
-
         ) {
-            val (background, text) = createRefs()
 
+            val (background, text) = createRefs()
             GlideImage(
                 imageModel = { backgroundImage },
+                loading = {
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                        verticalArrangement = Arrangement.Center) {
+                        CuccinaLoader(true)
+
+                    }
+                },
                 imageOptions = ImageOptions(
-                    requestSize = IntSize(150, 150),
+                    colorFilter = ColorFilter.tint(
+                        MaterialColor.Black.copy(alpha = 0.1f),
+                        blendMode = BlendMode.SrcAtop
+                    ),
                     contentScale = ContentScale.Crop,
                     alignment = Alignment.Center,
                 ), failure = {
-                    Text(
-                        text = "Foto nao encontrada",
-                        style = MaterialTheme.typography.bodyMedium.copy(
-                            color = MaterialColor.White,
-                            shadow = Shadow(
-                                color = MaterialColor.Black,
-                                offset = Offset(1f, 1f),
-                                blurRadius = 1f
-                            )
-                        ),
-                        modifier = Modifier.padding(8.dp)
-                    )
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                        verticalArrangement = Arrangement.Center) {
+                        CuccinaLoader(false)
+
+                    }
                 },
                 previewPlaceholder = R.drawable.ic_cherries,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(150.dp)
+                    .height(150.dp * getDeviceMultiplier())
                     .animateEnterExit(fadeIn(), fadeOut())
-                    .blur(1.dp, 1.dp, edgeTreatment = BlurredEdgeTreatment.Rectangle)
                     .clip(RoundedCornerShape(defaultRadius))
                     .constrainAs(background) {
                         top.linkTo(parent.top)
@@ -91,26 +104,43 @@ fun BannerCard(backgroundImage: String, onClickBanner: () -> Unit) {
                         end.linkTo(parent.end)
                     }
             )
+            Column(modifier = Modifier
+                .constrainAs(text) {
+                    top.linkTo(parent.top)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
 
-            Text(
-                text = "Vem conferir nossas melhores receitas",
-                style = MaterialTheme.typography.headlineMedium.copy(
-                    fontWeight = FontWeight.SemiBold,
-                    textAlign = TextAlign.Center,
-                    color = MaterialColor.White,
-                    shadow = Shadow(
-                        color = MaterialColor.Black,
-                        offset = Offset(1f, 1f),
-                        blurRadius = 1f
+                }
+                .fillMaxWidth()
+                .padding(16.dp), verticalArrangement = Arrangement.Top) {
+
+                val titleTextSize = MaterialTheme.typography.headlineMedium.fontSize * getDeviceMultiplier()
+                val labelTextSize = MaterialTheme.typography.labelLarge.fontSize * getDeviceMultiplier()
+                val textShadow =  Shadow(
+                    color = MaterialColor.Black.copy(alpha = 0.5f),
+                    offset = Offset(1.5f, 2f),
+                    blurRadius = 15f
+                )
+                Text(
+                    text = "De dar água na boca!",
+                    style = MaterialTheme.typography.labelLarge.copy(
+                        fontWeight = FontWeight.SemiBold,
+                        textAlign = TextAlign.Center,
+                        color = MaterialTheme.colorScheme.primary,
+                        fontSize = labelTextSize,
+                        shadow = textShadow.copy(color = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f))
                     )
-                ),
-                modifier = Modifier
-                    .constrainAs(text) {
-                        top.linkTo(parent.top)
-                        start.linkTo(parent.start)
-                    }
-                    .fillMaxWidth()
-                    .padding(16.dp))
+                )
+                Text(
+                    text = "Confira as favoritinhas da comunidade!",
+                    fontSize = titleTextSize,
+                    style = MaterialTheme.typography.headlineSmall.copy(
+                        shadow = textShadow
+                    )
+                )
+            }
+
+
         }
     }
 

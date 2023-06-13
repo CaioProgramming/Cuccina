@@ -8,6 +8,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
@@ -41,7 +42,7 @@ private val LightColorScheme = lightColorScheme(
     */
 )
 
-val defaultRadius = 15.dp
+val defaultRadius = 10.dp
 
 @Composable
 fun CuccinaTheme(
@@ -55,6 +56,7 @@ fun CuccinaTheme(
             val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
+
         darkTheme -> DarkColorScheme
         else -> LightColorScheme
     }
@@ -71,4 +73,15 @@ fun CuccinaTheme(
         typography = Typography,
         content = content
     )
+}
+
+@Composable
+fun getDeviceMultiplier(): Int {
+    val configuration = LocalConfiguration.current
+    val expanded = configuration.screenWidthDp > 840
+    return if (expanded) {
+        2
+    } else {
+        1
+    }
 }

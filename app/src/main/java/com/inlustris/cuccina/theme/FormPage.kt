@@ -55,7 +55,7 @@ sealed class FormPage(
 
     class IngredientsFormPage(sendData: (List<Ingredient>) -> Unit) : FormPage(
         "Ingredientes",
-        "Digite os ingredientes da receita.", "Continuar", { sendData(it as List<Ingredient>) }
+        "Coloque os ingredientes da sua receita.", "Continuar", { sendData(it as List<Ingredient>) }
     )
 
     class StepsFormPage(val currentIngredients: List<Ingredient>, sendData: (List<Step>) -> Unit) :

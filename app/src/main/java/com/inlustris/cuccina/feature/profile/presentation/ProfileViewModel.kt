@@ -28,6 +28,7 @@ class ProfileViewModel @Inject constructor(
 
     val user = MutableLiveData<UserModel>()
     val pages = MutableLiveData<ArrayList<Page>>()
+    val isUserPage = MutableLiveData<Boolean>(false)
 
     private fun updatePages(page: Page) {
         pages.value?.let {
@@ -38,14 +39,28 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
+
     fun getUserRecipes(userID: String) {
         viewModelScope.launch(Dispatchers.IO) {
+            val isUserPage = userID == service.currentUser()?.uid
+
             when (val queryTask = recipeService.getRecipesByUser(userID)) {
                 is ServiceResult.Error -> {
+                    val title = if (isUserPage) {
+                        "Minhas receitas"
+                    } else {
+                        "Receitas de ${user.value?.name}"
+                    }
+
+                    val message = if (isUserPage) {
+                        "Você ainda não tem receitas publicadas. \nQue tal começar agora mesmo?"
+                    } else {
+                        "${user.value?.name} ainda não tem receitas publicadas."
+                    }
                     updatePages(
                         Page.SimplePage(
-                            "Minhas receitas",
-                            "Você ainda não tem receitas publicadas. \nQue tal começar agora mesmo?",
+                            title,
+                            message,
                             listOf("receitas")
                         )
                     )
@@ -54,14 +69,28 @@ class ProfileViewModel @Inject constructor(
                         "getUserRecipes: error ${queryTask.errorException.code}"
                     )
                 }
+
                 is ServiceResult.Success -> {
+                    val message = if (isUserPage) {
+                        "Desde que entrou no Cuccina você publicou ${queryTask.data.size} receitas.\n Continue assim!"
+                    } else {
+                        "${user.value?.name} publicou ${queryTask.data.size} receitas."
+                    }
                     updatePages(
                         Page.RecipeListPage(
                             "Minhas receitas",
-                            "Desde que entrou no Cuccina você publicou ${queryTask.data.size} receitas.\nContinue assim!",
+                            message,
                             queryTask.data as List<Recipe>
                         )
                     )
+                    pages.value?.run {
+                        val profileIndex = indexOfFirst { it is Page.ProfilePage }
+                        val profilePage = this[profileIndex] as Page.ProfilePage
+                        profilePage.postCount = queryTask.data.size
+                        this[profileIndex] = profilePage
+                        pages.postValue(this)
+                    }
+
                 }
             }
         }
@@ -69,12 +98,18 @@ class ProfileViewModel @Inject constructor(
 
     fun getUserFavoriteRecipes(userID: String) {
         viewModelScope.launch(Dispatchers.IO) {
+            val isUserPage = userID == service.currentUser()?.uid
             when (val queryTask = recipeService.getRecipesByUserLike(userID)) {
                 is ServiceResult.Error -> {
+                    val message = if (isUserPage) {
+                        "Você ainda não tem receitas favoritas. \nQue tal dar uma olhada nas receitas e favoritar as que mais gostar?"
+                    } else {
+                        "Este usuário ainda não tem receitas favoritas."
+                    }
                     updatePages(
                         Page.SimplePage(
                             "Receitas favoritas",
-                            "Você ainda não tem receitas favoritas. \nQue tal dar uma olhada nas receitas e favoritar as que mais gostar?",
+                            message,
                             annotatedTexts = listOf("favoritas")
                         )
                     )
@@ -83,14 +118,27 @@ class ProfileViewModel @Inject constructor(
                         "getUserFavoriteRecipes: error ${queryTask.errorException.code}",
                     )
                 }
+
                 is ServiceResult.Success -> {
+                    val message = if (isUserPage) {
+                        "Você tem ${queryTask.data.size} receitas favoritas. Esperamos que encontre mais receitas que goste!"
+                    } else {
+                        "${user.value?.name} tem ${queryTask.data.size} receitas favoritas."
+                    }
                     updatePages(
                         Page.RecipeListPage(
                             "Receitas favoritas",
-                            "Você tem ${queryTask.data.size} receitas favoritas. Esperamos que encontre mais receitas que goste!",
-                            (queryTask.data as List<Recipe>).take(2)
+                            message,
+                            queryTask.data as List<Recipe>
                         )
                     )
+                    pages.value?.run {
+                        val profileIndex = indexOfFirst { it is Page.ProfilePage }
+                        val profilePage = this[profileIndex] as Page.ProfilePage
+                        profilePage.favoriteCount = queryTask.data.size
+                        this[profileIndex] = profilePage
+                        pages.postValue(this)
+                    }
                 }
             }
         }
@@ -105,8 +153,11 @@ class ProfileViewModel @Inject constructor(
                     is ServiceResult.Success -> {
                         delay(1000)
                         user.postValue(userTask.data as UserModel)
-                        updatePages(Page.ProfilePage(userModel = userTask.data as UserModel))
+                        isUserPage.postValue(userId == service.currentUser()?.uid)
+                        val profilePage = Page.ProfilePage(userModel = userTask.data as UserModel)
+                        updatePages(profilePage)
                     }
+
                     is ServiceResult.Error -> {
                         updateViewState(ViewModelBaseState.ErrorState(userTask.errorException))
                     }
@@ -115,6 +166,7 @@ class ProfileViewModel @Inject constructor(
             }
         }
     }
+
 
 
 }

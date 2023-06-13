@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
 
-package com.ilustris.cuccina.feature.recipe.ingredient.presentation.ui
+package com.inlustris.cuccina.feature.recipe.ingredient.presentation.ui
 
 import android.content.Context
 import android.os.Vibrator
@@ -96,8 +96,8 @@ fun IngredientSheet(newIngredient: (Ingredient) -> Unit) {
                 EnterTransition.None with ExitTransition.None
             }) {
             Text(
-                text = getIngredientEmoji(ingredientName.value),
-                style = MaterialTheme.typography.headlineLarge,
+                text = targetEmoji,
+                style = MaterialTheme.typography.displayMedium,
                 modifier = Modifier
                     .animateEnterExit(enter = scaleIn(), exit = scaleOut())
                     .background(
