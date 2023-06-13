@@ -1,6 +1,6 @@
 package com.ilustris.cuccina.feature.recipe.domain.model
 
-import com.ilustris.cuccina.feature.recipe.ingredient.domain.model.Ingredient
+import com.inlustris.cuccina.feature.recipe.ingredient.domain.model.Ingredient
 import com.ilustris.cuccina.feature.recipe.step.domain.model.Step
 import com.silent.ilustriscore.core.bean.BaseBean
 

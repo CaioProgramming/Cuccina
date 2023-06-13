@@ -1,4 +1,4 @@
-package com.ilustris.cuccina
+package com.inlustris.cuccina
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp

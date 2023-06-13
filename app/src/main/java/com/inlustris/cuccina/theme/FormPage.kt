@@ -1,6 +1,6 @@
 package com.ilustris.cuccina.ui.theme
 
-import com.ilustris.cuccina.feature.recipe.ingredient.domain.model.Ingredient
+import com.inlustris.cuccina.feature.recipe.ingredient.domain.model.Ingredient
 import com.ilustris.cuccina.feature.recipe.step.domain.model.Step
 
 sealed class FormPage(

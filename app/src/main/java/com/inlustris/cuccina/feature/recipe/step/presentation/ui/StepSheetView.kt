@@ -25,7 +25,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ilustris.cuccina.R
-import com.ilustris.cuccina.feature.recipe.ingredient.domain.model.Ingredient
+import com.inlustris.cuccina.feature.recipe.ingredient.domain.model.Ingredient
 import com.ilustris.cuccina.feature.recipe.step.domain.model.Step
 import com.ilustris.cuccina.ui.theme.CuccinaTheme
 import com.ilustris.cuccina.ui.theme.defaultRadius

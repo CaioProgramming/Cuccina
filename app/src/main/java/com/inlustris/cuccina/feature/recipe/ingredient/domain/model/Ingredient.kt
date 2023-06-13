@@ -1,4 +1,4 @@
-package com.ilustris.cuccina.feature.recipe.ingredient.domain.model
+package com.inlustris.cuccina.feature.recipe.ingredient.domain.model
 
 data class Ingredient(
     val name: String = "",

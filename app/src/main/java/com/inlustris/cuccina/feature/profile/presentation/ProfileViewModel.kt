@@ -1,4 +1,4 @@
-package com.ilustris.cuccina.feature.profile.presentation
+package com.inlustris.cuccina.feature.profile.presentation
 
 import android.app.Application
 import android.util.Log

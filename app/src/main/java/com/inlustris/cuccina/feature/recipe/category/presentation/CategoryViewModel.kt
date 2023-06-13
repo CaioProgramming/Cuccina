@@ -21,8 +21,7 @@ class CategoryViewModel @Inject constructor(application: Application, override v
 
     fun getCategoryRecipes(category: String) = viewModelScope.launch(Dispatchers.IO) {
         updateViewState(ViewModelBaseState.LoadingState)
-        val categoryQuery = service.getRecipesByCategory(category)
-        when(categoryQuery) {
+        when(val categoryQuery = service.getRecipesByCategory(category)) {
             is ServiceResult.Error -> {
                 updateViewState(ViewModelBaseState.ErrorState(categoryQuery.errorException))
             }

@@ -1,4 +1,4 @@
-package com.ilustris.cuccina
+package com.inlustris.cuccina
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(val userService: UserService) : ViewModel() {
+class MainViewModel @Inject constructor(private val userService: UserService) : ViewModel() {
 
     sealed class MainState {
         object Loading : MainState()

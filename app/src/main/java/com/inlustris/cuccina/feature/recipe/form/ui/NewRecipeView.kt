@@ -43,13 +43,11 @@ fun NewRecipeView(newRecipeViewModel: NewRecipeViewModel, navController: NavCont
 
     Log.i("NewRecipeView", "NewRecipeView: current recipe $recipe")
     Log.i("NewRecipeView", "current pages -> ${pages.value?.size}")
-    coroutineScope.launch {
-        keyboardController?.hide()
+    LaunchedEffect(pages) {
         pages.value?.let {
             pagerState.animateScrollToPage(it.lastIndex)
         }
     }
-
 
     val showPages =
         pages.value?.isNotEmpty() == true && baseState != ViewModelBaseState.LoadingState && baseState !is ViewModelBaseState.DataSavedState
@@ -62,8 +60,8 @@ fun NewRecipeView(newRecipeViewModel: NewRecipeViewModel, navController: NavCont
     }
 
     AnimatedVisibility(visible = !showPages, enter = fadeIn(), exit = fadeOut()) {
-        baseState?.let {
-            GetStateComponent(state = it, action = {
+        baseState?.let { state ->
+            GetStateComponent(state = state, action = {
                 if (it is ViewModelBaseState.DataSavedState) {
                     navController.navigate(HOME_ROUTE)
                 }

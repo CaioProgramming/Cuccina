@@ -1,4 +1,4 @@
-package com.ilustris.cuccina.ui.theme
+package com.inlustris.cuccina.theme
 
 import androidx.compose.ui.graphics.Color
 

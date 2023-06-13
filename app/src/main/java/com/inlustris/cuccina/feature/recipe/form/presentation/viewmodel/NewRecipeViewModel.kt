@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.ilustris.cuccina.feature.recipe.domain.model.Recipe
 import com.ilustris.cuccina.feature.recipe.domain.service.RecipeService
-import com.ilustris.cuccina.feature.recipe.ingredient.domain.model.Ingredient
+import com.inlustris.cuccina.feature.recipe.ingredient.domain.model.Ingredient
 import com.ilustris.cuccina.feature.recipe.step.domain.model.Step
 import com.ilustris.cuccina.ui.theme.FormPage
 import com.silent.ilustriscore.core.model.BaseViewModel
@@ -58,33 +58,33 @@ class NewRecipeViewModel @Inject constructor(
 
     }
 
-    fun clearRecipe() {
+    private fun clearRecipe() {
         recipe.postValue(Recipe())
         pages.postValue(arrayListOf())
     }
 
-    fun updateRecipeName(name: String) {
+    private fun updateRecipeName(name: String) {
         recipe.postValue(recipe.value?.copy(name = name))
         updatePage(FormPage.DescriptionFormPage {
             updateRecipeDescription(it)
         })
     }
 
-    fun updateRecipeDescription(description: String) {
+    private fun updateRecipeDescription(description: String) {
         recipe.postValue(recipe.value?.copy(description = description))
         updatePage(FormPage.ImageFormPage {
             updateRecipePhoto(it)
         })
     }
 
-    fun updateRecipeTime(time: Long) {
+    private fun updateRecipeTime(time: Long) {
         recipe.postValue(recipe.value?.copy(time = time))
         updatePage(FormPage.PortionsFormPage {
             updateRecipePortions(it)
         })
     }
 
-    fun updateRecipePortions(portions: Int) {
+    private fun updateRecipePortions(portions: Int) {
         recipe.postValue(recipe.value?.copy(portions = portions))
         updatePage(FormPage.CaloriesFormPage {
             updateCalories(it)
@@ -100,7 +100,7 @@ class NewRecipeViewModel @Inject constructor(
         )
     }
 
-    fun updateRecipeIngredients(ingredient: List<Ingredient>) {
+    private fun updateRecipeIngredients(ingredient: List<Ingredient>) {
         Log.i(javaClass.simpleName, "updateRecipeIngredients: adding ingredient -> $ingredient")
         recipe.postValue(
             recipe.value?.copy(ingredients = ingredient)
@@ -120,7 +120,7 @@ class NewRecipeViewModel @Inject constructor(
         )
     }
 
-    fun updateRecipePhoto(photo: String) {
+    private fun updateRecipePhoto(photo: String) {
         recipe.postValue(recipe.value?.copy(photo = photo))
         updatePage(FormPage.TimeFormPage {
             updateRecipeTime(it)
@@ -136,7 +136,7 @@ class NewRecipeViewModel @Inject constructor(
         )
     }
 
-    fun updateRecipeSteps(step: List<Step>) {
+    private fun updateRecipeSteps(step: List<Step>) {
         Log.i(javaClass.simpleName, "updateRecipeSteps: adding step -> $step")
         recipe.value = recipe.value?.copy(steps = step)
         recipe.value?.let {
@@ -155,14 +155,14 @@ class NewRecipeViewModel @Inject constructor(
         )
     }
 
-    fun updateRecipeCategory(category: String) {
+    private fun updateRecipeCategory(category: String) {
         recipe.postValue(recipe.value?.copy(category = category))
         updatePage(FormPage.NameFormPage {
             updateRecipeName(it)
         })
     }
 
-    fun updateCalories(calories: Int) {
+    private fun updateCalories(calories: Int) {
         recipe.postValue(recipe.value?.copy(calories = calories))
         updatePage(FormPage.IngredientsFormPage {
             updateRecipeIngredients(it)

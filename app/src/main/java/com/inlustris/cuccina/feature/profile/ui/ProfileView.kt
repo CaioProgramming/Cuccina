@@ -37,10 +37,10 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.navigation.NavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.ilustris.cuccina.feature.profile.presentation.ProfileViewModel
+import com.inlustris.cuccina.feature.profile.presentation.ProfileViewModel
 import com.inlustris.cuccina.feature.recipe.start.ui.START_RECIPE_ROUTE_IMPL
 import com.inlustris.cuccina.theme.StateComponent
-import com.ilustris.cuccina.ui.theme.CuccinaLoader
+import com.inlustris.cuccina.theme.CuccinaLoader
 import com.ilustris.cuccina.ui.theme.getDeviceMultiplier
 import com.inlustris.cuccina.feature.profile.ui.component.SettingsSheet
 import com.inlustris.cuccina.theme.getPageView
