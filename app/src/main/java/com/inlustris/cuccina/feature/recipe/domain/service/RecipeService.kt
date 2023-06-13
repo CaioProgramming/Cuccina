@@ -4,7 +4,7 @@ import android.net.Uri
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.firebase.storage.FirebaseStorage
-import com.ilustris.cuccina.feature.recipe.domain.model.Recipe
+import com.inlustris.cuccina.feature.recipe.domain.model.Recipe
 import com.silent.ilustriscore.core.bean.BaseBean
 import com.silent.ilustriscore.core.model.BaseService
 import com.silent.ilustriscore.core.model.DataException

@@ -21,14 +21,12 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.ilustris.cuccina.R
 import com.inlustris.cuccina.feature.recipe.category.domain.model.Category
-import com.ilustris.cuccina.feature.recipe.domain.model.Recipe
+import com.inlustris.cuccina.feature.recipe.domain.model.Recipe
 import com.ilustris.cuccina.ui.theme.CuccinaTheme
 import com.ilustris.cuccina.ui.theme.defaultRadius
-import com.silent.ilustriscore.core.utilities.delayedFunction
 import com.skydoves.landscapist.ImageOptions
 import com.skydoves.landscapist.glide.GlideImage
 
@@ -110,7 +108,6 @@ fun recipePreview() {
                 description = "Bolo de cenoura com cobertura de chocolate",
                 time = 60,
                 portions = 8,
-                author = "Silent",
                 ingredients = emptyList(),
                 category = Category.CANDY.name
             ), onClickRecipe = { }

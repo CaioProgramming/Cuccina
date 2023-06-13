@@ -3,7 +3,7 @@
     ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class
 )
 
-package com.ilustris.cuccina.feature.recipe.form.ui
+package com.inlustris.cuccina.feature.recipe.form.ui
 
 import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
@@ -17,7 +17,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.navigation.NavController
@@ -25,8 +24,8 @@ import com.inlustris.cuccina.feature.home.ui.HOME_ROUTE
 import com.inlustris.cuccina.feature.recipe.form.presentation.viewmodel.NewRecipeViewModel
 import com.inlustris.cuccina.theme.GetStateComponent
 import com.ilustris.cuccina.ui.theme.getFormView
+import com.inlustris.cuccina.theme.StateComponent
 import com.silent.ilustriscore.core.model.ViewModelBaseState
-import kotlinx.coroutines.launch
 
 const val NEW_RECIPE_ROUTE = "new_recipe"
 
@@ -35,18 +34,19 @@ fun NewRecipeView(newRecipeViewModel: NewRecipeViewModel, navController: NavCont
 
     val recipe = newRecipeViewModel.recipe.observeAsState().value
     val pages = newRecipeViewModel.pages.observeAsState()
+    val currentPage = newRecipeViewModel.currentPage.observeAsState()
     val baseState = newRecipeViewModel.viewModelState.observeAsState().value
-    val coroutineScope = rememberCoroutineScope()
+    val requireEmailValidation = newRecipeViewModel.requireValidateEmail.observeAsState().value
     val pagerState = rememberPagerState()
     val keyboardController = LocalSoftwareKeyboardController.current
 
 
     Log.i("NewRecipeView", "NewRecipeView: current recipe $recipe")
     Log.i("NewRecipeView", "current pages -> ${pages.value?.size}")
-    LaunchedEffect(pages) {
-        pages.value?.let {
-            pagerState.animateScrollToPage(it.lastIndex)
-        }
+    Log.i("NewRecipeView", "current page -> ${currentPage.value}")
+    LaunchedEffect(currentPage.value) {
+        pagerState.animateScrollToPage(currentPage.value ?: 0)
+        keyboardController?.hide()
     }
 
     val showPages =
@@ -69,6 +69,12 @@ fun NewRecipeView(newRecipeViewModel: NewRecipeViewModel, navController: NavCont
         }
     }
 
+
+    AnimatedVisibility(visible = requireEmailValidation == true, enter = fadeIn(), exit = fadeOut()) {
+        StateComponent(message = "Você precisa validar seu email para criar uma receita", action = {
+            newRecipeViewModel.pushValidationEmail()
+        })
+    }
 
 
     LaunchedEffect(Unit) {

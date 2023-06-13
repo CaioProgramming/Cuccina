@@ -75,7 +75,7 @@ import com.ilustris.cuccina.feature.home.ui.HighLightSheet
 import com.inlustris.cuccina.feature.home.ui.component.BannerCard
 import com.inlustris.cuccina.feature.recipe.category.domain.model.Category
 import com.ilustris.cuccina.feature.recipe.category.ui.component.CategoryBadge
-import com.ilustris.cuccina.feature.recipe.form.ui.NEW_RECIPE_ROUTE
+import com.inlustris.cuccina.feature.recipe.form.ui.NEW_RECIPE_ROUTE
 import com.inlustris.cuccina.feature.recipe.start.ui.START_RECIPE_ROUTE_IMPL
 import com.inlustris.cuccina.feature.recipe.ui.RecipeGroupList
 import com.inlustris.cuccina.theme.CuccinaLoader

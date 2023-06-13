@@ -38,8 +38,8 @@ import androidx.navigation.NavHostController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.ilustris.cuccina.R
 import com.inlustris.cuccina.feature.profile.ui.PROFILE_ROUTE_IMPL
-import com.ilustris.cuccina.feature.recipe.domain.model.Recipe
-import com.ilustris.cuccina.feature.recipe.form.ui.NEW_RECIPE_ROUTE
+import com.inlustris.cuccina.feature.recipe.domain.model.Recipe
+import com.inlustris.cuccina.feature.recipe.form.ui.NEW_RECIPE_ROUTE
 import com.inlustris.cuccina.feature.recipe.start.presentation.StartRecipeViewModel
 import com.inlustris.cuccina.theme.StateComponent
 import com.inlustris.cuccina.theme.GetStateComponent

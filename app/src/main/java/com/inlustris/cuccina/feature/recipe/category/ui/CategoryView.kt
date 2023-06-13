@@ -23,7 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.ilustris.cuccina.feature.recipe.domain.model.Recipe
+import com.inlustris.cuccina.feature.recipe.domain.model.Recipe
 import com.inlustris.cuccina.feature.recipe.start.ui.START_RECIPE_ROUTE_IMPL
 import com.inlustris.cuccina.feature.recipe.ui.component.RecipeCard
 import com.inlustris.cuccina.theme.GetStateComponent
@@ -64,7 +64,7 @@ fun CategoryView(
         enter = fadeIn(),
         exit = fadeOut()
     ) {
-        CuccinaLoader()
+        CuccinaLoader(customIcon = currentCategory.icon, showText = false)
 
     }
 
@@ -112,8 +112,6 @@ fun CategoryView(
                         .background(MaterialTheme.colorScheme.background)
                         .padding(16.dp)
                 )
-
-
             }
             item {
                 Text(
