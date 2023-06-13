@@ -1,4 +1,4 @@
-package com.ilustris.cuccina.feature.recipe.form.presentation.viewmodel
+package com.inlustris.cuccina.feature.recipe.form.presentation.viewmodel
 
 import android.app.Application
 import android.util.Log
@@ -141,6 +141,7 @@ class NewRecipeViewModel @Inject constructor(
         recipe.value = recipe.value?.copy(steps = step)
         recipe.value?.let {
             saveData(it.apply {
+                time = Calendar.getInstance().timeInMillis
                 steps = step
             })
         }

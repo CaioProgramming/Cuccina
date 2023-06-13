@@ -3,11 +3,11 @@ package com.ilustris.cuccina.feature.recipe.category.domain.mapper
 import ai.atick.material.MaterialColor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import com.ilustris.cuccina.feature.recipe.category.domain.model.Category
+import com.inlustris.cuccina.feature.recipe.category.domain.model.Category
 
 object CategoryMapper {
 
-    fun findCategory(name: String) = Category.values().find { it.name == name } ?: Category.UNKNOW
+    fun findCategory(name: String) = Category.values().find { it.name == name } ?: Category.UNKNOWN
 
 
     @Composable
@@ -22,7 +22,7 @@ object CategoryMapper {
             Category.SAUCE -> MaterialColor.Red300
             Category.PROTEIN -> MaterialColor.Red300
             Category.SALADS -> MaterialColor.LightGreen200
-            Category.UNKNOW -> MaterialColor.BlueGray200
+            Category.UNKNOWN -> MaterialColor.BlueGray200
         }
     }
 

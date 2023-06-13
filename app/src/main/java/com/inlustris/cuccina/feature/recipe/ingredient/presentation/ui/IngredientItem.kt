@@ -1,4 +1,4 @@
-package com.ilustris.cuccina.feature.recipe.ingredient.presentation.ui
+package com.inlustris.cuccina.feature.recipe.ingredient.presentation.ui
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
@@ -76,7 +76,7 @@ fun IngredientItem(
             }
         ) {
 
-            Text(text = clipIngredientName(ingredient.name), modifier = Modifier.padding(8.dp))
+            Text(text = clipIngredientName(ingredient.name), modifier = Modifier.padding(8.dp), maxLines = 1)
 
         }
         val quantityFormatted = "${ingredient.quantity}${ingredient.type.abreviation}"

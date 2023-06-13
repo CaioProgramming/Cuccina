@@ -1,4 +1,4 @@
-package com.ilustris.cuccina.feature.profile.domain.model
+package com.inlustris.cuccina.feature.profile.domain.model
 
 import com.silent.ilustriscore.core.bean.BaseBean
 

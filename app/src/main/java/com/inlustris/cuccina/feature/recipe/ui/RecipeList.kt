@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalFoundationApi::class, ExperimentalFoundationApi::class)
 
-package com.ilustris.cuccina.feature.recipe.ui
+package com.inlustris.cuccina.feature.recipe.ui
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -17,11 +17,14 @@ import androidx.recyclerview.widget.RecyclerView.HORIZONTAL
 import androidx.recyclerview.widget.RecyclerView.VERTICAL
 import com.ilustris.cuccina.feature.recipe.domain.model.Recipe
 import com.ilustris.cuccina.feature.recipe.domain.model.RecipeGroup
-import com.ilustris.cuccina.feature.recipe.ui.component.RecipeCard
+import com.inlustris.cuccina.feature.recipe.ui.component.RecipeCard
 import com.ilustris.cuccina.ui.theme.CuccinaTheme
+import com.ilustris.cuccina.ui.theme.getDeviceMultiplier
 
 @Composable
 fun RecipeGroupList(recipeGroup: RecipeGroup, orientation: Int, openRecipe: (Recipe) -> Unit) {
+
+
 
     Column {
         Text(
@@ -37,7 +40,7 @@ fun RecipeGroupList(recipeGroup: RecipeGroup, orientation: Int, openRecipe: (Rec
                     onClickRecipe = openRecipe,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(350.dp)
+                        .height(350.dp * getDeviceMultiplier())
                         .padding(16.dp)
                 )
             }
@@ -50,8 +53,8 @@ fun RecipeGroupList(recipeGroup: RecipeGroup, orientation: Int, openRecipe: (Rec
                         onClickRecipe = openRecipe,
                         modifier = Modifier
                             .padding(16.dp)
-                            .width(300.dp)
-                            .height(150.dp)
+                            .width(300.dp * getDeviceMultiplier())
+                            .height(150.dp * getDeviceMultiplier())
 
                     )
                 }

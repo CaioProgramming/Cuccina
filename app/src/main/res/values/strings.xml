@@ -1,28 +1,4 @@
 <resources>
     <string name="app_name">Cuccina</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string-array name="array_medidas">
 
-        <item>Grama</item>
-        <item>Kilo</item>
-        <item>Dúzia</item>
-        <item>Unidade</item>
-        <item>Litro</item>
-        <item>Copo de vinho</item>
-        <item>Copo americano</item>
-        <item>1/2 copo</item>
-        <item>Xícara</item>
-        <item>1/2 xícara</item>
-        <item>3/4 de xícara</item>
-        <item>1/4 de xícara</item>
-        <item>Copo (requeijão)</item>
-        <item>Colher de sobremesa</item>
-        <item>Cálice</item>
-        <item>Colher de sopa</item>
-        <item>Colher de café</item>
-        <item>Mililitros</item>
-
-
-    </string-array>
 </resources>

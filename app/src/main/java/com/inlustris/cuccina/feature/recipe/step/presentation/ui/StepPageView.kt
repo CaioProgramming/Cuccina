@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.ilustris.cuccina.ui.theme.Page
+import com.inlustris.cuccina.feature.recipe.step.presentation.ui.InstructionItem
 
 @Composable
 fun StepPageView(page: Page.StepPage) {

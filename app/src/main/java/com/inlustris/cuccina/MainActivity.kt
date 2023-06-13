@@ -4,10 +4,9 @@
     ExperimentalMaterial3Api::class
 )
 
-package com.ilustris.cuccina
+package com.inlustris.cuccina
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
@@ -30,18 +29,23 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.compose.rememberNavController
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.ilustris.cuccina.feature.home.ui.HOME_ROUTE
-import com.ilustris.cuccina.feature.profile.ui.PROFILE_ROUTE
+import com.ilustris.cuccina.AppModule
+import com.ilustris.cuccina.MainViewModel
+import com.ilustris.cuccina.R
+import com.inlustris.cuccina.feature.home.ui.HOME_ROUTE
 import com.ilustris.cuccina.feature.recipe.form.ui.NEW_RECIPE_ROUTE
-import com.ilustris.cuccina.feature.recipe.start.ui.START_RECIPE_ROUTE
-import com.ilustris.cuccina.feature.recipe.ui.component.getStateComponent
-import com.ilustris.cuccina.navigation.BottomNavigation
-import com.ilustris.cuccina.navigation.NavigationGraph
+import com.inlustris.cuccina.feature.recipe.start.ui.START_RECIPE_ROUTE
+import com.inlustris.cuccina.theme.GetStateComponent
+import com.inlustris.cuccina.navigation.BottomNavigation
+import com.inlustris.cuccina.navigation.NavigationGraph
 import com.ilustris.cuccina.ui.theme.CuccinaTheme
+import com.inlustris.cuccina.feature.recipe.category.ui.CATEGORY_ROUTE
+import com.inlustris.cuccina.navigation.BottomNavItem
 import com.silent.ilustriscore.core.model.ViewModelBaseState
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -60,9 +64,7 @@ class MainActivity : ComponentActivity() {
                 var title by remember {
                     mutableStateOf(appName)
                 }
-                var showNavigation by remember {
-                    mutableStateOf(true)
-                }
+                val showNavigation = MutableLiveData(true)
 
                 var bottomPadding by remember {
                     mutableStateOf(50.dp)
@@ -81,41 +83,51 @@ class MainActivity : ComponentActivity() {
                     .setAvailableProviders(AppModule.loginProviders)
                     .build()
 
-
-                fun showAppBar(state: MainViewModel.MainState?): Boolean {
-                    Log.i(javaClass.simpleName, "showAppBar: actual state -> $state")
-                    return state != MainViewModel.MainState.HideNavigation
+                fun showBottomNav(enableBottomNav: Boolean) {
+                    showNavigation.value = enableBottomNav
                 }
 
-                showNavigation = showAppBar(appState.value)
 
                 Scaffold(bottomBar = {
                     AnimatedVisibility(
-                        visible = showNavigation,
+                        visible = showNavigation.observeAsState().value ?: true,
                         enter = fadeIn(),
                         exit = fadeOut()
                     ) {
                         BottomNavigation(navController = navController)
                     }
-                }) {
+                }) { padding ->
                     if (appState.value == MainViewModel.MainState.RequireLogin) {
-                        getStateComponent(state = ViewModelBaseState.RequireAuth, action = {
+                        showBottomNav(false)
+                        GetStateComponent(state = ViewModelBaseState.RequireAuth, action = {
                             signInLauncher.launch(signInIntent)
                         })
                     } else {
+                        val currentRoute = navController.currentBackStackEntry?.destination?.route
+                        val item = BottomNavItem.values().find { it.route == currentRoute }
+                        if (item != null) {
+                            title = item.title
+                            showBottomNav(item.showBottomNav)
+                            systemUiController.isStatusBarVisible = item.showStatusBar
+                            bottomPadding = getPaddingForRoute(currentRoute)
+                        }
                         NavigationGraph(navController = navController, bottomPadding)
                     }
                 }
+
+
+
                 LaunchedEffect(navController) {
                     viewModel.checkUser()
                     navController.currentBackStackEntryFlow.collect { backStackEntry ->
-                        title = getRouteTitle(backStackEntry.destination.route)
-                        bottomPadding = getPaddingForRoute(backStackEntry.destination.route)
-                        showNavigation =
-                            (backStackEntry.destination.route != START_RECIPE_ROUTE && backStackEntry.destination.route != PROFILE_ROUTE)
-                        systemUiController.isStatusBarVisible =
-                            (backStackEntry.destination.route != START_RECIPE_ROUTE && backStackEntry.destination.route != PROFILE_ROUTE)
-
+                        val backStackRoute = backStackEntry.destination.route
+                        val routeItem = BottomNavItem.values().find { it.route == backStackRoute }
+                        routeItem?.let {
+                            title = it.title
+                            showBottomNav(it.showBottomNav)
+                            systemUiController.isStatusBarVisible = it.showStatusBar
+                            bottomPadding = getPaddingForRoute(backStackRoute)
+                        }
                     }
                 }
             }
@@ -125,10 +137,14 @@ class MainActivity : ComponentActivity() {
 
 fun getPaddingForRoute(route: String?) =
     when (route) {
-        HOME_ROUTE, NEW_RECIPE_ROUTE -> 50.dp
+        HOME_ROUTE, NEW_RECIPE_ROUTE, CATEGORY_ROUTE -> 50.dp
         else -> 0.dp
     }
 
+fun showBottomNavForRoute(route: String?) = when (route) {
+    HOME_ROUTE, NEW_RECIPE_ROUTE, CATEGORY_ROUTE -> true
+    else -> false
+}
 
 fun getRouteTitle(route: String?): String {
     if (route == null) return "Cuccina"

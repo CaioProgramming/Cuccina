@@ -1,16 +1,39 @@
+@file:OptIn(ExperimentalFoundationApi::class, ExperimentalAnimationApi::class)
+
 package com.ilustris.cuccina.ui.theme
 
 import ai.atick.material.MaterialColor
 import android.util.Log
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.*
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.with
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.rounded.KeyboardArrowDown
+import androidx.compose.material.icons.rounded.KeyboardArrowUp
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
@@ -25,10 +48,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import com.airbnb.lottie.compose.*
 import com.ilustris.cuccina.R
-import com.ilustris.cuccina.feature.recipe.ui.component.StateComponent
+import com.inlustris.cuccina.theme.StateComponent
 import com.silent.ilustriscore.core.model.ViewModelBaseState
+import kotlin.math.roundToInt
 
 
 @Composable
@@ -40,51 +66,50 @@ fun appColors() =
     )
 
 @Composable
-fun CuccinaLoader() {
-
+fun CuccinaLoader(showText: Boolean = true) {
+    val infiniteTransition = rememberInfiniteTransition()
+    val offsetAnimation = infiniteTransition.animateFloat(
+        initialValue = 0f,
+        targetValue = 100f,
+        animationSpec = infiniteRepeatable(
+            tween(1000, easing = LinearEasing),
+            repeatMode = RepeatMode.Reverse,
+        )
+    )
+    val brush = Brush.linearGradient(
+        appColors(),
+        start = Offset(offsetAnimation.value, offsetAnimation.value),
+        end = Offset(x = offsetAnimation.value * 10, y = offsetAnimation.value * 5)
+    )
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background),
+            .graphicsLayer(alpha = 0.99f)
+            .drawWithCache {
+                onDrawWithContent {
+                    drawContent()
+                    drawRect(brush, blendMode = BlendMode.SrcAtop)
+                }
+            },
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        val infiniteTransition = rememberInfiniteTransition()
-        val offsetAnimation = infiniteTransition.animateFloat(
-            initialValue = 0f,
-            targetValue = 100f,
-            animationSpec = infiniteRepeatable(
-                tween(1500, easing = LinearEasing),
-                repeatMode = RepeatMode.Reverse,
-            )
-        )
 
-
-        val brush = Brush.linearGradient(
-            appColors(),
-            start = Offset(offsetAnimation.value, offsetAnimation.value),
-            end = Offset(x = offsetAnimation.value * 5, y = offsetAnimation.value * 3)
-        )
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.cherry),
             contentDescription = "Cuccina",
             modifier = Modifier
-                .graphicsLayer(alpha = 0.99f)
-                .drawWithCache {
-                    onDrawWithContent {
-                        drawContent()
-                        drawRect(brush, blendMode = BlendMode.SrcAtop)
-                    }
-                }
                 .size(100.dp)
         )
 
-        Text(
-            text = "Cuccina",
-            style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center
-        )
+        AnimatedVisibility(visible = showText, enter = fadeIn(), exit = fadeOut()) {
+            Text(
+                text = "Cuccina",
+                style = MaterialTheme.typography.headlineMedium,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center
+            )
+        }
 
 
     }
@@ -154,10 +179,11 @@ fun annotatedPage(text: String, annotations: List<String>, color: Color) = build
 }
 
 @Composable
-fun SimplePageView(page: Page.SimplePage) {
+fun SimplePageView(page: Page.SimplePage, modifier: Modifier) {
+
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .background(page.backColor ?: MaterialTheme.colorScheme.background)
             .padding(16.dp)
             .fillMaxSize(), verticalArrangement = Arrangement.Center
@@ -189,9 +215,9 @@ fun SimplePageView(page: Page.SimplePage) {
 }
 
 @Composable
-fun AnimatedTextPage(page: Page.AnimatedTextPage) {
+fun AnimatedTextPage(page: Page.AnimatedTextPage, modifier: Modifier = Modifier) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(page.backColor ?: MaterialTheme.colorScheme.background)
     ) {
@@ -266,9 +292,14 @@ fun AnimatedTextPage(page: Page.AnimatedTextPage) {
 }
 
 @Composable
-fun SuccessPageView(page: Page.SuccessPage, pageAction: () -> Unit) {
+fun SuccessPageView(
+    page: Page.SuccessPage,
+    modifier: Modifier = Modifier,
+    pageAction: () -> Unit
+) {
     Column(
-        modifier = Modifier
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
             .background(page.backColor ?: MaterialTheme.colorScheme.background)
             .padding(16.dp)
             .fillMaxSize(), verticalArrangement = Arrangement.Center
@@ -315,9 +346,10 @@ fun SuccessPageView(page: Page.SuccessPage, pageAction: () -> Unit) {
 
         Button(
             onClick = pageAction,
+            shape = RoundedCornerShape(defaultRadius),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 16.dp)
+                .padding(vertical = 16.dp * getDeviceMultiplier())
         ) {
             Text(
                 text = page.actionText
@@ -326,3 +358,118 @@ fun SuccessPageView(page: Page.SuccessPage, pageAction: () -> Unit) {
     }
 }
 
+@Composable
+fun ExpandableComponent(
+    modifier: Modifier,
+    expanded: Boolean = false,
+    onExpandClick: (Boolean) -> Unit,
+    headerView: @Composable () -> Unit,
+    innerContent: @Composable () -> Unit
+) {
+
+    var expanded by remember {
+        mutableStateOf(expanded)
+    }
+
+    AnimatedContent(targetState = expanded, modifier = modifier, transitionSpec = {
+        fadeIn() with fadeOut()
+    }) { expand ->
+        ConstraintLayout(modifier = Modifier.animateContentSize()) {
+            val (icon, header, content) = createRefs()
+            IconButton(onClick = {
+                expanded = !expanded
+                onExpandClick(expanded)
+            }, modifier = Modifier.constrainAs(icon) {
+                end.linkTo(parent.end)
+                top.linkTo(parent.top)
+            }) {
+                val iconRes = if (expanded) {
+                    Icons.Rounded.KeyboardArrowUp
+                } else {
+                    Icons.Rounded.KeyboardArrowDown
+                }
+                val description = if (expanded) {
+                    "Fechar"
+                } else {
+                    "Abrir"
+                }
+                Icon(
+                    iconRes,
+                    tint = MaterialTheme.colorScheme.onBackground,
+                    contentDescription = description
+                )
+            }
+            Box(modifier = Modifier.constrainAs(header) {
+                start.linkTo(parent.start)
+                end.linkTo(icon.start)
+                top.linkTo(parent.top)
+                width = Dimension.fillToConstraints
+                height = Dimension.wrapContent
+            }) {
+                headerView()
+            }
+
+            Box(modifier = Modifier.constrainAs(content) {
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+                top.linkTo(header.bottom)
+                width = Dimension.fillToConstraints
+                height = Dimension.wrapContent
+            }) {
+                AnimatedVisibility(visible = expanded, enter = fadeIn(), exit = fadeOut()) {
+                    innerContent()
+                }
+            }
+
+        }
+
+    }
+
+
+
+}
+
+@Composable
+fun CounterTextComponent(count: Int, label: String, textColor: Color) {
+    var countValue by remember { mutableStateOf(0) }
+    val postCounter by animateFloatAsState(
+        targetValue = countValue.toFloat(),
+        animationSpec = tween(
+            durationMillis = 2000,
+            easing = FastOutSlowInEasing
+        )
+    )
+    LaunchedEffect(Unit) {
+        countValue = count
+    }
+    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(16.dp)) {
+        Text(
+            postCounter.roundToInt().toString(),
+            color = textColor,
+            style = MaterialTheme.typography.headlineLarge
+        )
+        Text(
+            label,
+            color = textColor.copy(alpha = 0.6f),
+            style = MaterialTheme.typography.labelSmall
+        )
+    }
+}
+
+
+@Preview
+@Composable
+fun ExpandCardPreview() {
+    CuccinaTheme() {
+        ExpandableComponent(modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+            .background(
+                MaterialTheme.colorScheme.surface, RoundedCornerShape(
+                    defaultRadius
+                )
+            ), onExpandClick = {}, headerView = { Text(text = "Expand card") }) {
+            Text(text = "Inner content")
+        }
+    }
+}
