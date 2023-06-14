@@ -2,7 +2,6 @@ package com.inlustris.cuccina.feature.recipe.form.ui
 
 import ai.atick.material.MaterialColor
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding

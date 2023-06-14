@@ -11,10 +11,8 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -25,8 +23,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.*
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -36,8 +32,6 @@ import com.ilustris.cuccina.ui.theme.Page
 import com.inlustris.cuccina.theme.PageIndicators
 import com.ilustris.cuccina.ui.theme.defaultRadius
 import com.inlustris.cuccina.theme.getPageView
-import com.inlustris.cuccina.theme.pagerCircularRevealTransition
-import com.inlustris.cuccina.theme.pagerFadeTransition
 import com.inlustris.cuccina.theme.pagerScaleTransition
 import kotlinx.coroutines.launch
 

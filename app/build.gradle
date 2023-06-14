@@ -31,7 +31,7 @@ android {
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.inlustris.cuccina"
+        applicationId "com.ilustris.cuccina"
         minSdk 28
         targetSdk 33
         versionCode versionNumber
@@ -50,7 +50,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
-            resValue("string","version_text",vName + "-release")
+            resValue("string","version_text",vName + "-debug")
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }

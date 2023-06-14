@@ -17,7 +17,6 @@ object CategoryMapper {
             Category.CANDY -> MaterialColor.Pink200
             Category.SOUPS -> MaterialColor.Purple200
             Category.SEA -> MaterialColor.Teal200
-            Category.VEGGIES -> MaterialColor.Green200
             Category.PASTA -> MaterialColor.Red100
             Category.SAUCE -> MaterialColor.Red300
             Category.PROTEIN -> MaterialColor.Red300

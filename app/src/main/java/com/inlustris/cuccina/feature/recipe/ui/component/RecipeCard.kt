@@ -34,17 +34,16 @@ import com.skydoves.landscapist.glide.GlideImage
 fun RecipeCard(modifier: Modifier, recipe: Recipe, onClickRecipe: (Recipe) -> Unit) {
 
 
-
     AnimatedContent(
         targetState = recipe,
         transitionSpec = { EnterTransition.None with ExitTransition.None }
     ) {
         Column(modifier = Modifier
             .padding(vertical = 8.dp)
+            .clip(RoundedCornerShape(defaultRadius))
             .clickable {
                 onClickRecipe(recipe)
             }
-            .clip(RoundedCornerShape(defaultRadius))
         ) {
 
             GlideImage(

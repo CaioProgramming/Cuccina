@@ -13,7 +13,6 @@ enum class Category(
     CANDY(title = "Confeitaria e doces", description = CANDY_DESCRIPTION,icon = R.drawable.candy, cover = CANDY_COVER),
     SOUPS(title = "Sopas e cremes", description = SOUPS_DESCRIPTION, icon = R.drawable.soup, cover = SOUPS_COVER),
     SEA(title = "Frutos do mar", description = SEA_DESCRIPTION, icon = R.drawable.crab, cover = SEA_COVER),
-    VEGGIES(title = "Legumes e vegetais", description = VEGGIES_DESCRIPTION, icon = R.drawable.vegetable, cover = VEGGIES_COVER),
     PASTA(title = "Massas", description = PASTA_DESCRIPTION, icon = R.drawable.pasta, cover = PASTA_COVER),
     SAUCE(title = "Molhos", description = SAUCE_DESCRIPTION, icon = R.drawable.sauce, cover = SAUCE_COVER),
     PROTEIN(title = "Proteínas", description = PROTEIN_DESCRIPTION, icon = R.drawable.meat, cover = PROTEIN_COVER),

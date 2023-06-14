@@ -5,6 +5,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -18,6 +19,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.airbnb.lottie.compose.*
 import com.ilustris.cuccina.R
+import com.ilustris.cuccina.ui.theme.defaultRadius
+import com.ilustris.cuccina.ui.theme.getDeviceMultiplier
 import com.silent.ilustriscore.core.model.ViewModelBaseState
 import com.silent.ilustriscore.core.utilities.delayedFunction
 
@@ -75,9 +78,9 @@ fun StateComponent(
 
             if (action != null && buttonText != null) {
                 Button(
-                    onClick = action, modifier = Modifier
-                        .fillMaxWidth(0.5f)
-                        .padding(16.dp)
+                    onClick = action, shape = RoundedCornerShape(defaultRadius)  ,modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp * getDeviceMultiplier())
                 ) {
                     Text(text = buttonText)
                 }

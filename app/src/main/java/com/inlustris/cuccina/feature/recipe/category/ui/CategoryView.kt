@@ -20,6 +20,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -81,11 +83,14 @@ fun CategoryView(
                 GlideImage(
                     imageModel = { currentCategory.cover },
                     glideRequestType = GlideRequestType.BITMAP,
-                    imageOptions = ImageOptions(requestSize = IntSize(coverSize, coverSize)),
+                    imageOptions = ImageOptions(
+                        requestSize = IntSize(coverSize, coverSize)
+                    ),
                     loading = {
                         Column(
                             modifier = Modifier.fillMaxSize(),
-                            verticalArrangement = Arrangement.Center) {
+                            verticalArrangement = Arrangement.Center
+                        ) {
                             CuccinaLoader(true)
 
                         }
@@ -93,7 +98,8 @@ fun CategoryView(
                     failure = {
                         Column(
                             modifier = Modifier.fillMaxSize(),
-                            verticalArrangement = Arrangement.Center) {
+                            verticalArrangement = Arrangement.Center
+                        ) {
                             CuccinaLoader(false)
 
                         }
@@ -116,14 +122,13 @@ fun CategoryView(
             item {
                 Text(
                     text = currentCategory.description,
-                    style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.padding(16.dp)
                 )
                 Divider(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(1.dp)
-                        .padding(horizontal = 16.dp)
                         .background(MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f))
                 )
             }
@@ -135,7 +140,8 @@ fun CategoryView(
                 )
             }
 
-            val recipeList = (pageState.value as ViewModelBaseState.DataListRetrievedState).dataList as List<Recipe>
+            val recipeList =
+                (pageState.value as ViewModelBaseState.DataListRetrievedState).dataList as List<Recipe>
 
             items(recipeList) {
                 RecipeCard(
