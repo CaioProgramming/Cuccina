@@ -48,7 +48,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.ilustris.cuccina.BuildConfig
 import com.ilustris.cuccina.R
 import com.inlustris.cuccina.theme.CuccinaLoader
 import com.ilustris.cuccina.ui.theme.defaultRadius

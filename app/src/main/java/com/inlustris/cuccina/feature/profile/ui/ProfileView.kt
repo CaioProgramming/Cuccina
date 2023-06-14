@@ -138,7 +138,7 @@ fun ProfileView(
                 val isComplete = pagerState.currentPage == pages.value!!.lastIndex
 
                 val iconColor =
-                    if (isComplete) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onBackground
+                    if (pagerState.currentPage == 0) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onBackground
                 val backColor =
                     if (pagerState.currentPage == 0) MaterialTheme.colorScheme.primary else Color.Transparent
                 val icon =
@@ -256,7 +256,7 @@ fun ProfileView(
                     },) {
                         Icon(
                             Icons.Filled.Settings,
-                            tint = MaterialTheme.colorScheme.onBackground,
+                            tint = MaterialTheme.colorScheme.onPrimary,
                             contentDescription = "Configurações"
                         )
                     }

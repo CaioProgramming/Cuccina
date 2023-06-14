@@ -78,6 +78,7 @@ fun PageIndicators(
     }
 
     Row(
+        modifier = modifier,
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically,
     ) {

@@ -54,38 +54,46 @@ fun ChefsPageView(page: Page.OtherChefsPage, openChefPage: (String) -> Unit) {
 
         items(page.chefs.size) {
             val user = page.chefs[it]
-            GlideImage(
-                imageModel = { user.photoUrl },
-                imageOptions = ImageOptions(
-                    alignment = Alignment.Center,
-                    "",
-                    contentScale = ContentScale.Crop
-                ),
-                loading = {
-                    CuccinaLoader()
-                },
-                modifier = Modifier
-                    .height(200.dp * getDeviceMultiplier())
-                    .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.surface, CircleShape)
-                    .clip(CircleShape)
-                    .padding(8.dp)
-                    .border(
-                        width = 3.dp,
-                        brush = Brush.horizontalGradient(
-                            colors = listOf(
-                                MaterialTheme.colorScheme.primary,
-                                MaterialTheme.colorScheme.secondary,
-                                MaterialTheme.colorScheme.tertiary
-                            )
-                        ),
-                        shape = CircleShape
-                    )
-                    .clip(CircleShape)
-                    .clickable {
-                        openChefPage(user.uid)
-                    }
-            )
+            Column(modifier = Modifier.fillMaxWidth().padding(8.dp)) {
+                GlideImage(
+                    imageModel = { user.photoUrl },
+                    imageOptions = ImageOptions(
+                        alignment = Alignment.Center,
+                        "",
+                        contentScale = ContentScale.Crop
+                    ),
+                    loading = {
+                        CuccinaLoader()
+                    },
+                    modifier = Modifier
+                        .height(150.dp * getDeviceMultiplier())
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.surface, CircleShape)
+                        .clip(CircleShape)
+                        .border(
+                            width = 3.dp,
+                            brush = Brush.horizontalGradient(
+                                colors = listOf(
+                                    MaterialTheme.colorScheme.primary,
+                                    MaterialTheme.colorScheme.secondary,
+                                    MaterialTheme.colorScheme.tertiary
+                                )
+                            ),
+                            shape = CircleShape
+                        )
+                        .clip(CircleShape)
+                        .clickable {
+                            openChefPage(user.uid)
+                        }
+                )
+                Text(
+                    text = user.name,
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.fillMaxWidth().padding(8.dp),
+                    textAlign = TextAlign.Center
+                )
+            }
+
         }
 
     }

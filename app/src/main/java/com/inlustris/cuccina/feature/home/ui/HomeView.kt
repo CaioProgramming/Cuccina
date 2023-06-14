@@ -23,6 +23,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -97,7 +98,8 @@ fun HomeView(homeViewModel: HomeViewModel?, navController: NavHostController) {
     val homeBaseState = homeViewModel?.viewModelState?.observeAsState()
     val homeList = homeViewModel?.homeList?.observeAsState()
     val highLights = homeViewModel?.highlightRecipes?.observeAsState()
-    val categories = Category.values().toList().filter { it.title != "Outros" }.sortedBy { it.title }
+    val categories =
+        Category.values().toList().filter { it.title != "Outros" }.sortedBy { it.title }
     val systemUiController = rememberSystemUiController()
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
@@ -123,7 +125,8 @@ fun HomeView(homeViewModel: HomeViewModel?, navController: NavHostController) {
 
     LaunchedEffect(sheetState) {
         snapshotFlow { sheetState.currentValue }.distinctUntilChanged().collect {
-            systemUiController.isStatusBarVisible = it == ModalBottomSheetValue.Hidden || currentSheet == SETTINGS_SHEET
+            systemUiController.isStatusBarVisible =
+                it == ModalBottomSheetValue.Hidden || currentSheet == SETTINGS_SHEET
         }
     }
 
@@ -161,7 +164,9 @@ fun HomeView(homeViewModel: HomeViewModel?, navController: NavHostController) {
     }
 
     ModalBottomSheetLayout(
-        modifier = Modifier.animateContentSize(tween(500)).fillMaxSize(),
+        modifier = Modifier
+            .animateContentSize(tween(500))
+            .fillMaxSize(),
         sheetState = sheetState,
         sheetBackgroundColor = MaterialTheme.colorScheme.surface,
         sheetContent = { getCurrentSheet() }) {
@@ -176,7 +181,8 @@ fun HomeView(homeViewModel: HomeViewModel?, navController: NavHostController) {
             }
         }
 
-        fun isLoading() = homeBaseState?.value == ViewModelBaseState.LoadingState && homeList?.value == null
+        fun isLoading() =
+            homeBaseState?.value == ViewModelBaseState.LoadingState && homeList?.value == null
 
         val context = LocalContext.current
 
@@ -293,7 +299,7 @@ fun HomeView(homeViewModel: HomeViewModel?, navController: NavHostController) {
 
                 item {
 
-                    AnimatedVisibility(visible = true, enter = fadeIn(), exit = fadeOut()) {
+                    AnimatedVisibility(visible = !isLoading(), enter = fadeIn(), exit = fadeOut()) {
                         LazyRow(modifier = Modifier.padding(vertical = 8.dp, horizontal = 4.dp)) {
 
                             items(categories.size) {
@@ -382,15 +388,15 @@ fun HomeView(homeViewModel: HomeViewModel?, navController: NavHostController) {
                                 .padding(horizontal = 16.dp, vertical = 4.dp)
                                 .fillMaxWidth()
                         )
-                        Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
+                        Row(
+                            horizontalArrangement = Arrangement.Center,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
                             Icon(
                                 Icons.Rounded.Star,
                                 contentDescription = null,
                                 modifier = Modifier
                                     .size(32.dp)
-                                    .clickable {
-                                        openPlayStorePage()
-                                    }
                                     .graphicsLayer(alpha = 0.99f)
                                     .drawWithCache {
                                         onDrawWithContent {
@@ -403,6 +409,10 @@ fun HomeView(homeViewModel: HomeViewModel?, navController: NavHostController) {
                                             )
                                         }
                                     }
+                                    .clip(CircleShape)
+                                    .clickable() {
+                                        openPlayStorePage()
+                                    }
                             )
                         }
 
@@ -410,8 +420,7 @@ fun HomeView(homeViewModel: HomeViewModel?, navController: NavHostController) {
                             text = "Desenvolvido por ilustris em 2019 - $currentYear",
                             modifier = Modifier
                                 .padding(horizontal = 16.dp, vertical = 4.dp)
-                                .fillMaxWidth()
-                                .clickable { openPlayStorePage() },
+                                .fillMaxWidth(),
                             textAlign = TextAlign.Center,
                             style = MaterialTheme.typography.labelMedium.copy(
                                 fontStyle = FontStyle.Italic,

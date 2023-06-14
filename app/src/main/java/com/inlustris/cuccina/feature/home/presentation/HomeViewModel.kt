@@ -36,7 +36,7 @@ class HomeViewModel @Inject constructor(
             val data = service.getAllData()
             if (data.isSuccess) {
                 val recipes = data.success.data as List<Recipe>
-                getHighlights(recipes.sortedBy { it.publishDate }.take(recipes.size / 2))
+                getHighlights(recipes.sortedBy { it.likes.size }.take(recipes.size / 2))
                 groupRecipes(recipes)
             } else {
                 updateViewState(ViewModelBaseState.ErrorState(data.error.errorException))
@@ -48,10 +48,9 @@ class HomeViewModel @Inject constructor(
 
     private fun groupRecipes(recipes: List<Recipe>) {
         val categoriesRecipes = recipes.groupBy { it.category }.map {
-            val category = Category.values().find { category -> category.name == it.key }
-                ?: Category.UNKNOWN
+            val category = Category.values().find { category -> category.name == it.key } ?: Category.UNKNOWN
             RecipeGroup(category.title, it.value)
-        }.sortedByDescending { it.recipes.size }
+        }.sortedBy { it.title }
         homeList.postValue(categoriesRecipes)
     }
 

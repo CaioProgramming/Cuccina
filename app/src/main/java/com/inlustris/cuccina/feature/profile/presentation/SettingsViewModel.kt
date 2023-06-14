@@ -6,9 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.ilustris.cuccina.feature.profile.domain.service.UserService
-import com.ilustris.cuccina.ui.theme.Page
 import com.inlustris.cuccina.feature.profile.domain.model.UserModel
-import com.silent.ilustriscore.core.model.BaseService
 import com.silent.ilustriscore.core.model.BaseViewModel
 import com.silent.ilustriscore.core.model.ServiceResult
 import com.silent.ilustriscore.core.model.ViewModelBaseState

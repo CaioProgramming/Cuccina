@@ -1,6 +1,6 @@
 @file:OptIn(
     ExperimentalPagerApi::class, ExperimentalAnimationApi::class,
-    ExperimentalMaterial3Api::class
+    ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class
 )
 
 package com.inlustris.cuccina.feature.recipe.start.ui
@@ -27,6 +27,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -121,20 +122,20 @@ fun StartRecipeView(
                     fun isLastPage() = pagerState.currentPage == pages.lastIndex
                     fun isFirstPage() = pagerState.currentPage == 0
                     val iconColor =
-                        if (isComplete()) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.background
+                        if (isComplete()) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onBackground
                     val backColor =
-                        if (isComplete()) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground
+                        if (isComplete()) MaterialTheme.colorScheme.primary else Color.Transparent
                     val icon =
                         if (isComplete()) Icons.Default.Check else Icons.Default.KeyboardArrowRight
 
 
                     val iconColorAnimation by animateColorAsState(
                         targetValue = iconColor,
-                        animationSpec = tween(500)
+                        animationSpec = tween(1000)
                     )
                     val backColorAnimation by animateColorAsState(
                         targetValue = backColor,
-                        animationSpec = tween(1500)
+                        animationSpec = tween(500)
                     )
 
 
@@ -144,7 +145,7 @@ fun StartRecipeView(
                         } else {
                             MaterialTheme.colorScheme.onBackground
                         },
-                        animationSpec = tween(1000)
+                        animationSpec = tween(1500)
                     )
                     val topBackColorAnimation by animateColorAsState(
                         targetValue = if (pagerState.currentPage == 0) {
@@ -152,7 +153,7 @@ fun StartRecipeView(
                         } else {
                             MaterialTheme.colorScheme.background
                         },
-                        animationSpec = tween(1000)
+                        animationSpec = tween(250)
                     )
 
 
@@ -424,8 +425,8 @@ fun StartRecipeView(
 
 
                     AnimatedVisibility(visible = !isFirstPage() && !isComplete(),
-                        enter = fadeIn(tween(1000)),
-                        exit = fadeOut(tween(1000)),
+                        enter = slideInHorizontally(tween(1000)),
+                        exit = fadeOut(tween(250)),
                         modifier = Modifier
                             .constrainAs(indicator) {
                                 bottom.linkTo(nextButton.bottom)
@@ -515,6 +516,7 @@ fun StartRecipeView(
                                     end.linkTo(parent.end)
                                 }
                             }
+                            .animateEnterExit(scaleIn(), scaleOut())
                             .size(70.dp)
                             .padding(8.dp)
                     ) {

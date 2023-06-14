@@ -139,6 +139,7 @@ class ProfileViewModel @Inject constructor(
                     }
                 }
             }
+            updateViewState(ViewModelBaseState.LoadCompleteState)
         }
     }
 
@@ -160,7 +161,6 @@ class ProfileViewModel @Inject constructor(
                         updateViewState(ViewModelBaseState.ErrorState(userTask.errorException))
                     }
                 }
-                updateViewState(ViewModelBaseState.LoadCompleteState)
             }
         }
     }
