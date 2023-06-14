@@ -116,14 +116,13 @@ fun CategoryView(
             item {
                 Text(
                     text = currentCategory.description,
-                    style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.padding(16.dp)
                 )
                 Divider(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(1.dp)
-                        .padding(horizontal = 16.dp)
                         .background(MaterialTheme.colorScheme.onBackground.copy(alpha = 0.1f))
                 )
             }

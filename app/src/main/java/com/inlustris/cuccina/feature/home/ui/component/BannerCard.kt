@@ -130,10 +130,11 @@ fun BannerCard(backgroundImage: String, onClickBanner: () -> Unit) {
                     )
                 )
                 Text(
-                    text = "Confira as favoritinhas da comunidade!",
+                    text = "As nossas receitas mais populares!",
                     fontSize = titleTextSize,
                     style = MaterialTheme.typography.headlineSmall.copy(
-                        shadow = textShadow
+                        shadow = textShadow,
+                        color = MaterialColor.White
                     )
                 )
             }

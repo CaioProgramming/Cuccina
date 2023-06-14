@@ -261,6 +261,7 @@ fun HomeView(homeViewModel: HomeViewModel?, navController: NavHostController) {
                             Text(
                                 text = "Busque por receitas ou ingredientes...",
                                 maxLines = 1,
+                                modifier = Modifier.fillMaxWidth(),
                                 style = MaterialTheme.typography.labelLarge,
                                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
                             )
